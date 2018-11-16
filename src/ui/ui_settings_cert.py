@@ -4,8 +4,8 @@ import sys
 import os
 import uidef
 import uivar
-sys.path.append(os.path.abspath("../.."))
-from gui import advSettingsWin_Cert
+sys.path.append(os.path.abspath(".."))
+from win import advSettingsWin_Cert
 
 class secBootUiSettingsCert(advSettingsWin_Cert.advSettingsWin_Cert):
 

@@ -5,9 +5,8 @@ import os
 import serial.tools.list_ports
 import uidef
 import uivar
-sys.path.append(os.path.abspath("../.."))
-from gui import secBootWin
 sys.path.append(os.path.abspath(".."))
+from win import secBootWin
 from run import rundef
 from fuse import fusedef
 

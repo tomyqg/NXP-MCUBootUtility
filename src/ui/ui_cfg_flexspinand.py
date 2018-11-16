@@ -4,8 +4,8 @@ import sys
 import os
 import uivar
 import uidef
-sys.path.append(os.path.abspath("../.."))
-from gui import bootDeviceWin_FlexspiNand
+sys.path.append(os.path.abspath(".."))
+from win import bootDeviceWin_FlexspiNand
 
 class secBootUiFlexspiNand(bootDeviceWin_FlexspiNand.bootDeviceWin_FlexspiNand):
     def __init__(self, parent):

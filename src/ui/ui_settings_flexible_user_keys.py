@@ -4,8 +4,8 @@ import sys
 import os
 import uidef
 import uivar
-sys.path.append(os.path.abspath("../.."))
-from gui import advSettingsWin_FlexibleUserKeys
+sys.path.append(os.path.abspath(".."))
+from win import advSettingsWin_FlexibleUserKeys
 
 class secBootUiSettingsFlexibleUserKeys(advSettingsWin_FlexibleUserKeys.advSettingsWin_FlexibleUserKeys):
 

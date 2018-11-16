@@ -4,8 +4,8 @@ import sys
 import os
 import uidef
 import uivar
-sys.path.append(os.path.abspath("../.."))
-from gui import advSettingsWin_FixedOtpmkKey
+sys.path.append(os.path.abspath(".."))
+from win import advSettingsWin_FixedOtpmkKey
 
 class secBootUiSettingsFixedOtpmkKey(advSettingsWin_FixedOtpmkKey.advSettingsWin_FixedOtpmkKey):
 

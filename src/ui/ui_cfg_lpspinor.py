@@ -4,8 +4,8 @@ import sys
 import os
 import uivar
 import uidef
-sys.path.append(os.path.abspath("../.."))
-from gui import bootDeviceWin_LpspiNor
+sys.path.append(os.path.abspath(".."))
+from win import bootDeviceWin_LpspiNor
 
 class secBootUiLpspiNor(bootDeviceWin_LpspiNor.bootDeviceWin_LpspiNor):
     def __init__(self, parent):

@@ -5,8 +5,8 @@ import os
 import math
 import uidef
 import uivar
-sys.path.append(os.path.abspath("../.."))
-from gui import bootDeviceWin_FlexspiNor
+sys.path.append(os.path.abspath(".."))
+from win import bootDeviceWin_FlexspiNor
 
 g_flexspiNorOpt0_ISSI_IS25LP064A   = 0xc0000006
 g_flexspiNorOpt0_MXIC_MX25UM51245G = 0xc0403037

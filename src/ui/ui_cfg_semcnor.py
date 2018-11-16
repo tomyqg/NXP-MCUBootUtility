@@ -4,8 +4,8 @@ import sys
 import os
 import uivar
 import uidef
-sys.path.append(os.path.abspath("../.."))
-from gui import bootDeviceWin_SemcNor
+sys.path.append(os.path.abspath(".."))
+from win import bootDeviceWin_SemcNor
 
 class secBootUiSemcNor(bootDeviceWin_SemcNor.bootDeviceWin_SemcNor):
     def __init__(self, parent):
