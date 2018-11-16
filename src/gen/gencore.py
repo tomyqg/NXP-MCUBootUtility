@@ -16,47 +16,50 @@ class secBootGen(uicore.secBootUi):
 
     def __init__(self, parent):
         uicore.secBootUi.__init__(self, parent)
-
-        self.serialFilename = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), 'gen', 'hab_cert', 'serial')
-        self.keypassFilename = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), 'gen', 'hab_cert', 'key_pass.txt')
-        self.cstBinFolder = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), 'tools', 'cst', uidef.kCstVersion_Invalid, 'mingw32', 'bin')
-        self.cstKeysFolder = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), 'tools', 'cst', uidef.kCstVersion_Invalid, 'keys')
-        self.cstCrtsFolder = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), 'tools', 'cst', uidef.kCstVersion_Invalid, 'crts')
-        self.hab4PkiTreePath = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), 'tools', 'cst', uidef.kCstVersion_Invalid, 'keys')
+        self.exeTopRoot = os.path.dirname(self.exeBinRoot)
+        exeMainFile = os.path.join(self.exeTopRoot, 'src', 'main.py')
+        if not os.path.isfile(exeMainFile):
+            self.exeTopRoot = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
+        self.serialFilename = os.path.join(self.exeTopRoot, 'gen', 'hab_cert', 'serial')
+        self.keypassFilename = os.path.join(self.exeTopRoot, 'gen', 'hab_cert', 'key_pass.txt')
+        self.cstBinFolder = os.path.join(self.exeTopRoot, 'tools', 'cst', uidef.kCstVersion_Invalid, 'mingw32', 'bin')
+        self.cstKeysFolder = os.path.join(self.exeTopRoot, 'tools', 'cst', uidef.kCstVersion_Invalid, 'keys')
+        self.cstCrtsFolder = os.path.join(self.exeTopRoot, 'tools', 'cst', uidef.kCstVersion_Invalid, 'crts')
+        self.hab4PkiTreePath = os.path.join(self.exeTopRoot, 'tools', 'cst', uidef.kCstVersion_Invalid, 'keys')
         self.hab4PkiTreeName = 'hab4_pki_tree.bat'
-        self.srktoolPath = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), 'tools', 'cst', uidef.kCstVersion_Invalid, 'mingw32', 'bin', 'srktool.exe')
-        self.srkFolder = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), 'gen', 'hab_cert')
+        self.srktoolPath = os.path.join(self.exeTopRoot, 'tools', 'cst', uidef.kCstVersion_Invalid, 'mingw32', 'bin', 'srktool.exe')
+        self.srkFolder = os.path.join(self.exeTopRoot, 'gen', 'hab_cert')
         self.srkTableFilename = None
         self.srkFuseFilename = None
         self.crtSrkCaPemFileList = [None] * 4
         self.crtCsfUsrPemFileList = [None] * 4
         self.crtImgUsrPemFileList = [None] * 4
-        self.srkBatFilename = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), 'gen', 'hab_cert', 'imx_srk_gen.bat')
+        self.srkBatFilename = os.path.join(self.exeTopRoot, 'gen', 'hab_cert', 'imx_srk_gen.bat')
         self.cstBinToElftosbPath = '../../cst/' + uidef.kCstVersion_Invalid + '/mingw32/bin'
         self.cstCrtsToElftosbPath = '../../cst/' + uidef.kCstVersion_Invalid + '/crts/'
         self.genCertToElftosbPath = '../../../gen/hab_cert/'
         self.genCryptoToElftosbPath = '../../../gen/hab_crypto/'
         self.lastCstVersion = uidef.kCstVersion_Invalid
-        self.habDekFilename = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), 'gen', 'hab_crypto', 'hab_dek.bin')
+        self.habDekFilename = os.path.join(self.exeTopRoot, 'gen', 'hab_crypto', 'hab_dek.bin')
         self.habDekDataOffset = None
         self.srcAppFilename = None
-        self.destAppFilename = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), 'gen', 'bootable_image', 'ivt_application.bin')
-        self.destAppNoPaddingFilename = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), 'gen', 'bootable_image', 'ivt_application_nopadding.bin')
-        self.appBdFilename = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), 'gen', 'bd_file', 'imx_application_gen.bd')
-        self.elftosbPath = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), 'tools', 'elftosb', 'win', 'elftosb.exe')
-        self.appBdBatFilename = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), 'gen', 'bd_file', 'imx_application_gen.bat')
+        self.destAppFilename = os.path.join(self.exeTopRoot, 'gen', 'bootable_image', 'ivt_application.bin')
+        self.destAppNoPaddingFilename = os.path.join(self.exeTopRoot, 'gen', 'bootable_image', 'ivt_application_nopadding.bin')
+        self.appBdFilename = os.path.join(self.exeTopRoot, 'gen', 'bd_file', 'imx_application_gen.bd')
+        self.elftosbPath = os.path.join(self.exeTopRoot, 'tools', 'elftosb', 'win', 'elftosb.exe')
+        self.appBdBatFilename = os.path.join(self.exeTopRoot, 'gen', 'bd_file', 'imx_application_gen.bat')
         self.updateAllCstPathToCorrectVersion()
-        self.imageEncPath = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), 'tools', 'image_enc', 'win', 'image_enc.exe')
-        self.beeDek0Filename = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), 'gen', 'bee_crypto', 'bee_dek0.bin')
-        self.beeDek1Filename = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), 'gen', 'bee_crypto', 'bee_dek1.bin')
-        self.encBatFilename = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), 'gen', 'bee_crypto', 'imx_application_enc.bat')
-        self.otpmkDekFilename = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), 'gen', 'bee_crypto', 'otpmk_dek.bin')
+        self.imageEncPath = os.path.join(self.exeTopRoot, 'tools', 'image_enc', 'win', 'image_enc.exe')
+        self.beeDek0Filename = os.path.join(self.exeTopRoot, 'gen', 'bee_crypto', 'bee_dek0.bin')
+        self.beeDek1Filename = os.path.join(self.exeTopRoot, 'gen', 'bee_crypto', 'bee_dek1.bin')
+        self.encBatFilename = os.path.join(self.exeTopRoot, 'gen', 'bee_crypto', 'imx_application_enc.bat')
+        self.otpmkDekFilename = os.path.join(self.exeTopRoot, 'gen', 'bee_crypto', 'otpmk_dek.bin')
         self.destEncAppFilename = None
         self.destEncAppNoCfgBlockFilename = None
 
-        self.flBdFilename = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), 'gen', 'bd_file', 'imx_flashloader_gen.bd')
-        self.flBdBatFilename = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), 'gen', 'bd_file', 'imx_flashloader_gen.bat')
-        self.destFlFilename = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), 'gen', 'bootable_image', 'ivt_flashloader_signed.bin')
+        self.flBdFilename = os.path.join(self.exeTopRoot, 'gen', 'bd_file', 'imx_flashloader_gen.bd')
+        self.flBdBatFilename = os.path.join(self.exeTopRoot, 'gen', 'bd_file', 'imx_flashloader_gen.bat')
+        self.destFlFilename = os.path.join(self.exeTopRoot, 'gen', 'bootable_image', 'ivt_flashloader_signed.bin')
 
     def _copyCstBinToElftosbFolder( self ):
         shutil.copy(self.cstBinFolder + '\\cst.exe', os.path.split(self.elftosbPath)[0])
@@ -126,8 +129,10 @@ class secBootGen(uicore.secBootUi):
         else:
             pass
         # We have to change system dir to the path of hab4_pki_tree.bat, or hab4_pki_tree.bat will not be ran successfully
+        curdir = os.getcwd()
         os.chdir(self.hab4PkiTreePath)
         os.system(self.hab4PkiTreeName + batArg)
+        os.chdir(curdir)
         self.printLog('Certificates are generated into these folders: ' + self.cstKeysFolder + ' , ' + self.cstCrtsFolder)
 
     def _setSrkFilenames( self ):
@@ -519,8 +524,10 @@ class secBootGen(uicore.secBootUi):
     def genBootableImage( self ):
         self._updateBdBatfileContent()
         # We have to change system dir to the path of elftosb.exe, or elftosb.exe may not be ran successfully
+        curdir = os.getcwd()
         os.chdir(os.path.split(self.elftosbPath)[0])
         process = subprocess.Popen(self.appBdBatFilename, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+        os.chdir(curdir)
         commandOutput = process.communicate()[0]
         print commandOutput
         self._parseBootableImageGenerationResult(commandOutput)
@@ -608,8 +615,10 @@ class secBootGen(uicore.secBootUi):
             fileObj.close()
 
     def _encrypteBootableImage( self ):
+        curdir = os.getcwd()
         os.chdir(os.path.split(self.imageEncPath)[0])
         process = subprocess.Popen(self.encBatFilename, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+        os.chdir(curdir)
         commandOutput = process.communicate()[0]
         print commandOutput
 
@@ -643,8 +652,10 @@ class secBootGen(uicore.secBootUi):
     def genSignedFlashloader( self, srcFlFilename ):
         if self._createSignedFlBdfile(srcFlFilename):
             self._updateFlBdBatfileContent(srcFlFilename)
+            curdir = os.getcwd()
             os.chdir(os.path.split(self.elftosbPath)[0])
             process = subprocess.Popen(self.flBdBatFilename, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+            os.chdir(curdir)
             commandOutput = process.communicate()[0]
             print commandOutput
             return self.destFlFilename

@@ -13,7 +13,7 @@ from boot import bltest
 from boot import target
 from utils import misc
 
-def createTarget(device):
+def createTarget(device, exeBinRoot):
     # Build path to target directory and config file.
     if device == uidef.kMcuDevice_iMXRT102x:
         cpu = "MIMXRT1021"
@@ -24,11 +24,14 @@ def createTarget(device):
     else:
         pass
     targetBaseDir = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'targets', cpu)
-    targetConfigFile = os.path.join(targetBaseDir, 'bltargetconfig.py')
 
     # Check for existing target directory.
     if not os.path.isdir(targetBaseDir):
-        raise ValueError("Missing target directory at path %s" % targetBaseDir)
+        targetBaseDir = os.path.join(os.path.dirname(exeBinRoot), 'src', 'targets', cpu)
+        if not os.path.isdir(targetBaseDir):
+            raise ValueError("Missing target directory at path %s" % targetBaseDir)
+
+    targetConfigFile = os.path.join(targetBaseDir, 'bltargetconfig.py')
 
     # Check for config file existence.
     if not os.path.isfile(targetConfigFile):
@@ -45,7 +48,7 @@ def createTarget(device):
     # Create the target object.
     tgt = target.Target(**targetConfig)
 
-    return tgt
+    return tgt, targetBaseDir
 
 ##
 # @brief
@@ -56,8 +59,9 @@ class secBootRun(gencore.secBootGen):
         self.blhost = None
         self.sdphost = None
         self.tgt = None
-        self.sdphostVectorsDir = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), 'tools', 'sdphost', 'win', 'vectors')
-        self.blhostVectorsDir = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), 'tools', 'blhost', 'win', 'vectors')
+        self.cpuDir = None
+        self.sdphostVectorsDir = os.path.join(self.exeTopRoot, 'tools', 'sdphost', 'win', 'vectors')
+        self.blhostVectorsDir = os.path.join(self.exeTopRoot, 'tools', 'blhost', 'win', 'vectors')
 
         self.bootDeviceMemId = None
         self.bootDeviceMemBase = None
@@ -73,13 +77,13 @@ class secBootRun(gencore.secBootGen):
 
     def getUsbid( self ):
         # Create the target object.
-        tgt = createTarget(self.mcuDevice)
+        tgt, cpuDir = createTarget(self.mcuDevice, self.exeBinRoot)
         return [tgt.romUsbVid, tgt.romUsbPid, tgt.flashloaderUsbVid, tgt.flashloaderUsbPid]
 
     def connectToDevice( self , connectStage):
         # Create the target object.
-        if self.tgt == None:
-            self.tgt = createTarget(self.mcuDevice)
+        if self.tgt == None or self.cpuDir == None:
+            self.tgt, self.cpuDir = createTarget(self.mcuDevice, self.exeBinRoot)
 
         if connectStage == uidef.kConnectStage_Rom:
             if self.isUartPortSelected:
@@ -194,12 +198,12 @@ class secBootRun(gencore.secBootGen):
             pass
         flashloaderBinFile = None
         if self.mcuDeviceHabStatus == fusedef.kHabStatus_Closed0 or self.mcuDeviceHabStatus == fusedef.kHabStatus_Closed1:
-            flashloaderSrecFile = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'targets', cpu, 'flashloader.srec')
+            flashloaderSrecFile = os.path.join(self.cpuDir, 'flashloader.srec')
             flashloaderBinFile = self.genSignedFlashloader(flashloaderSrecFile)
             if flashloaderBinFile == None:
                 return False
         elif self.mcuDeviceHabStatus == fusedef.kHabStatus_FAB or self.mcuDeviceHabStatus == fusedef.kHabStatus_Open:
-            flashloaderBinFile = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'targets', cpu, 'ivt_flashloader.bin')
+            flashloaderBinFile = os.path.join(self.cpuDir, 'ivt_flashloader.bin')
         else:
             pass
         status, results, cmdStr = self.sdphost.writeFile(loadAddr, flashloaderBinFile)

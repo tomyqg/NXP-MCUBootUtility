@@ -102,6 +102,8 @@ class secBootMain(memcore.secBootMem):
                 pingStatus = self.pingFlashloader()
             else:
                 pass
+            if pingStatus:
+                break
             pingCnt = pingCnt - 1
             if self.isUsbhidPortSelected:
                 time.sleep(2)
@@ -361,7 +363,7 @@ if __name__ == '__main__':
     app = wx.App()
 
     main_win = secBootMain(None)
-    main_win.SetTitle(u"nxpSecBoot v0.6.0")
+    main_win.SetTitle(u"nxpSecBoot v0.8.0")
     main_win.Show()
 
     app.MainLoop()

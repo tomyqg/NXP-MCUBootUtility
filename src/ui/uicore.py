@@ -18,6 +18,7 @@ class secBootUi(secBootWin.secBootWin):
 
     def __init__(self, parent):
         secBootWin.secBootWin.__init__(self, parent)
+        self.exeBinRoot = os.getcwd()
         self.m_bitmap_nxp.SetBitmap(wx.Bitmap( u"../img/logo_nxp.png", wx.BITMAP_TYPE_ANY ))
         self.updateConnectStatus()
 
@@ -112,7 +113,6 @@ class secBootUi(secBootWin.secBootWin):
             pass
 
     def updateConnectStatus( self, color='black' ):
-        os.chdir(os.path.join(os.path.dirname(os.path.dirname(__file__))))
         if color == 'black':
             self.m_button_connect.SetLabel('Connect to ROM')
             self.m_bitmap_connectLed.SetBitmap(wx.Bitmap( u"../img/led_black.png", wx.BITMAP_TYPE_ANY ))
