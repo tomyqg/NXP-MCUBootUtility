@@ -519,7 +519,7 @@ class secBootGen(uicore.secBootUi):
                 self.habDekDataOffset = None
         else:
             self.habDekDataOffset = None
-            self.popupMsgBox('Bootable image is not generated successfully!')
+            self.popupMsgBox('Bootable image is not generated successfully! Make sure you don\'t put the tool in path with blank space!')
 
     def genBootableImage( self ):
         self._updateBdBatfileContent()
