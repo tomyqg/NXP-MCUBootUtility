@@ -204,7 +204,7 @@ class secBootWin ( wx.Frame ):
 
 		wSizer_bootType = wx.WrapSizer( wx.HORIZONTAL, wx.WRAPSIZER_DEFAULT_FLAGS )
 
-		self.m_staticText_null1BootType = wx.StaticText( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.Size( 415,-1 ), 0 )
+		self.m_staticText_null1BootType = wx.StaticText( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.Size( 400,-1 ), 0 )
 		self.m_staticText_null1BootType.Wrap( -1 )
 
 		wSizer_bootType.Add( self.m_staticText_null1BootType, 0, wx.ALL, 5 )
@@ -536,7 +536,7 @@ class secBootWin ( wx.Frame ):
 
 		sbSizer_showImage = wx.StaticBoxSizer( wx.StaticBox( self.m_panel_flashImage1_showImage, wx.ID_ANY, u"Step 6:" ), wx.VERTICAL )
 
-		self.m_staticText_showImage = wx.StaticText( sbSizer_showImage.GetStaticBox(), wx.ID_ANY, u"Program final bootable image to flash:", wx.DefaultPosition, wx.Size( 180,50 ), 0 )
+		self.m_staticText_showImage = wx.StaticText( sbSizer_showImage.GetStaticBox(), wx.ID_ANY, u"Program final bootable image to flash:", wx.DefaultPosition, wx.Size( 170,50 ), 0 )
 		self.m_staticText_showImage.Wrap( -1 )
 
 		sbSizer_showImage.Add( self.m_staticText_showImage, 0, wx.ALL, 5 )
