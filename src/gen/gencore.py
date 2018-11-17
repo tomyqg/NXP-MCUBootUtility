@@ -10,6 +10,7 @@ sys.path.append(os.path.abspath(".."))
 from ui import uicore
 from ui import uidef
 from ui import uivar
+from run import rundef
 from utils import elf
 
 class secBootGen(uicore.secBootUi):
@@ -60,6 +61,12 @@ class secBootGen(uicore.secBootUi):
         self.flBdFilename = os.path.join(self.exeTopRoot, 'gen', 'bd_file', 'imx_flashloader_gen.bd')
         self.flBdBatFilename = os.path.join(self.exeTopRoot, 'gen', 'bd_file', 'imx_flashloader_gen.bat')
         self.destFlFilename = os.path.join(self.exeTopRoot, 'gen', 'bootable_image', 'ivt_flashloader_signed.bin')
+
+        self.destAppIvtOffset = None
+        self.destAppVectorOffset = None
+        self.destAppBinaryBytes = 0
+        self.isNandDevice = False
+        self.isXipApp = False
 
     def _copyCstBinToElftosbFolder( self ):
         shutil.copy(self.cstBinFolder + '\\cst.exe', os.path.split(self.elftosbPath)[0])
@@ -214,6 +221,7 @@ class secBootGen(uicore.secBootUi):
     def _getImageInfo( self, srcAppFilename ):
         startAddress = None
         entryPointAddress = None
+        lengthInByte = 0
         if os.path.isfile(srcAppFilename):
             appPath, appFilename = os.path.split(srcAppFilename)
             appName, appType = os.path.splitext(appFilename)
@@ -223,31 +231,39 @@ class secBootGen(uicore.secBootUi):
                     e = elf.ELFObject()
                     e.fromFile(f)
                     elfObj = e
-                for symbol in gendef.kToolchainSymbolList_VectorAddr:
-                    try:
-                        startAddress = elfObj.getSymbol(symbol).st_value
-                        break
-                    except:
-                        startAddress = None
-                if startAddress == None:
-                    self.printLog('Cannot get vectorAddr symbol from image file: ' + srcAppFilename)
+                #for symbol in gendef.kToolchainSymbolList_VectorAddr:
+                #    try:
+                #        startAddress = elfObj.getSymbol(symbol).st_value
+                #        break
+                #    except:
+                #        startAddress = None
+                #if startAddress == None:
+                #    self.printLog('Cannot get vectorAddr symbol from image file: ' + srcAppFilename)
                 #entryPointAddress = elfObj.e_entry
-                for symbol in gendef.kToolchainSymbolList_EntryAddr:
-                    try:
-                        entryPointAddress = elfObj.getSymbol(symbol).st_value
-                        break
-                    except:
-                        entryPointAddress = None
-                if entryPointAddress == None:
-                    self.printLog('Cannot get entryAddr symbol from image file: ' + srcAppFilename)
+                #for symbol in gendef.kToolchainSymbolList_EntryAddr:
+                #    try:
+                #        entryPointAddress = elfObj.getSymbol(symbol).st_value
+                #        break
+                #    except:
+                #        entryPointAddress = None
+                #if entryPointAddress == None:
+                #    self.printLog('Cannot get entryAddr symbol from image file: ' + srcAppFilename)
+                startAddress = elfObj.programmheaders[0].p_paddr
+                entryPointAddress = self.getVal32FromBinFile(srcAppFilename, elfObj.programmheaders[0].p_offset + 4)
+                for i in range(elfObj.e_phnum):
+                    lengthInByte += elfObj.programmheaders[i].p_memsz
             elif appType == '.s19' or appType == '.srec':
                 srecObj = bincopy.BinFile(str(srcAppFilename))
                 startAddress = srecObj.minimum_address
                 #entryPointAddress = srecObj.execution_start_address
                 entryPointAddress = self.getVal32FromByteArray(srecObj.as_binary(startAddress + 0x4, startAddress  + 0x8))
+                lengthInByte = len(srecObj.as_binary())
             else:
                 self.printLog('Cannot recognise the format of image file: ' + srcAppFilename)
-        return startAddress, entryPointAddress
+        #print ('Image Vector address is 0x%x' %(startAddress))
+        #print ('Image Entry address is 0x%x' %(entryPointAddress))
+        #print ('Image length is 0x%x' %(lengthInByte))
+        return startAddress, entryPointAddress, lengthInByte
 
     def _updateBdfileContent( self, secureBootType, bootDevice, vectorAddress, entryPointAddress):
         bdContent = ""
@@ -270,17 +286,27 @@ class secBootGen(uicore.secBootUi):
         startAddress = 0x0
         if bootDevice == uidef.kBootDevice_FlexspiNor or \
            bootDevice == uidef.kBootDevice_SemcNor:
-            ivtOffset = gendef.kIvtOffset_NOR
-            initialLoadSize = gendef.kInitialLoadSize_NOR
+            self.destAppIvtOffset = gendef.kIvtOffset_NOR
+            if self.isXipApp:
+                initialLoadSize = self.destAppVectorOffset
+            else:
+                initialLoadSize = gendef.kInitialLoadSize_NOR
+            self.isNandDevice = False
         elif bootDevice == uidef.kBootDevice_FlexspiNand or \
              bootDevice == uidef.kBootDevice_SemcNand or \
              bootDevice == uidef.kBootDevice_UsdhcSd or \
              bootDevice == uidef.kBootDevice_UsdhcMmc or \
              bootDevice == uidef.kBootDevice_LpspiNor:
-            ivtOffset = gendef.kIvtOffset_NAND_SD_EEPROM
+            self.destAppIvtOffset = gendef.kIvtOffset_NAND_SD_EEPROM
             initialLoadSize = gendef.kInitialLoadSize_NAND_SD_EEPROM
+            if bootDevice == uidef.kBootDevice_LpspiNor:
+                self.isNandDevice = False
+            else:
+                self.isNandDevice = True
+            self.isXipApp = False
+            self.destAppVectorOffset = initialLoadSize
         elif bootDevice == uidef.kBootDevice_RamFlashloader:
-            ivtOffset = gendef.kIvtOffset_RAM_FLASHLOADER
+            self.destAppIvtOffset = gendef.kIvtOffset_RAM_FLASHLOADER
             initialLoadSize = gendef.kInitialLoadSize_RAM_FLASHLOADER
         else:
             pass
@@ -291,7 +317,7 @@ class secBootGen(uicore.secBootUi):
         else:
             startAddress = vectorAddress - initialLoadSize
         bdContent += "    startAddress = " + str(hex(startAddress)) + ";\n"
-        bdContent += "    ivtOffset = " + str(hex(ivtOffset)) + ";\n"
+        bdContent += "    ivtOffset = " + str(hex(self.destAppIvtOffset)) + ";\n"
         bdContent += "    initialLoadSize = " + str(hex(initialLoadSize)) + ";\n"
         if secureBootType == uidef.kSecureBootType_HabAuth:
             #bdContent += "    cstFolderPath = \"" + self.cstBinFolder + "\";\n"
@@ -459,10 +485,33 @@ class secBootGen(uicore.secBootUi):
 
     def createMatchedAppBdfile( self ):
         self.srcAppFilename = self.getUserAppFilePath()
-        imageStartAddr, imageEntryAddr = self._getImageInfo(self.srcAppFilename)
+        imageStartAddr, imageEntryAddr, imageLength = self._getImageInfo(self.srcAppFilename)
         if imageStartAddr == None or imageEntryAddr == None:
             self.popupMsgBox('You should first specify a source image file (.elf/.srec)!')
             return False
+        if self.bootDevice == uidef.kBootDevice_FlexspiNor:
+            if ((imageStartAddr >= rundef.kBootDeviceMemBase_FlexspiNor) and (imageStartAddr < rundef.kBootDeviceMemBase_FlexspiNor + rundef.kBootDeviceMemXipSize_FlexspiNor)):
+                if (imageStartAddr + imageLength <= rundef.kBootDeviceMemBase_FlexspiNor + rundef.kBootDeviceMemXipSize_FlexspiNor):
+                    self.isXipApp = True
+                    self.destAppVectorOffset = imageStartAddr - rundef.kBootDeviceMemBase_FlexspiNor
+                else:
+                    self.popupMsgBox('XIP Application is detected but the size exceeds maximum XIP size 0x%s !' %(rundef.kBootDeviceMemXipSize_FlexspiNor))
+                    return False
+            else:
+                self.destAppVectorOffset = gendef.kInitialLoadSize_NOR
+        elif self.bootDevice == uidef.kBootDevice_SemcNor:
+            if ((imageStartAddr >= rundef.kBootDeviceMemBase_SemcNor) and (imageStartAddr <= rundef.kBootDeviceMemBase_SemcNor + rundef.kBootDeviceMemXipSize_SemcNor)):
+                if (imageStartAddr + imageLength <= rundef.kBootDeviceMemBase_SemcNor + rundef.kBootDeviceMemXipSize_SemcNor):
+                    self.isXipApp = True
+                    self.destAppVectorOffset = imageStartAddr - rundef.kBootDeviceMemBase_SemcNor
+                else:
+                    self.popupMsgBox('XIP Application is detected but the size exceeds maximum XIP size 0x%s !' %(rundef.kBootDeviceMemXipSize_SemcNor))
+                    return False
+            else:
+                self.destAppVectorOffset = gendef.kInitialLoadSize_NOR
+        else:
+            pass
+        self.destAppBinaryBytes = imageLength
         if not self._isCertificateGenerated(self.secureBootType):
             self.popupMsgBox('You should first generate certificates!')
             return False
@@ -633,7 +682,7 @@ class secBootGen(uicore.secBootUi):
             pass
 
     def _createSignedFlBdfile( self, srcFlFilename):
-        imageStartAddr, imageEntryAddr = self._getImageInfo(srcFlFilename)
+        imageStartAddr, imageEntryAddr, imageLength = self._getImageInfo(srcFlFilename)
         if imageStartAddr == None or imageEntryAddr == None:
             self.popupMsgBox('Default Flashloader image file is not usable!')
             return False
