@@ -60,3 +60,17 @@ kSupportedKeySource_iMXRT105x = [kUserKeySource_SW_GP2]
 kSupportedKeySource_iMXRT106x = [kUserKeySource_SW_GP2, kUserKeySource_GP4]
 
 kMaxFacRegionCount = 3
+
+kMemBlockColor_Background = wx.WHITE
+kMemBlockColor_Padding    = wx.BLACK
+#kMemBlockColor_FCB        = wx.
+#kMemBlockColor_DBBT       = wx.
+kMemBlockColor_CFG        = wx.Colour( 0x00, 0xff, 0xff ) #wx.CYAN
+kMemBlockColor_EKIB       = wx.Colour( 0xb0, 0x00, 0xff ) #wx.PURPLE
+kMemBlockColor_EPRDB      = wx.Colour( 0xa5, 0x2a, 0x2a ) #wx.BROWN
+kMemBlockColor_IVT        = wx.RED
+kMemBlockColor_BootData   = wx.GREEN
+kMemBlockColor_DCD        = wx.Colour( 0x6f, 0x42, 0x42 ) #wx.SALMON
+kMemBlockColor_Image      = wx.BLUE
+kMemBlockColor_CSF        = wx.Colour( 0xff, 0xc0, 0xcb ) #wx.PINK
+kMemBlockColor_KeyBlob    = wx.Colour( 0xff, 0x7f, 0x00 ) #wx.CORAL

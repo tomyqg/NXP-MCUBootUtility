@@ -2,6 +2,7 @@
 import sys
 import os
 import boot
+import memdef
 sys.path.append(os.path.abspath(".."))
 from fuse import fusecore
 from run import rundef
@@ -15,6 +16,32 @@ class secBootMem(fusecore.secBootFuse):
 
     def __init__(self, parent):
         fusecore.secBootFuse.__init__(self, parent)
+
+        self.needToShowCfgIntr = None
+        self.needToShowEkib0Intr = None
+        self.needToShowEprdb0Intr = None
+        self.needToShowEkib1Intr = None
+        self.needToShowEprdb1Intr = None
+        self.needToShowIvtIntr = None
+        self.needToShowBootDataIntr = None
+        self.needToShowDcdIntr = None
+        self.needToShowImageIntr = None
+        self.needToShowCsfIntr = None
+        self.needToShowKeyBlobIntr = None
+        self._initShowIntr()
+
+    def _initShowIntr( self ):
+        self.needToShowCfgIntr = True
+        self.needToShowEkib0Intr = True
+        self.needToShowEprdb0Intr = True
+        self.needToShowEkib1Intr = True
+        self.needToShowEprdb1Intr = True
+        self.needToShowIvtIntr = True
+        self.needToShowBootDataIntr = True
+        self.needToShowDcdIntr = True
+        self.needToShowImageIntr = True
+        self.needToShowCsfIntr = True
+        self.needToShowKeyBlobIntr = True
 
     def readProgrammedMemoryAndShow( self ):
         if not os.path.isfile(self.destAppFilename):
@@ -72,9 +99,37 @@ class secBootMem(fusecore.secBootFuse):
                         contentToShow += '-- '
                         visibleContent += '-'
                 contentToShow += '        ' + visibleContent
-                self.printMem(contentToShow)
+                if not self.isNandDevice:
+                    if addr <= self.bootDeviceMemBase + memdef.kMemBlockSize_CFG:
+                        if self.needToShowCfgIntr:
+                            self.printMem('------------------------------------CFG-----------------------------------------------', uidef.kMemBlockColor_CFG)
+                            self.needToShowCfgIntr = False
+                        self.printMem(contentToShow, uidef.kMemBlockColor_CFG)
+                    elif addr <= self.bootDeviceMemBase + self.destAppIvtOffset:
+                        self.printMem(contentToShow)
+                    elif addr <= self.bootDeviceMemBase + self.destAppIvtOffset + memdef.kMemBlockSize_IVT:
+                        if self.needToShowIvtIntr:
+                            self.printMem('------------------------------------IVT-----------------------------------------------', uidef.kMemBlockColor_IVT)
+                            self.needToShowIvtIntr = False
+                        self.printMem(contentToShow, uidef.kMemBlockColor_IVT)
+                    elif addr <= self.bootDeviceMemBase + self.destAppIvtOffset + memdef.kMemBlockSize_IVT + memdef.kMemBlockSize_BootData:
+                        if self.needToShowBootDataIntr:
+                            self.printMem('---------------------------------Boot Data--------------------------------------------', uidef.kMemBlockColor_BootData)
+                            self.needToShowBootDataIntr = False
+                        self.printMem(contentToShow, uidef.kMemBlockColor_BootData)
+                    elif addr <= self.bootDeviceMemBase + self.destAppVectorOffset:
+                        self.printMem(contentToShow)
+                    elif addr <= self.bootDeviceMemBase + self.destAppVectorOffset + self.destAppBinaryBytes:
+                        if self.needToShowImageIntr:
+                            self.printMem('-----------------------------------Image----------------------------------------------', uidef.kMemBlockColor_Image)
+                            self.needToShowImageIntr = False
+                        self.printMem(contentToShow, uidef.kMemBlockColor_Image)
+                    else:
+                        self.printMem(contentToShow)
+                else:
+                    self.printMem(contentToShow)
             fileObj.close()
-
+        self._initShowIntr()
         try:
             os.remove(memFilepath)
         except:

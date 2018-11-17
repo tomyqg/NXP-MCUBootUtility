@@ -9,6 +9,7 @@ from gen import gendef
 from fuse import fusedef
 from ui import uidef
 from ui import uivar
+from mem import memdef
 from boot import bltest
 from boot import target
 from utils import misc
@@ -772,7 +773,7 @@ class secBootRun(gencore.secBootGen):
                 else:
                     pass
                 alignedErasedSize = misc.align_up(imageLen, eraseUnit)
-                needToBeErasedSize = misc.align_up(self.habDekDataOffset + rundef.kKeyBlobMaxSize, eraseUnit)
+                needToBeErasedSize = misc.align_up(self.habDekDataOffset + memdef.kMemBlockSize_KeyBlob, eraseUnit)
                 if alignedErasedSize < needToBeErasedSize:
                     memEraseLen = needToBeErasedSize - alignedErasedSize
                     alignedMemEraseAddr = imageLoadAddr + alignedErasedSize

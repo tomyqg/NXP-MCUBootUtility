@@ -19,6 +19,9 @@ kBootDeviceMemBase_LpspiNor     = 0x0
 kBootDeviceMemBase_UsdhcSd      = 0x0
 kBootDeviceMemBase_UsdhcMmc     = 0x0
 
+kBootDeviceMemXipSize_SemcNor      = 0x01000000 #16MB
+kBootDeviceMemXipSize_FlexspiNor   = 0x10000000 #256MB
+
 kRamFreeSpaceStart_LoadCommOpt        = 0x00002000
 kRamFreeSpaceStart_LoadDekData        = 0x00002100
 kRamFreeSpaceStart_LoadKeyBlobContext = 0x00002200
@@ -29,8 +32,6 @@ kRamFreeSpaceStart_LoadPrdbOpt        = 0x00004000
 kRamFreeSpaceStep_LoadKeyBlobData    = 0x100
 
 kRamFreeSpaceStart_Rom         = 0x20208000
-
-kKeyBlobMaxSize = 512
 
 kRegisterAddr_UUID1  = 0x401F4410
 kRegisterAddr_UUID2  = 0x401F4420
