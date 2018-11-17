@@ -36,7 +36,7 @@ class secBootUi(secBootWin.secBootWin):
         self.usbhidPid = None
         self._initPortSetupValue()
         self.isOneStepConnectMode = None
-        self.getOneStepConnectMode()
+        self._initOneStepConnectMode()
 
         self.secureBootType = None
         self.keyStorageRegion = None
@@ -49,9 +49,10 @@ class secBootUi(secBootWin.secBootWin):
         self.bootDevice = self.m_choice_bootDevice.GetString(self.m_choice_bootDevice.GetSelection())
 
     def _initPortSetupValue( self ):
-        self.m_radioBtn_uart.SetValue(True)
-        self.m_radioBtn_usbhid.SetValue(False)
-        self.setPortSetupValue()
+        self.m_radioBtn_uart.SetValue(False)
+        self.m_radioBtn_usbhid.SetValue(True)
+        usbIdList = self.getUsbid()
+        self.setPortSetupValue(uidef.kConnectStage_Rom, usbIdList)
 
     def adjustPortSetupValue( self, connectStage=uidef.kConnectStage_Rom, usbIdList=[] ):
         self.isUartPortSelected = self.m_radioBtn_uart.GetValue()
@@ -130,6 +131,10 @@ class secBootUi(secBootWin.secBootWin):
             self.m_bitmap_connectLed.SetBitmap(wx.Bitmap( u"../img/led_red.png", wx.BITMAP_TYPE_ANY ))
         else:
             pass
+
+    def _initOneStepConnectMode( self ):
+        self.m_checkBox_oneStepConnect.SetValue(True)
+        self.getOneStepConnectMode()
 
     def getOneStepConnectMode( self ):
         self.isOneStepConnectMode = self.m_checkBox_oneStepConnect.GetValue()
@@ -326,8 +331,9 @@ class secBootUi(secBootWin.secBootWin):
     def clearSwGp2DekData( self ):
         self.m_textCtrl_swgp2Dek128bit.Clear()
 
-    def printMem( self , memStr ):
-        self.m_textCtrl_bootDeviceMem.write(memStr + "\n")
+    def printMem( self , memStr, strColor=uidef.kMemBlockColor_Padding ):
+        self.m_textCtrl_bootDeviceMem.SetDefaultStyle(wx.TextAttr(strColor, uidef.kMemBlockColor_Background))
+        self.m_textCtrl_bootDeviceMem.AppendText(memStr + "\n")
 
     def clearMem( self ):
         self.m_textCtrl_bootDeviceMem.Clear()
