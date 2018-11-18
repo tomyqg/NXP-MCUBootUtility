@@ -119,10 +119,10 @@ def initVar():
     g_UserKeyCtrlDict['region1_key_src'] = uidef.kUserKeySource_OTPMK
     g_UserKeyCtrlDict['region1_fac_cnt'] = 1
     g_UserKeyCmdDict['base_addr'] = '0x60000000'
-    #g_UserKeyCmdDict['region0_key']
+    g_UserKeyCmdDict['region0_key'] = '0123456789abcdeffedcba9876543210'
     g_UserKeyCmdDict['region0_arg'] = '1,[0x60001000,0x1000,0]'
     g_UserKeyCmdDict['region0_lock'] = '0'
-    #g_UserKeyCmdDict['region1_key']
+    g_UserKeyCmdDict['region1_key'] = '0123456789abcdeffedcba9876543210'
     g_UserKeyCmdDict['region1_arg'] = '1,[0x60002000,0x1000,0]'
     g_UserKeyCmdDict['region1_lock'] = '0'
     g_UserKeyCmdDict['use_zero_key'] = '1'

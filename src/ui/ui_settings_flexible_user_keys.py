@@ -16,11 +16,11 @@ class secBootUiSettingsFlexibleUserKeys(advSettingsWin_FlexibleUserKeys.advSetti
         userKeyCtrlDict, userKeyCmdDict = uivar.getAdvancedSettings(uidef.kAdvancedSettings_UserKeys)
         self.userKeyCtrlDict = userKeyCtrlDict
         self.userKeyCmdDict = userKeyCmdDict
-        #self._recoverLastSettings()
         self.region0FacStart = [None] * uidef.kMaxFacRegionCount
         self.region0FacLength = [None] * uidef.kMaxFacRegionCount
         self.region1FacStart = [None] * uidef.kMaxFacRegionCount
         self.region1FacLength = [None] * uidef.kMaxFacRegionCount
+        self._recoverLastSettings()
 
     def _getDek128ContentFromBinFile( self, filename ):
         if os.path.isfile(filename):
@@ -38,9 +38,8 @@ class secBootUiSettingsFlexibleUserKeys(advSettingsWin_FlexibleUserKeys.advSetti
         else:
             return None
 
-    def setNecessaryInfo( self, mcuDevice, otpmkFilename ):
+    def setNecessaryInfo( self, mcuDevice ):
         self.mcuDevice = mcuDevice
-        self.otpmkDekContent = self._getDek128ContentFromBinFile(otpmkFilename)
         keySource = None
         if self.mcuDevice == uidef.kMcuDevice_iMXRT102x:
             keySource = uidef.kSupportedKeySource_iMXRT102x
@@ -54,8 +53,42 @@ class secBootUiSettingsFlexibleUserKeys(advSettingsWin_FlexibleUserKeys.advSetti
         self.m_choice_region1keySource.Clear()
         self.m_choice_region0keySource.SetItems(keySource)
         self.m_choice_region1keySource.SetItems(keySource)
-        self.m_choice_region0keySource.SetSelection(1)
-        self.m_choice_region1keySource.SetSelection(1)
+        self.m_choice_region0keySource.SetSelection(0)
+        self.m_choice_region1keySource.SetSelection(0)
+
+    def _recoverLastSettings ( self ):
+        if self.userKeyCtrlDict['region_sel'] == uidef.kUserRegionSel_Region0:
+            self.m_choice_regionSel.SetSelection(0)
+            self._recoverRegionInfo(0)
+            self._updateKeySourceInfoField(0)
+            self._updateRegionRangeInfoField(0)
+            self._updateRegionInfoField(0, True)
+            self._updateRegionInfoField(1, False)
+        elif self.userKeyCtrlDict['region_sel'] == uidef.kUserRegionSel_Region1:
+            self.m_choice_regionSel.SetSelection(1)
+            self._recoverRegionInfo(1)
+            self._updateKeySourceInfoField(1)
+            self._updateRegionRangeInfoField(1)
+            self._updateRegionInfoField(0, False)
+            self._updateRegionInfoField(1, True)
+        elif self.userKeyCtrlDict['region_sel'] == uidef.kUserRegionSel_BothRegions:
+            self.m_choice_regionSel.SetSelection(2)
+            self._recoverRegionInfo(0)
+            self._updateKeySourceInfoField(0)
+            self._updateRegionRangeInfoField(0)
+            self._recoverRegionInfo(1)
+            self._updateKeySourceInfoField(1)
+            self._updateRegionRangeInfoField(1)
+            self._updateRegionInfoField(0, True)
+            self._updateRegionInfoField(1, True)
+        else:
+            pass
+        self.m_choice_beeEngKeySel.SetSelection(int(self.userKeyCmdDict['use_zero_key']))
+        self.m_choice_imageType.SetSelection(int(self.userKeyCmdDict['is_boot_image']))
+        if self.userKeyCmdDict['base_addr'] == '0x60000000':
+            self.m_choice_xipBaseAddr.SetSelection(0)
+        else:
+            pass
 
     def _getRegionSelection( self ):
         self.userKeyCtrlDict['region_sel'] = self.m_choice_regionSel.GetString(self.m_choice_regionSel.GetSelection())
@@ -293,6 +326,7 @@ class secBootUiSettingsFlexibleUserKeys(advSettingsWin_FlexibleUserKeys.advSetti
                 self.region1FacLength = [None] * uidef.kMaxFacRegionCount
                 return False
             self._getAccessPermision(regionIndex)
+        return True
 
     def _getRegionInfo( self, regionIndex=0 ):
         self._getKeySource(regionIndex)
@@ -303,15 +337,117 @@ class secBootUiSettingsFlexibleUserKeys(advSettingsWin_FlexibleUserKeys.advSetti
         self._getRegionLock(regionIndex)
         return True
 
+    def _recoverRegionArg( self, regionIndex ):
+        if regionIndex == 0:
+            self.m_choice_region0FacCnt.SetSelection(self.userKeyCtrlDict['region0_fac_cnt'] - 1)
+            self.m_choice_region0AesMode.SetSelection(int(self.userKeyCmdDict['region0_arg'][0]))
+            locStart = 0
+            locEnd = 0
+            if self.userKeyCtrlDict['region0_fac_cnt'] > 0:
+                self.m_textCtrl_region0Fac0Start.Clear()
+                locStart = self.userKeyCmdDict['region0_arg'].find('[')
+                locEnd = self.userKeyCmdDict['region0_arg'].find(',', locStart)
+                self.m_textCtrl_region0Fac0Start.write(self.userKeyCmdDict['region0_arg'][locStart+1:locEnd])
+                self.m_textCtrl_region0Fac0Length.Clear()
+                locStart = locEnd
+                locEnd = self.userKeyCmdDict['region0_arg'].find(',', locStart + 1)
+                self.m_textCtrl_region0Fac0Length.write(self.userKeyCmdDict['region0_arg'][locStart+1:locEnd])
+            if self.userKeyCtrlDict['region0_fac_cnt'] > 1:
+                self.m_textCtrl_region0Fac1Start.Clear()
+                locStart = self.userKeyCmdDict['region0_arg'].find('[', locEnd)
+                locEnd = self.userKeyCmdDict['region0_arg'].find(',', locStart)
+                self.m_textCtrl_region0Fac1Start.write(self.userKeyCmdDict['region0_arg'][locStart+1:locEnd])
+                self.m_textCtrl_region0Fac1Length.Clear()
+                locStart = locEnd
+                locEnd = self.userKeyCmdDict['region0_arg'].find(',', locStart + 1)
+                self.m_textCtrl_region0Fac1Length.write(self.userKeyCmdDict['region0_arg'][locStart+1:locEnd])
+            if self.userKeyCtrlDict['region0_fac_cnt'] > 2:
+                self.m_textCtrl_region0Fac2Start.Clear()
+                locStart = self.userKeyCmdDict['region0_arg'].find('[', locEnd)
+                locEnd = self.userKeyCmdDict['region0_arg'].find(',', locStart)
+                self.m_textCtrl_region0Fac2Start.write(self.userKeyCmdDict['region0_arg'][locStart+1:locEnd])
+                self.m_textCtrl_region0Fac2Length.Clear()
+                locStart = locEnd
+                locEnd = self.userKeyCmdDict['region0_arg'].find(',', locStart + 1)
+                self.m_textCtrl_region0Fac2Length.write(self.userKeyCmdDict['region0_arg'][locStart+1:locEnd])
+            locEnd = self.userKeyCmdDict['region0_arg'].find(']', locEnd)
+            self.m_choice_region0AccessPermision.SetSelection(int(self.userKeyCmdDict['region0_arg'][locEnd-1:locEnd]))
+        elif regionIndex == 1:
+            self.m_choice_region1FacCnt.SetSelection(self.userKeyCtrlDict['region1_fac_cnt'] - 1)
+            self.m_choice_region1AesMode.SetSelection(int(self.userKeyCmdDict['region1_arg'][0]))
+            locStart = 0
+            locEnd = 0
+            if self.userKeyCtrlDict['region1_fac_cnt'] > 0:
+                self.m_textCtrl_region1Fac0Start.Clear()
+                locStart = self.userKeyCmdDict['region1_arg'].find('[')
+                locEnd = self.userKeyCmdDict['region1_arg'].find(',', locStart)
+                self.m_textCtrl_region1Fac0Start.write(self.userKeyCmdDict['region1_arg'][locStart+1:locEnd])
+                self.m_textCtrl_region1Fac0Length.Clear()
+                locStart = locEnd
+                locEnd = self.userKeyCmdDict['region1_arg'].find(',', locStart + 1)
+                self.m_textCtrl_region1Fac0Length.write(self.userKeyCmdDict['region1_arg'][locStart+1:locEnd])
+            if self.userKeyCtrlDict['region1_fac_cnt'] > 1:
+                self.m_textCtrl_region1Fac1Start.Clear()
+                locStart = self.userKeyCmdDict['region1_arg'].find('[', locEnd)
+                locEnd = self.userKeyCmdDict['region1_arg'].find(',', locStart)
+                self.m_textCtrl_region1Fac1Start.write(self.userKeyCmdDict['region1_arg'][locStart+1:locEnd])
+                self.m_textCtrl_region1Fac1Length.Clear()
+                locStart = locEnd
+                locEnd = self.userKeyCmdDict['region1_arg'].find(',', locStart + 1)
+                self.m_textCtrl_region1Fac1Length.write(self.userKeyCmdDict['region1_arg'][locStart+1:locEnd])
+            if self.userKeyCtrlDict['region1_fac_cnt'] > 2:
+                self.m_textCtrl_region1Fac2Start.Clear()
+                locStart = self.userKeyCmdDict['region1_arg'].find('[', locEnd)
+                locEnd = self.userKeyCmdDict['region1_arg'].find(',', locStart)
+                self.m_textCtrl_region1Fac2Start.write(self.userKeyCmdDict['region1_arg'][locStart+1:locEnd])
+                self.m_textCtrl_region1Fac2Length.Clear()
+                locStart = locEnd
+                locEnd = self.userKeyCmdDict['region1_arg'].find(',', locStart + 1)
+                self.m_textCtrl_region1Fac2Length.write(self.userKeyCmdDict['region1_arg'][locStart+1:locEnd])
+            locEnd = self.userKeyCmdDict['region1_arg'].find(']', locEnd)
+            self.m_choice_region1AccessPermision.SetSelection(int(self.userKeyCmdDict['region1_arg'][locEnd-1:locEnd]))
+        else:
+            pass
+
+    def _recoverRegionInfo( self, regionIndex ):
+        if regionIndex == 0:
+            if self.m_choice_region0keySource.GetCount() == 2:
+                if self.userKeyCtrlDict['region0_key_src'] == uidef.kUserKeySource_SW_GP2:
+                    self.m_choice_region0keySource.SetSelection(0)
+                elif self.userKeyCtrlDict['region0_key_src'] == uidef.kUserKeySource_GP4:
+                    self.m_choice_region0keySource.SetSelection(1)
+                else:
+                    pass
+            else:
+                self.m_choice_region0keySource.SetSelection(0)
+            self.m_textCtrl_region0UserKeyData.Clear()
+            if self.userKeyCmdDict['region0_key'] != None:
+                self.m_textCtrl_region0UserKeyData.write(self.userKeyCmdDict['region0_key'])
+            self._recoverRegionArg(0)
+            if self.userKeyCmdDict['region0_lock'] == 'No Lock':
+                self.m_choice_region0Lock.SetSelection(0)
+        elif regionIndex == 1:
+            if self.m_choice_region1keySource.GetCount() == 2:
+                if self.userKeyCtrlDict['region1_key_src'] == uidef.kUserKeySource_SW_GP2:
+                    self.m_choice_region1keySource.SetSelection(0)
+                elif self.userKeyCtrlDict['region1_key_src'] == uidef.kUserKeySource_GP4:
+                    self.m_choice_region1keySource.SetSelection(1)
+                else:
+                    pass
+            else:
+                self.m_choice_region1keySource.SetSelection(0)
+            self.m_textCtrl_region1UserKeyData.Clear()
+            if self.userKeyCmdDict['region1_key'] != None:
+                self.m_textCtrl_region1UserKeyData.write(self.userKeyCmdDict['region1_key'])
+            self._recoverRegionArg(1)
+            if self.userKeyCmdDict['region1_lock'] == 'No Lock':
+                self.m_choice_region1Lock.SetSelection(0)
+        else:
+            pass
+
     def _updateKeySourceInfoField ( self, regionIndex=0 ):
         if regionIndex == 0:
-            if self.userKeyCtrlDict['region0_key_src'] == uidef.kUserKeySource_OTPMK:
-                self.m_textCtrl_region0UserKeyData.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_GRAYTEXT ) )
-                self.m_textCtrl_region0UserKeyData.Clear()
-                if self.otpmkDekContent != None:
-                    self.m_textCtrl_region0UserKeyData.write(self.otpmkDekContent)
-            else:
-                self.m_textCtrl_region0UserKeyData.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
+            self.m_textCtrl_region0UserKeyData.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
             if self.userKeyCtrlDict['region_sel'] == uidef.kUserRegionSel_BothRegions:
                 if self.userKeyCtrlDict['region1_key_src'] == self.userKeyCtrlDict['region0_key_src']:
                     self.m_textCtrl_region1UserKeyData.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_GRAYTEXT ) )
@@ -319,20 +455,14 @@ class secBootUiSettingsFlexibleUserKeys(advSettingsWin_FlexibleUserKeys.advSetti
                 else:
                     self.m_textCtrl_region1UserKeyData.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
         elif regionIndex == 1:
-            if self.userKeyCtrlDict['region1_key_src'] == uidef.kUserKeySource_OTPMK:
-                self.m_textCtrl_region1UserKeyData.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_GRAYTEXT ) )
-                self.m_textCtrl_region1UserKeyData.Clear()
-                if self.otpmkDekContent != None:
-                    self.m_textCtrl_region1UserKeyData.write(self.otpmkDekContent)
-            else:
-                if self.userKeyCtrlDict['region_sel'] == uidef.kUserRegionSel_BothRegions:
-                    if self.userKeyCtrlDict['region1_key_src'] == self.userKeyCtrlDict['region0_key_src']:
-                        self.m_textCtrl_region1UserKeyData.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_GRAYTEXT ) )
-                        self.m_textCtrl_region1UserKeyData.Clear()
-                    else:
-                        self.m_textCtrl_region1UserKeyData.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
+            if self.userKeyCtrlDict['region_sel'] == uidef.kUserRegionSel_BothRegions:
+                if self.userKeyCtrlDict['region1_key_src'] == self.userKeyCtrlDict['region0_key_src']:
+                    self.m_textCtrl_region1UserKeyData.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_GRAYTEXT ) )
+                    self.m_textCtrl_region1UserKeyData.Clear()
                 else:
                     self.m_textCtrl_region1UserKeyData.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
+            else:
+                self.m_textCtrl_region1UserKeyData.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
         else:
             pass
         self.Refresh()

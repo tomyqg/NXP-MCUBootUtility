@@ -227,7 +227,7 @@ class secBootMain(memcore.secBootMem):
             elif self.keyStorageRegion == uidef.kKeyStorageRegion_FlexibleUserKeys:
                 userKeySettingsFrame = ui_settings_flexible_user_keys.secBootUiSettingsFlexibleUserKeys(None)
                 userKeySettingsFrame.SetTitle(u"Advanced Key Settings - Flexible User")
-                userKeySettingsFrame.setNecessaryInfo(self.mcuDevice, self.otpmkDekFilename)
+                userKeySettingsFrame.setNecessaryInfo(self.mcuDevice)
                 userKeySettingsFrame.Show(True)
             else:
                 pass
@@ -363,7 +363,7 @@ if __name__ == '__main__':
     app = wx.App()
 
     main_win = secBootMain(None)
-    main_win.SetTitle(u"nxpSecBoot v0.8.2")
+    main_win.SetTitle(u"nxpSecBoot v0.8.3")
     main_win.Show()
 
     app.MainLoop()
