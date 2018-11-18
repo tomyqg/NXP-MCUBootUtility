@@ -114,7 +114,35 @@ class secBootMem(fusecore.secBootFuse):
                             self.needToShowCfgIntr = False
                         self.printMem(contentToShow, uidef.kMemBlockColor_CFG)
                     elif addr <= self.bootDeviceMemBase + self.destAppIvtOffset:
-                        self.printMem(contentToShow)
+                        if self.secureBootType == uidef.kSecureBootType_BeeCrypto:
+                            ekib0Start = self.bootDeviceMemBase + memdef.kMemBlockOffset_EKIB0
+                            eprdb0Start = self.bootDeviceMemBase + memdef.kMemBlockOffset_EPRDB0
+                            ekib1Start = self.bootDeviceMemBase + memdef.kMemBlockOffset_EKIB1
+                            eprdb1Start = self.bootDeviceMemBase + memdef.kMemBlockOffset_EPRDB1
+                            if addr > ekib0Start and addr <= ekib0Start + memdef.kMemBlockSize_EKIB:
+                                if self.needToShowEkib0Intr:
+                                    self.printMem('-----------------------------------EKIB0----------------------------------------------', uidef.kMemBlockColor_EKIB)
+                                    self.needToShowEkib0Intr = False
+                                self.printMem(contentToShow, uidef.kMemBlockColor_EKIB)
+                            elif addr > eprdb0Start and addr <= eprdb0Start + memdef.kMemBlockSize_EPRDB:
+                                if self.needToShowEprdb0Intr:
+                                    self.printMem('-----------------------------------EPRDB0---------------------------------------------', uidef.kMemBlockColor_EPRDB)
+                                    self.needToShowEprdb0Intr = False
+                                self.printMem(contentToShow, uidef.kMemBlockColor_EPRDB)
+                            elif addr > ekib1Start and addr <= ekib1Start + memdef.kMemBlockSize_EKIB:
+                                if self.needToShowEkib1Intr:
+                                    self.printMem('-----------------------------------EKIB1----------------------------------------------', uidef.kMemBlockColor_EKIB)
+                                    self.needToShowEkib1Intr = False
+                                self.printMem(contentToShow, uidef.kMemBlockColor_EKIB)
+                            elif addr > eprdb1Start and addr <= eprdb1Start + memdef.kMemBlockSize_EPRDB:
+                                if self.needToShowEprdb1Intr:
+                                    self.printMem('-----------------------------------EPRDB1---------------------------------------------', uidef.kMemBlockColor_EPRDB)
+                                    self.needToShowEprdb1Intr = False
+                                self.printMem(contentToShow, uidef.kMemBlockColor_EPRDB)
+                            else:
+                                self.printMem(contentToShow)
+                        else:
+                            self.printMem(contentToShow)
                     elif addr <= self.bootDeviceMemBase + self.destAppIvtOffset + memdef.kMemBlockSize_IVT:
                         if self.needToShowIvtIntr:
                             self.printMem('------------------------------------IVT-----------------------------------------------', uidef.kMemBlockColor_IVT)
