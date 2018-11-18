@@ -43,10 +43,18 @@ class secBootMem(fusecore.secBootFuse):
         self.needToShowCsfIntr = True
         self.needToShowKeyBlobIntr = True
 
+    def _getCsfBlockInfo( self ):
+        self.destAppCsfAddress = self.getVal32FromBinFile(self.destAppFilename, self.destAppIvtOffset + memdef.kMemberOffsetInIvt_Csf)
+
+    def _getInfoFromIvt( self ):
+        self._getCsfBlockInfo()
+
     def readProgrammedMemoryAndShow( self ):
         if not os.path.isfile(self.destAppFilename):
             self.popupMsgBox('You should program your image first!')
             return
+
+        self._getInfoFromIvt()
 
         memLen = 0
         imageLen = os.path.getsize(self.destAppFilename)
@@ -125,7 +133,26 @@ class secBootMem(fusecore.secBootFuse):
                             self.needToShowImageIntr = False
                         self.printMem(contentToShow, uidef.kMemBlockColor_Image)
                     else:
-                        self.printMem(contentToShow)
+                        hasShowed = False
+                        if self.secureBootType == uidef.kSecureBootType_HabAuth or self.secureBootType == uidef.kSecureBootType_HabCrypto or \
+                           (self.secureBootType == uidef.kSecureBootType_BeeCrypto and self.isCertEnabledForBee):
+                            csfStart = self.bootDeviceMemBase + (self.destAppCsfAddress - self.destAppVectorAddress) + self.destAppInitialLoadSize
+                            if addr > csfStart and addr <= csfStart + memdef.kMemBlockSize_CSF:
+                                if self.needToShowCsfIntr:
+                                    self.printMem('------------------------------------CSF-----------------------------------------------', uidef.kMemBlockColor_CSF)
+                                    self.needToShowCsfIntr = False
+                                self.printMem(contentToShow, uidef.kMemBlockColor_CSF)
+                                hasShowed = True
+                        if self.secureBootType == uidef.kSecureBootType_HabCrypto and self.habDekDataOffset != None:
+                            keyBlobStart = self.bootDeviceMemBase + (self.destAppVectorOffset - self.destAppInitialLoadSize) + self.habDekDataOffset
+                            if addr > keyBlobStart and addr <= keyBlobStart + memdef.kMemBlockSize_KeyBlob:
+                                if self.needToShowKeyBlobIntr:
+                                    self.printMem('--------------------------------DEK KeyBlob-------------------------------------------', uidef.kMemBlockColor_KeyBlob)
+                                    self.needToShowKeyBlobIntr = False
+                                self.printMem(contentToShow, uidef.kMemBlockColor_KeyBlob)
+                                hasShowed = True
+                        if not hasShowed:
+                            self.printMem(contentToShow)
                 else:
                     self.printMem(contentToShow)
             fileObj.close()
