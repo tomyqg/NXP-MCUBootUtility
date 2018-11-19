@@ -360,7 +360,7 @@ class secBootMain(memcore.secBootMem):
         wx.MessageBox(msgText, "Home Page", wx.OK | wx.ICON_INFORMATION)
 
     def callbackShowAboutAuthor( self, event ):
-        author = "Author:  衡杰Jay, 李嘉奕Joyee \n"
+        author = "Author:  衡杰Jay、李嘉奕Joyee \n"
         blog = "Blog:      痞子衡嵌入式 https://www.cnblogs.com/henjay724/ \n"
         msgText = ((author.encode('utf-8')) +
                    ('Email:     jie.heng@nxp.com \n') +
@@ -368,11 +368,16 @@ class secBootMain(memcore.secBootMem):
                    (blog.encode('utf-8')))
         wx.MessageBox(msgText, "About Author", wx.OK | wx.ICON_INFORMATION)
 
+    def callbackShowSpecialThanks( self, event ):
+        helper = "Special thanks to 周小朋Clare、杨帆 \n"
+        msgText = ((helper.encode('utf-8')))
+        wx.MessageBox(msgText, "Special Thanks", wx.OK | wx.ICON_INFORMATION)
+
 if __name__ == '__main__':
     app = wx.App()
 
     main_win = secBootMain(None)
-    main_win.SetTitle(u"nxpSecBoot v0.8.3")
+    main_win.SetTitle(u"nxpSecBoot v0.8.4")
     main_win.Show()
 
     app.MainLoop()

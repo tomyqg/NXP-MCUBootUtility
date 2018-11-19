@@ -27,8 +27,11 @@ class secBootWin ( wx.Frame ):
 		self.m_menuItem_homePage = wx.MenuItem( self.m_menu_help, wx.ID_ANY, u"Home Page", wx.EmptyString, wx.ITEM_NORMAL )
 		self.m_menu_help.Append( self.m_menuItem_homePage )
 
-		self.m_menuIte_aboutAuthor = wx.MenuItem( self.m_menu_help, wx.ID_ANY, u"About Author", wx.EmptyString, wx.ITEM_NORMAL )
-		self.m_menu_help.Append( self.m_menuIte_aboutAuthor )
+		self.m_menuItem_aboutAuthor = wx.MenuItem( self.m_menu_help, wx.ID_ANY, u"About Author", wx.EmptyString, wx.ITEM_NORMAL )
+		self.m_menu_help.Append( self.m_menuItem_aboutAuthor )
+
+		self.m_menuItem_specialThanks = wx.MenuItem( self.m_menu_help, wx.ID_ANY, u"Special Thanks", wx.EmptyString, wx.ITEM_NORMAL )
+		self.m_menu_help.Append( self.m_menuItem_specialThanks )
 
 		self.m_menubar.Append( self.m_menu_help, u"Help" )
 
@@ -542,12 +545,12 @@ class secBootWin ( wx.Frame ):
 
 		sbSizer_showImage = wx.StaticBoxSizer( wx.StaticBox( self.m_panel_flashImage1_showImage, wx.ID_ANY, u"Step 6:" ), wx.VERTICAL )
 
-		self.m_staticText_showImage = wx.StaticText( sbSizer_showImage.GetStaticBox(), wx.ID_ANY, u"Program final bootable image to flash:", wx.DefaultPosition, wx.Size( 170,50 ), 0 )
+		self.m_staticText_showImage = wx.StaticText( sbSizer_showImage.GetStaticBox(), wx.ID_ANY, u"Program final bootable image to flash:", wx.DefaultPosition, wx.Size( 170,35 ), 0 )
 		self.m_staticText_showImage.Wrap( -1 )
 
 		sbSizer_showImage.Add( self.m_staticText_showImage, 0, wx.ALL, 5 )
 
-		self.m_bitmap_bootableImage = wx.StaticBitmap( sbSizer_showImage.GetStaticBox(), wx.ID_ANY, wx.NullBitmap, wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.m_bitmap_bootableImage = wx.StaticBitmap( sbSizer_showImage.GetStaticBox(), wx.ID_ANY, wx.NullBitmap, wx.DefaultPosition, wx.Size( 170,310 ), 0 )
 		sbSizer_showImage.Add( self.m_bitmap_bootableImage, 0, wx.ALIGN_CENTER|wx.ALL, 5 )
 
 
@@ -1418,7 +1421,8 @@ class secBootWin ( wx.Frame ):
 
 		# Connect Events
 		self.Bind( wx.EVT_MENU, self.callbackShowHomePage, id = self.m_menuItem_homePage.GetId() )
-		self.Bind( wx.EVT_MENU, self.callbackShowAboutAuthor, id = self.m_menuIte_aboutAuthor.GetId() )
+		self.Bind( wx.EVT_MENU, self.callbackShowAboutAuthor, id = self.m_menuItem_aboutAuthor.GetId() )
+		self.Bind( wx.EVT_MENU, self.callbackShowSpecialThanks, id = self.m_menuItem_specialThanks.GetId() )
 		self.m_choice_mcuSeries.Bind( wx.EVT_CHOICE, self.callbackSetMcuSeries )
 		self.m_choice_mcuDevice.Bind( wx.EVT_CHOICE, self.callbackSetMcuDevice )
 		self.m_choice_bootDevice.Bind( wx.EVT_CHOICE, self.callbackSetBootDevice )
@@ -1453,6 +1457,9 @@ class secBootWin ( wx.Frame ):
 		event.Skip()
 
 	def callbackShowAboutAuthor( self, event ):
+		event.Skip()
+
+	def callbackShowSpecialThanks( self, event ):
 		event.Skip()
 
 	def callbackSetMcuSeries( self, event ):
