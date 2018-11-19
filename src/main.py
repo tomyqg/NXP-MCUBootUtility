@@ -122,15 +122,18 @@ class secBootMain(memcore.secBootMem):
                     self.getMcuDeviceInfoViaRom()
                     self.getMcuDeviceHabStatus()
                     if self.jumpToFlashloader():
-                        self.updateConnectStatus('yellow')
                         self.connectStage = uidef.kConnectStage_Flashloader
+                        self.updateConnectStatus('yellow')
                         usbIdList = self.getUsbid()
                         self.adjustPortSetupValue(self.connectStage, usbIdList)
                     else:
                         self.updateConnectStatus('red')
+                        self.popupMsgBox('MCU has entered ROM SDP mode but failed to jump to Flashloader, Please reset board and try again!')
+                        return
                 else:
                     self.updateConnectStatus('red')
-                    self.popupMsgBox('Make sure that you have put MCU in Serial Downloader mode (BMOD[1:0] pins = 2\'b01)!')
+                    self.popupMsgBox('Make sure that you have put MCU in SDP (Serial Downloader Programming) mode (BMOD[1:0] pins = 2\'b01)!')
+                    return
             elif self.connectStage == uidef.kConnectStage_Flashloader:
                 self.connectToDevice(self.connectStage)
                 if self._retryToPingBootloader(kBootloaderType_Flashloader):
@@ -139,14 +142,20 @@ class secBootMain(memcore.secBootMem):
                     self.updateConnectStatus('green')
                     self.connectStage = uidef.kConnectStage_ExternalMemory
                 else:
+                    self.connectStage = uidef.kConnectStage_Rom
                     self.updateConnectStatus('red')
+                    self.popupMsgBox('Failed to ping Flashloader, Please reset board and consider updating flashloader.srec file under /src/targets/ then try again!')
+                    return
             elif self.connectStage == uidef.kConnectStage_ExternalMemory:
                 if self.configureBootDevice():
                     self.getBootDeviceInfoViaFlashloader()
                     self.connectStage = uidef.kConnectStage_Reset
                     self.updateConnectStatus('blue')
                 else:
+                    self.connectStage = uidef.kConnectStage_Rom
                     self.updateConnectStatus('red')
+                    self.popupMsgBox('MCU has entered Flashloader but failed to configure external memory, Please reset board and set properly boot device then try again!')
+                    return
             elif self.connectStage == uidef.kConnectStage_Reset:
                 self.resetMcuDevice()
                 self.connectStage = uidef.kConnectStage_Rom
