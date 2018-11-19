@@ -53,7 +53,7 @@ class advSettingsWin_FixedOtpmkKey ( wx.Frame ):
 
 		gSizer_encryptionOpt.Add( self.m_staticText_regionCnt, 0, wx.ALL, 5 )
 
-		m_choice_regionCntChoices = [ u"0 - Whole Image", u"1 - User Defined", u"2 - User Defined" ]
+		m_choice_regionCntChoices = [ u"0 - Whole Image", u"1 - User Defined", u"2 - User Defined", u"3 - User Defined" ]
 		self.m_choice_regionCnt = wx.Choice( self.m_panel_encryptionOpt, wx.ID_ANY, wx.DefaultPosition, wx.Size( 150,-1 ), m_choice_regionCntChoices, 0 )
 		self.m_choice_regionCnt.SetSelection( 0 )
 		gSizer_encryptionOpt.Add( self.m_choice_regionCnt, 0, wx.ALL, 5 )
@@ -80,16 +80,6 @@ class advSettingsWin_FixedOtpmkKey ( wx.Frame ):
 
 		gSizer_regionInfo.Add( self.m_staticText_regionLength, 0, wx.ALL, 5 )
 
-		self.m_staticText_regionStartEg = wx.StaticText( self.m_panel_regionInfo, wx.ID_ANY, u"eg. 0x60001000", wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.m_staticText_regionStartEg.Wrap( -1 )
-
-		gSizer_regionInfo.Add( self.m_staticText_regionStartEg, 0, wx.ALL, 5 )
-
-		self.m_staticText_regionLengthEg = wx.StaticText( self.m_panel_regionInfo, wx.ID_ANY, u"eg. 0x1000", wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.m_staticText_regionLengthEg.Wrap( -1 )
-
-		gSizer_regionInfo.Add( self.m_staticText_regionLengthEg, 0, wx.ALL, 5 )
-
 		self.m_textCtrl_region0Start = wx.TextCtrl( self.m_panel_regionInfo, wx.ID_ANY, u"0x60001000", wx.DefaultPosition, wx.DefaultSize, 0 )
 		gSizer_regionInfo.Add( self.m_textCtrl_region0Start, 0, wx.ALL, 5 )
 
@@ -101,6 +91,12 @@ class advSettingsWin_FixedOtpmkKey ( wx.Frame ):
 
 		self.m_textCtrl_region1Length = wx.TextCtrl( self.m_panel_regionInfo, wx.ID_ANY, u"0xe000", wx.DefaultPosition, wx.DefaultSize, 0 )
 		gSizer_regionInfo.Add( self.m_textCtrl_region1Length, 0, wx.ALL, 5 )
+
+		self.m_textCtrl_region2Start = wx.TextCtrl( self.m_panel_regionInfo, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, 0 )
+		gSizer_regionInfo.Add( self.m_textCtrl_region2Start, 0, wx.ALL, 5 )
+
+		self.m_textCtrl_region2Length = wx.TextCtrl( self.m_panel_regionInfo, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, 0 )
+		gSizer_regionInfo.Add( self.m_textCtrl_region2Length, 0, wx.ALL, 5 )
 
 
 		self.m_panel_regionInfo.SetSizer( gSizer_regionInfo )

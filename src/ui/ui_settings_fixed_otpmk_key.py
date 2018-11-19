@@ -32,6 +32,12 @@ class secBootUiSettingsFixedOtpmkKey(advSettingsWin_FixedOtpmkKey.advSettingsWin
         else:
             self.m_textCtrl_region1Start.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
             self.m_textCtrl_region1Length.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
+        if regionCnt < 3:
+            self.m_textCtrl_region2Start.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_GRAYTEXT ) )
+            self.m_textCtrl_region2Length.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_GRAYTEXT ) )
+        else:
+            self.m_textCtrl_region2Start.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
+            self.m_textCtrl_region2Length.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
         self.Refresh()
 
     def _recoverLastSettings ( self ):
@@ -56,6 +62,11 @@ class secBootUiSettingsFixedOtpmkKey(advSettingsWin_FixedOtpmkKey.advSettingsWin
             self.m_textCtrl_region1Length.Clear()
             self.m_textCtrl_region1Start.write(str(hex(self.otpmkEncryptedRegionStart[1])))
             self.m_textCtrl_region1Length.write(str(hex(self.otpmkEncryptedRegionLength[1])))
+        if encryptedRegionCnt > 2:
+            self.m_textCtrl_region2Start.Clear()
+            self.m_textCtrl_region2Length.Clear()
+            self.m_textCtrl_region2Start.write(str(hex(self.otpmkEncryptedRegionStart[2])))
+            self.m_textCtrl_region2Length.write(str(hex(self.otpmkEncryptedRegionLength[2])))
 
     def _getKeySource( self ):
         txt = self.m_choice_keySource.GetString(self.m_choice_keySource.GetSelection())
@@ -137,6 +148,24 @@ class secBootUiSettingsFixedOtpmkKey(advSettingsWin_FixedOtpmkKey.advSettingsWin
         else:
             self.otpmkEncryptedRegionStart[1] = None
             self.otpmkEncryptedRegionLength[1] = None
+        if regionCnt > 2:
+            convertStatus, self.otpmkEncryptedRegionStart[2] = self._convertRegionInfoToVal32(self.m_textCtrl_region2Start.GetLineText(0))
+            if convertStatus:
+                if self.otpmkEncryptedRegionStart[2] < self.otpmkEncryptedRegionStart[1] + self.otpmkEncryptedRegionLength[1]:
+                    self.popupMsgBox('FAC Region 2 start address shouldn\'t less than FAC region 1 end address 0x%x' %(self.otpmkEncryptedRegionStart[1] + self.otpmkEncryptedRegionLength[1]))
+                    return False
+            else:
+                return False
+            convertStatus, self.otpmkEncryptedRegionLength[2] = self._convertRegionInfoToVal32(self.m_textCtrl_region2Length.GetLineText(0))
+            if convertStatus:
+                if self.otpmkEncryptedRegionLength[2] % gendef.kSecFacRegionAlignedUnit != 0:
+                    self.popupMsgBox('FAC Region 2 length should be aligned with %dKB' %(gendef.kSecFacRegionAlignedUnit / 0x400))
+                    return False
+            else:
+                return False
+        else:
+            self.otpmkEncryptedRegionStart[2] = None
+            self.otpmkEncryptedRegionLength[2] = None
         return True
 
     def callbackChangeRegionCount( self, event ):
