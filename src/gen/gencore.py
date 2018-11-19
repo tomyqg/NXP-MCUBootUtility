@@ -650,14 +650,10 @@ class secBootGen(uicore.secBootUi):
         batContent += " ofile=" + self.destEncAppFilename
         batContent += " base_addr=" + userKeyCmdDict['base_addr']
         if userKeyCtrlDict['region_sel'] == uidef.kUserRegionSel_Region0 or userKeyCtrlDict['region_sel'] == uidef.kUserRegionSel_BothRegions:
-            if userKeyCtrlDict['region0_key_src'] == uidef.kUserKeySource_OTPMK:
-                userKeyCmdDict['region0_key'] = self.getDek128ContentFromBinFile(self.otpmkDekFilename)
             batContent += " region0_key=" + userKeyCmdDict['region0_key']
             batContent += " region0_arg=" + userKeyCmdDict['region0_arg']
             batContent += " region0_lock=" + userKeyCmdDict['region0_lock']
         if userKeyCtrlDict['region_sel'] == uidef.kUserRegionSel_Region1 or userKeyCtrlDict['region_sel'] == uidef.kUserRegionSel_BothRegions:
-            if userKeyCtrlDict['region1_key_src'] == uidef.kUserKeySource_OTPMK:
-                userKeyCmdDict['region1_key'] = self.getDek128ContentFromBinFile(self.otpmkDekFilename)
             batContent += " region1_key=" + userKeyCmdDict['region1_key']
             batContent += " region1_arg=" + userKeyCmdDict['region1_arg']
             batContent += " region1_lock=" + userKeyCmdDict['region1_lock']

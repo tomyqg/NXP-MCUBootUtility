@@ -477,7 +477,7 @@ class secBootRun(gencore.secBootGen):
 
     def prepareForFixedOtpmkEncryption( self ):
         self._prepareForBootDeviceOperation()
-        self._showOtpmkDek()
+        #self._showOtpmkDek()
         self._eraseFlexspiNorForImageLoading()
         otpmkKeyOpt, otpmkEncryptedRegionStart, otpmkEncryptedRegionLength = uivar.getAdvancedSettings(uidef.kAdvancedSettings_OtpmkKey)
         # Prepare PRDB options
