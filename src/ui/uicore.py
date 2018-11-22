@@ -226,9 +226,11 @@ class secBootUi(secBootWin.secBootWin):
         txt = self.m_choice_enableCertForBee.GetString(self.m_choice_enableCertForBee.GetSelection())
         if txt == 'No':
             self.isCertEnabledForBee = False
+            self.m_button_genImage.SetLabel('Generate Unsigned Bootable Image')
             self.showImageLayout(u"../img/image_unsigned_bee_encrypted.png")
         elif txt == 'Yes':
             self.isCertEnabledForBee = True
+            self.m_button_genImage.SetLabel('Generate Signed Bootable Image')
             self.showImageLayout(u"../img/image_signed_bee_encrypted.png")
         else:
             pass

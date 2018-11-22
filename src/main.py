@@ -248,7 +248,8 @@ class secBootMain(memcore.secBootMem):
             self._startGaugeTimer()
             if self.keyStorageRegion == uidef.kKeyStorageRegion_FixedOtpmkKey:
                 if self.connectStage == uidef.kConnectStage_Reset:
-                    self.prepareForFixedOtpmkEncryption()
+                    if not self.prepareForFixedOtpmkEncryption():
+                        self.popupMsgBox('Failed to prepare for fixed OTPMK SNVS encryption, Please reset board and try again!')
                 else:
                     self.popupMsgBox('Please configure boot device via Flashloader first!')
             elif self.keyStorageRegion == uidef.kKeyStorageRegion_FlexibleUserKeys:
@@ -299,7 +300,8 @@ class secBootMain(memcore.secBootMem):
             if self.connectStage == uidef.kConnectStage_Reset:
                 self._startGaugeTimer()
                 self.printLog("'Load Bootable Image' button is clicked")
-                self.flashBootableImage()
+                if not self.flashBootableImage():
+                    self.popupMsgBox('Failed to flash bootable image into external memory, Please reset board and try again!')
                 self.burnBeeKeySelIfApplicable()
                 self._stopGaugeTimer()
             else:
@@ -377,7 +379,7 @@ if __name__ == '__main__':
     app = wx.App()
 
     main_win = secBootMain(None)
-    main_win.SetTitle(u"nxpSecBoot v0.8.4")
+    main_win.SetTitle(u"nxpSecBoot v0.8.5")
     main_win.Show()
 
     app.MainLoop()

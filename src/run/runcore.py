@@ -400,8 +400,7 @@ class secBootRun(gencore.secBootGen):
     def _eraseFlexspiNorForConfigBlockLoading( self ):
         status, results, cmdStr = self.blhost.flashEraseRegion(rundef.kBootDeviceMemBase_FlexspiNor, rundef.kFlexspiNorCfgInfo_Length, rundef.kBootDeviceMemId_FlexspiNor)
         self.printLog(cmdStr)
-        if status != boot.status.kStatus_Success:
-            return False
+        return (status == boot.status.kStatus_Success)
 
     def _programFlexspiNorConfigBlock ( self ):
         # 0xf000000f is the tag to notify Flashloader to program FlexSPI NOR config block to the start of device
@@ -411,8 +410,7 @@ class secBootRun(gencore.secBootGen):
             return False
         status, results, cmdStr = self.blhost.configureMemory(self.bootDeviceMemId, rundef.kRamFreeSpaceStart_LoadCfgBlock)
         self.printLog(cmdStr)
-        if status != boot.status.kStatus_Success:
-            return False
+        return (status == boot.status.kStatus_Success)
 
     def configureBootDevice ( self ):
         self._prepareForBootDeviceOperation()
@@ -452,8 +450,10 @@ class secBootRun(gencore.secBootGen):
             self.printLog(cmdStr)
             if status != boot.status.kStatus_Success:
                 return False
-            self._eraseFlexspiNorForConfigBlockLoading()
-            self._programFlexspiNorConfigBlock()
+            if not self._eraseFlexspiNorForConfigBlockLoading():
+                return False
+            if not self._programFlexspiNorConfigBlock():
+                return False
         else:
             pass
         return True
@@ -474,11 +474,13 @@ class secBootRun(gencore.secBootGen):
         if status != boot.status.kStatus_Success:
             return False
         self.isFlexspiNorErasedForImage = True
+        return True
 
     def prepareForFixedOtpmkEncryption( self ):
         self._prepareForBootDeviceOperation()
         #self._showOtpmkDek()
-        self._eraseFlexspiNorForImageLoading()
+        if not self._eraseFlexspiNorForImageLoading():
+            return False
         otpmkKeyOpt, otpmkEncryptedRegionStart, otpmkEncryptedRegionLength = uivar.getAdvancedSettings(uidef.kAdvancedSettings_OtpmkKey)
         # Prepare PRDB options
         #---------------------------------------------------------------------------
@@ -514,7 +516,9 @@ class secBootRun(gencore.secBootGen):
         self.printLog(cmdStr)
         if status != boot.status.kStatus_Success:
             return False
-        self._programFlexspiNorConfigBlock()
+        if not self._programFlexspiNorConfigBlock():
+            return False
+        return True
 
     def _isDeviceFuseSrkRegionBlank( self ):
         keyWords = gendef.kSecKeyLengthInBits_SRK / 32
@@ -634,11 +638,13 @@ class secBootRun(gencore.secBootGen):
                     return False
         elif self.bootDevice == uidef.kBootDevice_FlexspiNor:
             if not self.isFlexspiNorErasedForImage:
-                self._eraseFlexspiNorForImageLoading()
+                if not self._eraseFlexspiNorForImageLoading():
+                    return False
                 if self.secureBootType == uidef.kSecureBootType_Development or \
                    self.secureBootType == uidef.kSecureBootType_HabAuth or \
                    (self.secureBootType == uidef.kSecureBootType_BeeCrypto and self.keyStorageRegion == uidef.kKeyStorageRegion_FlexibleUserKeys):
-                    self._programFlexspiNorConfigBlock()
+                    if not self._programFlexspiNorConfigBlock():
+                        return False
             if self.secureBootType == uidef.kSecureBootType_BeeCrypto and self.keyStorageRegion == uidef.kKeyStorageRegion_FlexibleUserKeys:
                 self._genDestEncAppFileWithoutCfgBlock()
                 imageLoadAddr = self.bootDeviceMemBase + rundef.kFlexspiNorCfgInfo_Length
@@ -649,8 +655,11 @@ class secBootRun(gencore.secBootGen):
                 status, results, cmdStr = self.blhost.writeMemory(imageLoadAddr, self.destAppNoPaddingFilename, self.bootDeviceMemId)
                 self.printLog(cmdStr)
             self.isFlexspiNorErasedForImage = False
+            if status != boot.status.kStatus_Success:
+                return False
         else:
             pass
+        return True
 
     def _getMcuDeviceBeeKeySel( self ):
         beeKeySel = self.readMcuDeviceFuseByBlhost(fusedef.kEfuseLocation_BeeKeySel, '', False)
@@ -787,10 +796,12 @@ class secBootRun(gencore.secBootGen):
                 if status != boot.status.kStatus_Success:
                     return False
             if self.bootDevice == uidef.kBootDevice_FlexspiNor:
-                self._programFlexspiNorConfigBlock()
+                if not self._programFlexspiNorConfigBlock():
+                    return False
             self.showImageLayout(u"../img/image_signed_hab_encrypted.png")
         else:
             self.popupMsgBox('Dek file hasn\'t been generated!')
+        return True
 
     def enableHab( self ):
         if self.mcuDeviceHabStatus != fusedef.kHabStatus_Closed0 and \

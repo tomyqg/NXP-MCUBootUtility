@@ -23,6 +23,42 @@ class secBootWin ( wx.Frame ):
 		self.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
 
 		self.m_menubar = wx.MenuBar( 0 )
+		self.m_menu_file = wx.Menu()
+		self.m_menubar.Append( self.m_menu_file, u"File" )
+
+		self.m_menu_edit = wx.Menu()
+		self.m_menubar.Append( self.m_menu_edit, u"Edit" )
+
+		self.m_menu_view = wx.Menu()
+		self.m_menu_language = wx.Menu()
+		self.m_menuItem_chinese = wx.MenuItem( self.m_menu_language, wx.ID_ANY, u"Chinese", wx.EmptyString, wx.ITEM_NORMAL )
+		self.m_menu_language.Append( self.m_menuItem_chinese )
+
+		self.m_menuItem_english = wx.MenuItem( self.m_menu_language, wx.ID_ANY, u"English", wx.EmptyString, wx.ITEM_NORMAL )
+		self.m_menu_language.Append( self.m_menuItem_english )
+
+		self.m_menu_view.AppendSubMenu( self.m_menu_language, u"Language" )
+
+		self.m_menubar.Append( self.m_menu_view, u"View" )
+
+		self.m_menu_tools = wx.Menu()
+		self.m_menuItem_option = wx.MenuItem( self.m_menu_tools, wx.ID_ANY, u"Option", wx.EmptyString, wx.ITEM_NORMAL )
+		self.m_menu_tools.Append( self.m_menuItem_option )
+
+		self.m_menubar.Append( self.m_menu_tools, u"Tools" )
+
+		self.m_menu_window = wx.Menu()
+		self.m_menu_theme = wx.Menu()
+		self.m_menuItem_light = wx.MenuItem( self.m_menu_theme, wx.ID_ANY, u"Light", wx.EmptyString, wx.ITEM_NORMAL )
+		self.m_menu_theme.Append( self.m_menuItem_light )
+
+		self.m_menuItem_dark = wx.MenuItem( self.m_menu_theme, wx.ID_ANY, u"Dark", wx.EmptyString, wx.ITEM_NORMAL )
+		self.m_menu_theme.Append( self.m_menuItem_dark )
+
+		self.m_menu_window.AppendSubMenu( self.m_menu_theme, u"Theme" )
+
+		self.m_menubar.Append( self.m_menu_window, u"Window" )
+
 		self.m_menu_help = wx.Menu()
 		self.m_menuItem_homePage = wx.MenuItem( self.m_menu_help, wx.ID_ANY, u"Home Page", wx.EmptyString, wx.ITEM_NORMAL )
 		self.m_menu_help.Append( self.m_menuItem_homePage )

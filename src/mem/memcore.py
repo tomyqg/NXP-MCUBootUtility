@@ -65,8 +65,8 @@ class secBootMem(fusecore.secBootFuse):
             pass
         else:
             pass
-        if self.habDekDataOffset != None and (self.habDekDataOffset + rundef.kKeyBlobMaxSize > imageLen):
-            memLen += self.habDekDataOffset + rundef.kKeyBlobMaxSize
+        if self.habDekDataOffset != None and (self.habDekDataOffset + memdef.kMemBlockSize_KeyBlob > imageLen):
+            memLen += self.habDekDataOffset + memdef.kMemBlockSize_KeyBlob
         else:
             memLen += imageLen
 
