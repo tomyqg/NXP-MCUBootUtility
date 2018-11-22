@@ -668,55 +668,52 @@ class secBootRun(gencore.secBootGen):
             self.mcuDeviceBeeKey1Sel = ((beeKeySel & fusedef.kEfuseMask_BeeKey1Sel) >> fusedef.kEfuseShift_BeeKey1Sel)
         return beeKeySel
 
-    def burnBeeKeySelIfApplicable( self ):
-        if self.secureBootType == uidef.kSecureBootType_BeeCrypto and self.bootDevice == uidef.kBootDevice_FlexspiNor:
-            setBeeKey0Sel = None
-            setBeeKey1Sel = None
-            if self.keyStorageRegion == uidef.kKeyStorageRegion_FixedOtpmkKey:
-                otpmkKeyOpt, otpmkEncryptedRegionStart, otpmkEncryptedRegionLength = uivar.getAdvancedSettings(uidef.kAdvancedSettings_OtpmkKey)
-                encryptedRegionCnt = (otpmkKeyOpt & 0x000F0000) >> 16
-                # One PRDB means one BEE_KEY, no matter how many FAC regions it has
-                if encryptedRegionCnt >= 0:
+    def burnBeeKeySel( self ):
+        setBeeKey0Sel = None
+        setBeeKey1Sel = None
+        if self.keyStorageRegion == uidef.kKeyStorageRegion_FixedOtpmkKey:
+            otpmkKeyOpt, otpmkEncryptedRegionStart, otpmkEncryptedRegionLength = uivar.getAdvancedSettings(uidef.kAdvancedSettings_OtpmkKey)
+            encryptedRegionCnt = (otpmkKeyOpt & 0x000F0000) >> 16
+            # One PRDB means one BEE_KEY, no matter how many FAC regions it has
+            if encryptedRegionCnt >= 0:
+                setBeeKey0Sel = fusedef.kBeeKeySel_FromOtpmk
+            #if encryptedRegionCnt > 1:
+            #    setBeeKey1Sel = fusedef.kBeeKeySel_FromOtpmk
+        elif self.keyStorageRegion == uidef.kKeyStorageRegion_FlexibleUserKeys:
+            userKeyCtrlDict, userKeyCmdDict = uivar.getAdvancedSettings(uidef.kAdvancedSettings_UserKeys)
+            if userKeyCtrlDict['region_sel'] == uidef.kUserRegionSel_Region0 or userKeyCtrlDict['region_sel'] == uidef.kUserRegionSel_BothRegions:
+                if userKeyCtrlDict['region0_key_src'] == uidef.kUserKeySource_OTPMK:
                     setBeeKey0Sel = fusedef.kBeeKeySel_FromOtpmk
-                #if encryptedRegionCnt > 1:
-                #    setBeeKey1Sel = fusedef.kBeeKeySel_FromOtpmk
-            elif self.keyStorageRegion == uidef.kKeyStorageRegion_FlexibleUserKeys:
-                userKeyCtrlDict, userKeyCmdDict = uivar.getAdvancedSettings(uidef.kAdvancedSettings_UserKeys)
-                if userKeyCtrlDict['region_sel'] == uidef.kUserRegionSel_Region0 or userKeyCtrlDict['region_sel'] == uidef.kUserRegionSel_BothRegions:
-                    if userKeyCtrlDict['region0_key_src'] == uidef.kUserKeySource_OTPMK:
-                        setBeeKey0Sel = fusedef.kBeeKeySel_FromOtpmk
-                    elif userKeyCtrlDict['region0_key_src'] == uidef.kUserKeySource_SW_GP2:
-                        setBeeKey0Sel = fusedef.kBeeKeySel_FromSwGp2
-                    elif userKeyCtrlDict['region0_key_src'] == uidef.kUserKeySource_GP4:
-                        setBeeKey0Sel = fusedef.kBeeKeySel_FromGp4
-                    else:
-                        pass
-                if userKeyCtrlDict['region_sel'] == uidef.kUserRegionSel_Region1 or userKeyCtrlDict['region_sel'] == uidef.kUserRegionSel_BothRegions:
-                    if userKeyCtrlDict['region0_key_src'] == uidef.kUserKeySource_OTPMK:
-                        setBeeKey1Sel = fusedef.kBeeKeySel_FromOtpmk
-                    elif userKeyCtrlDict['region1_key_src'] == uidef.kUserKeySource_SW_GP2:
-                        setBeeKey1Sel = fusedef.kBeeKeySel_FromSwGp2
-                    elif userKeyCtrlDict['region1_key_src'] == uidef.kUserKeySource_GP4:
-                        setBeeKey1Sel = fusedef.kBeeKeySel_FromGp4
-                    else:
-                        pass
-            else:
-                pass
-            getBeeKeySel = self._getMcuDeviceBeeKeySel()
-            if getBeeKeySel != None:
-                if setBeeKey0Sel != None:
-                    getBeeKeySel = getBeeKeySel | (setBeeKey0Sel << fusedef.kEfuseShift_BeeKey0Sel)
-                    if ((getBeeKeySel & fusedef.kEfuseMask_BeeKey0Sel) >> fusedef.kEfuseShift_BeeKey0Sel) != setBeeKey0Sel:
-                        self.popupMsgBox('Fuse BOOT_CFG1[5:4] BEE_KEY0_SEL has been burned, it is program-once!')
-                        return
-                if setBeeKey1Sel != None:
-                    getBeeKeySel = getBeeKeySel | (setBeeKey1Sel << fusedef.kEfuseShift_BeeKey1Sel)
-                    if ((getBeeKeySel & fusedef.kEfuseMask_BeeKey1Sel) >> fusedef.kEfuseShift_BeeKey1Sel) != setBeeKey1Sel:
-                        self.popupMsgBox('Fuse BOOT_CFG1[7:6] BEE_KEY1_SEL has been burned, it is program-once!')
-                        return
-                self.burnMcuDeviceFuseByBlhost(fusedef.kEfuseLocation_BeeKeySel, getBeeKeySel)
+                elif userKeyCtrlDict['region0_key_src'] == uidef.kUserKeySource_SW_GP2:
+                    setBeeKey0Sel = fusedef.kBeeKeySel_FromSwGp2
+                elif userKeyCtrlDict['region0_key_src'] == uidef.kUserKeySource_GP4:
+                    setBeeKey0Sel = fusedef.kBeeKeySel_FromGp4
+                else:
+                    pass
+            if userKeyCtrlDict['region_sel'] == uidef.kUserRegionSel_Region1 or userKeyCtrlDict['region_sel'] == uidef.kUserRegionSel_BothRegions:
+                if userKeyCtrlDict['region0_key_src'] == uidef.kUserKeySource_OTPMK:
+                    setBeeKey1Sel = fusedef.kBeeKeySel_FromOtpmk
+                elif userKeyCtrlDict['region1_key_src'] == uidef.kUserKeySource_SW_GP2:
+                    setBeeKey1Sel = fusedef.kBeeKeySel_FromSwGp2
+                elif userKeyCtrlDict['region1_key_src'] == uidef.kUserKeySource_GP4:
+                    setBeeKey1Sel = fusedef.kBeeKeySel_FromGp4
+                else:
+                    pass
         else:
             pass
+        getBeeKeySel = self._getMcuDeviceBeeKeySel()
+        if getBeeKeySel != None:
+            if setBeeKey0Sel != None:
+                getBeeKeySel = getBeeKeySel | (setBeeKey0Sel << fusedef.kEfuseShift_BeeKey0Sel)
+                if ((getBeeKeySel & fusedef.kEfuseMask_BeeKey0Sel) >> fusedef.kEfuseShift_BeeKey0Sel) != setBeeKey0Sel:
+                    self.popupMsgBox('Fuse BOOT_CFG1[5:4] BEE_KEY0_SEL has been burned, it is program-once!')
+                    return
+            if setBeeKey1Sel != None:
+                getBeeKeySel = getBeeKeySel | (setBeeKey1Sel << fusedef.kEfuseShift_BeeKey1Sel)
+                if ((getBeeKeySel & fusedef.kEfuseMask_BeeKey1Sel) >> fusedef.kEfuseShift_BeeKey1Sel) != setBeeKey1Sel:
+                    self.popupMsgBox('Fuse BOOT_CFG1[7:6] BEE_KEY1_SEL has been burned, it is program-once!')
+                    return
+            self.burnMcuDeviceFuseByBlhost(fusedef.kEfuseLocation_BeeKeySel, getBeeKeySel)
 
     def flashHabDekToGenerateKeyBlob ( self ):
         if os.path.isfile(self.habDekFilename) and self.habDekDataOffset != None:

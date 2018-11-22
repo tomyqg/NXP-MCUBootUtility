@@ -45,7 +45,8 @@ class secBootUiSettingsFixedOtpmkKey(advSettingsWin_FixedOtpmkKey.advSettingsWin
         self.m_choice_keySource.SetSelection(keySource)
 
         aesMode = (self.otpmkKeyOpt & 0x00F00000) >> 20
-        self.m_choice_aesMode.SetSelection(aesMode)
+        if aesMode == 1:
+            self.m_choice_aesMode.SetSelection(0)
 
         encryptedRegionCnt = (self.otpmkKeyOpt & 0x000F0000) >> 16
         self.m_choice_regionCnt.SetSelection(encryptedRegionCnt)

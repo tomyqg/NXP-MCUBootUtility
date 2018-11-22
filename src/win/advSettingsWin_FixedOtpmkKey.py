@@ -43,9 +43,9 @@ class advSettingsWin_FixedOtpmkKey ( wx.Frame ):
 
 		gSizer_encryptionOpt.Add( self.m_staticText_aesMode, 0, wx.ALL, 5 )
 
-		m_choice_aesModeChoices = [ u"ECB", u"CTR" ]
+		m_choice_aesModeChoices = [ u"CTR" ]
 		self.m_choice_aesMode = wx.Choice( self.m_panel_encryptionOpt, wx.ID_ANY, wx.DefaultPosition, wx.Size( 150,-1 ), m_choice_aesModeChoices, 0 )
-		self.m_choice_aesMode.SetSelection( 1 )
+		self.m_choice_aesMode.SetSelection( 0 )
 		gSizer_encryptionOpt.Add( self.m_choice_aesMode, 0, wx.ALL, 5 )
 
 		self.m_staticText_regionCnt = wx.StaticText( self.m_panel_encryptionOpt, wx.ID_ANY, u"Region Count:", wx.DefaultPosition, wx.DefaultSize, 0 )

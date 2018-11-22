@@ -461,16 +461,11 @@ class secBootGen(uicore.secBootUi):
         self._getCrtSrkCaPemFilenames()
         self._getCrtCsfImgUsrPemFilenames()
 
-    def _isCertificateGenerated( self, secureBootType ):
+    def isCertificateGenerated( self, secureBootType ):
         if secureBootType == uidef.kSecureBootType_HabAuth or \
            secureBootType == uidef.kSecureBootType_HabCrypto or \
            (secureBootType == uidef.kSecureBootType_BeeCrypto and self.isCertEnabledForBee):
-            if ((self.srkTableFilename == None) or \
-                (self.srkFuseFilename == None) or \
-                (self.crtSrkCaPemFileList[0] == None) or \
-                (self.crtCsfUsrPemFileList[0] == None) or \
-                (self.crtImgUsrPemFileList[0] == None)):
-                self._tryToReuseExistingCert()
+            self._tryToReuseExistingCert()
             if (os.path.isfile(self.srkTableFilename) and \
                 os.path.isfile(self.srkFuseFilename) and \
                 os.path.isfile(self.crtSrkCaPemFileList[0]) and \
@@ -516,7 +511,7 @@ class secBootGen(uicore.secBootUi):
         else:
             pass
         self.destAppBinaryBytes = imageLength
-        if not self._isCertificateGenerated(self.secureBootType):
+        if not self.isCertificateGenerated(self.secureBootType):
             self.popupMsgBox('You should first generate certificates!')
             return False
         return self._updateBdfileContent(self.secureBootType, self.bootDevice, imageStartAddr, imageEntryAddr)
@@ -686,7 +681,7 @@ class secBootGen(uicore.secBootUi):
         if imageStartAddr == None or imageEntryAddr == None:
             self.popupMsgBox('Default Flashloader image file is not usable!')
             return False
-        if not self._isCertificateGenerated(uidef.kSecureBootType_HabAuth):
+        if not self.isCertificateGenerated(uidef.kSecureBootType_HabAuth):
             self.popupMsgBox('You should first generate certificates!')
             return False
         return self._updateBdfileContent(uidef.kSecureBootType_HabAuth, uidef.kBootDevice_RamFlashloader, imageStartAddr, imageEntryAddr)

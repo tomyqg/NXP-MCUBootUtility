@@ -190,6 +190,20 @@ class secBootMain(memcore.secBootMem):
         else:
             self.popupMsgBox('No need to set certificate option when booting unsigned image!')
 
+    def _wantToReuseAvailableCert( self ):
+        certAnswer = wx.NO
+        if self.isCertificateGenerated(self.secureBootType):
+            msgText = (("There is available certificate, Do you want to reuse existing certificate? \n"))
+            certAnswer = wx.MessageBox(msgText, "Certificate Question", wx.YES_NO | wx.ICON_QUESTION)
+            if certAnswer == wx.NO:
+                msgText = (("New certificate will be different even you don’t change any settings, Do you really want to have new certificate? \n"))
+                certAnswer = wx.MessageBox(msgText, "Certificate Question", wx.YES_NO | wx.ICON_QUESTION)
+                if certAnswer == wx.YES:
+                    certAnswer = wx.NO
+                else:
+                    certAnswer = wx.YES
+        return (certAnswer == wx.YES)
+
     def callbackGenCert( self, event ):
         if self.secureBootType == uidef.kSecureBootType_BeeCrypto and self.bootDevice != uidef.kBootDevice_FlexspiNor:
             self.popupMsgBox('Action is not available because BEE encryption boot is only designed for FlexSPI NOR device!')
@@ -200,10 +214,11 @@ class secBootMain(memcore.secBootMem):
                 self._startGaugeTimer()
                 self.printLog("'Generate Certificate' button is clicked")
                 self.updateAllCstPathToCorrectVersion()
-                if self.createSerialAndKeypassfile():
-                    self.genCertificate()
-                    self.genSuperRootKeys()
-                    self.showSuperRootKeys()
+                if not self._wantToReuseAvailableCert():
+                    if self.createSerialAndKeypassfile():
+                        self.genCertificate()
+                        self.genSuperRootKeys()
+                        self.showSuperRootKeys()
                 self._stopGaugeTimer()
         else:
             self.popupMsgBox('No need to generate certificate when booting unsigned image!')
@@ -302,7 +317,14 @@ class secBootMain(memcore.secBootMem):
                 self.printLog("'Load Bootable Image' button is clicked")
                 if not self.flashBootableImage():
                     self.popupMsgBox('Failed to flash bootable image into external memory, Please reset board and try again!')
-                self.burnBeeKeySelIfApplicable()
+                else:
+                    if (self.secureBootType == uidef.kSecureBootType_HabAuth) or \
+                       (self.secureBootType == uidef.kSecureBootType_BeeCrypto and self.isCertEnabledForBee):
+                        if self.mcuDeviceHabStatus != fusedef.kHabStatus_Closed0 and \
+                           self.mcuDeviceHabStatus != fusedef.kHabStatus_Closed1:
+                            self.enableHab()
+                    if self.secureBootType == uidef.kSecureBootType_BeeCrypto and self.bootDevice == uidef.kBootDevice_FlexspiNor:
+                        self.burnBeeKeySel()
                 self._stopGaugeTimer()
             else:
                 self.popupMsgBox('Please configure boot device via Flashloader first!')
@@ -356,6 +378,20 @@ class secBootMain(memcore.secBootMem):
 
     def callbackClearLog( self, event ):
         self.clearLog()
+
+    def callbackExit( self, event ):
+        exit(0)
+
+    def _switchToolRunMode( self ):
+        self.applyFuseOperToRunMode()
+
+    def callbackSetEntryMode( self, event ):
+        self.setToolRunMode()
+        self._switchToolRunMode()
+
+    def callbackSetMasterMode( self, event ):
+        self.setToolRunMode()
+        self._switchToolRunMode()
 
     def callbackShowHomePage( self, event ):
         msgText = (('https://github.com/JayHeng/nxp-sec-boot-ui.git \n'))

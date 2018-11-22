@@ -14,6 +14,27 @@ class secBootFuse(runcore.secBootRun):
 
         self.scannedFuseList = [None] * fusedef.kMaxEfuseWords
         self.toBeBurnnedFuseList = [None] * fusedef.kMaxEfuseWords
+        self.entryModeFuseFlagList = [None] * fusedef.kMaxEfuseWords
+
+        self.applyFuseOperToRunMode()
+
+    def _initEntryModeFuseFlag( self ):
+        if self.isToolRunAsEntryMode:
+            for i in range(fusedef.kMaxEfuseWords):
+                if (i >= fusedef.kEfuseEntryModeRegion0IndexStart and i <= fusedef.kEfuseEntryModeRegion0IndexEnd) or \
+                   (i >= fusedef.kEfuseEntryModeRegion1IndexStart and i <= fusedef.kEfuseEntryModeRegion1IndexEnd) or \
+                   (i >= fusedef.kEfuseEntryModeRegion2IndexStart and i <= fusedef.kEfuseEntryModeRegion2IndexEnd) or \
+                   (i >= fusedef.kEfuseEntryModeRegion3IndexStart and i <= fusedef.kEfuseEntryModeRegion3IndexEnd):
+                    self.entryModeFuseFlagList[i] = True
+                else:
+                    self.entryModeFuseFlagList[i] = False
+        else:
+            for i in range(fusedef.kEfuseRemapLen):
+                self.entryModeFuseFlagList[i] = True
+
+    def applyFuseOperToRunMode( self ):
+        self._initEntryModeFuseFlag()
+        self.updateFuseRegionField()
 
     def _swapRemappedScannedFuseIfAppliable( self ):
         if self.mcuDevice == uidef.kMcuDevice_iMXRT106x:
@@ -27,7 +48,8 @@ class secBootFuse(runcore.secBootRun):
 
     def scanAllFuseRegions( self ):
         for i in range(fusedef.kMaxEfuseWords):
-            self.scannedFuseList[i] = self.readMcuDeviceFuseByBlhost(fusedef.kEfuseIndex_START + i, '', False)
+            if self.entryModeFuseFlagList[i]:
+                self.scannedFuseList[i] = self.readMcuDeviceFuseByBlhost(fusedef.kEfuseIndex_START + i, '', False)
         self._swapRemappedScannedFuseIfAppliable()
         self.showScannedFuses(self.scannedFuseList)
 
@@ -45,9 +67,10 @@ class secBootFuse(runcore.secBootRun):
         self.toBeBurnnedFuseList = self.getUserFuses()
         self._swapRemappedToBeBurnFuseIfAppliable()
         for i in range(fusedef.kMaxEfuseWords):
-            if self.toBeBurnnedFuseList[i] != self.scannedFuseList[i] and \
-               self.toBeBurnnedFuseList[i] != None and \
-               self.scannedFuseList[i] != None:
-                fuseValue = self.toBeBurnnedFuseList[i] | self.scannedFuseList[i]
-                self.burnMcuDeviceFuseByBlhost(fusedef.kEfuseIndex_START + i, fuseValue)
+            if self.entryModeFuseFlagList[i]:
+                if self.toBeBurnnedFuseList[i] != self.scannedFuseList[i] and \
+                   self.toBeBurnnedFuseList[i] != None and \
+                   self.scannedFuseList[i] != None:
+                    fuseValue = self.toBeBurnnedFuseList[i] | self.scannedFuseList[i]
+                    self.burnMcuDeviceFuseByBlhost(fusedef.kEfuseIndex_START + i, fuseValue)
         self.scanAllFuseRegions()

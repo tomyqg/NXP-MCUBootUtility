@@ -24,6 +24,9 @@ class secBootWin ( wx.Frame ):
 
 		self.m_menubar = wx.MenuBar( 0 )
 		self.m_menu_file = wx.Menu()
+		self.m_menuItem_exit = wx.MenuItem( self.m_menu_file, wx.ID_ANY, u"Exit", wx.EmptyString, wx.ITEM_NORMAL )
+		self.m_menu_file.Append( self.m_menuItem_exit )
+
 		self.m_menubar.Append( self.m_menu_file, u"File" )
 
 		self.m_menu_edit = wx.Menu()
@@ -31,28 +34,34 @@ class secBootWin ( wx.Frame ):
 
 		self.m_menu_view = wx.Menu()
 		self.m_menu_language = wx.Menu()
-		self.m_menuItem_chinese = wx.MenuItem( self.m_menu_language, wx.ID_ANY, u"Chinese", wx.EmptyString, wx.ITEM_NORMAL )
-		self.m_menu_language.Append( self.m_menuItem_chinese )
-
-		self.m_menuItem_english = wx.MenuItem( self.m_menu_language, wx.ID_ANY, u"English", wx.EmptyString, wx.ITEM_NORMAL )
+		self.m_menuItem_english = wx.MenuItem( self.m_menu_language, wx.ID_ANY, u"English", wx.EmptyString, wx.ITEM_RADIO )
 		self.m_menu_language.Append( self.m_menuItem_english )
+
+		self.m_menuItem_chinese = wx.MenuItem( self.m_menu_language, wx.ID_ANY, u"Chinese", wx.EmptyString, wx.ITEM_RADIO )
+		self.m_menu_language.Append( self.m_menuItem_chinese )
 
 		self.m_menu_view.AppendSubMenu( self.m_menu_language, u"Language" )
 
 		self.m_menubar.Append( self.m_menu_view, u"View" )
 
 		self.m_menu_tools = wx.Menu()
-		self.m_menuItem_option = wx.MenuItem( self.m_menu_tools, wx.ID_ANY, u"Option", wx.EmptyString, wx.ITEM_NORMAL )
-		self.m_menu_tools.Append( self.m_menuItem_option )
+		self.m_menu_option = wx.Menu()
+		self.m_menuItem_entryMode = wx.MenuItem( self.m_menu_option, wx.ID_ANY, u"Entry Mode", wx.EmptyString, wx.ITEM_RADIO )
+		self.m_menu_option.Append( self.m_menuItem_entryMode )
+
+		self.m_menuItem_masterMode = wx.MenuItem( self.m_menu_option, wx.ID_ANY, u"Master Mode", wx.EmptyString, wx.ITEM_RADIO )
+		self.m_menu_option.Append( self.m_menuItem_masterMode )
+
+		self.m_menu_tools.AppendSubMenu( self.m_menu_option, u"Option" )
 
 		self.m_menubar.Append( self.m_menu_tools, u"Tools" )
 
 		self.m_menu_window = wx.Menu()
 		self.m_menu_theme = wx.Menu()
-		self.m_menuItem_light = wx.MenuItem( self.m_menu_theme, wx.ID_ANY, u"Light", wx.EmptyString, wx.ITEM_NORMAL )
+		self.m_menuItem_light = wx.MenuItem( self.m_menu_theme, wx.ID_ANY, u"Light", wx.EmptyString, wx.ITEM_RADIO )
 		self.m_menu_theme.Append( self.m_menuItem_light )
 
-		self.m_menuItem_dark = wx.MenuItem( self.m_menu_theme, wx.ID_ANY, u"Dark", wx.EmptyString, wx.ITEM_NORMAL )
+		self.m_menuItem_dark = wx.MenuItem( self.m_menu_theme, wx.ID_ANY, u"Dark", wx.EmptyString, wx.ITEM_RADIO )
 		self.m_menu_theme.Append( self.m_menuItem_dark )
 
 		self.m_menu_window.AppendSubMenu( self.m_menu_theme, u"Theme" )
@@ -1456,6 +1465,9 @@ class secBootWin ( wx.Frame ):
 		self.Centre( wx.BOTH )
 
 		# Connect Events
+		self.Bind( wx.EVT_MENU, self.callbackExit, id = self.m_menuItem_exit.GetId() )
+		self.Bind( wx.EVT_MENU, self.callbackSetEntryMode, id = self.m_menuItem_entryMode.GetId() )
+		self.Bind( wx.EVT_MENU, self.callbackSetMasterMode, id = self.m_menuItem_masterMode.GetId() )
 		self.Bind( wx.EVT_MENU, self.callbackShowHomePage, id = self.m_menuItem_homePage.GetId() )
 		self.Bind( wx.EVT_MENU, self.callbackShowAboutAuthor, id = self.m_menuItem_aboutAuthor.GetId() )
 		self.Bind( wx.EVT_MENU, self.callbackShowSpecialThanks, id = self.m_menuItem_specialThanks.GetId() )
@@ -1489,6 +1501,15 @@ class secBootWin ( wx.Frame ):
 
 
 	# Virtual event handlers, overide them in your derived class
+	def callbackExit( self, event ):
+		event.Skip()
+
+	def callbackSetEntryMode( self, event ):
+		event.Skip()
+
+	def callbackSetMasterMode( self, event ):
+		event.Skip()
+
 	def callbackShowHomePage( self, event ):
 		event.Skip()
 

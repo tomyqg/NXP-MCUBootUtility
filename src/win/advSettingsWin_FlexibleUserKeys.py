@@ -125,15 +125,15 @@ class advSettingsWin_FlexibleUserKeys ( wx.Frame ):
 
 		gSizer_region0Info.Add( self.m_staticText_region0AesMode, 0, wx.ALL, 5 )
 
-		m_choice_region0AesModeChoices = [ u"ECB", u"CTR" ]
+		m_choice_region0AesModeChoices = [ u"CTR" ]
 		self.m_choice_region0AesMode = wx.Choice( self.m_panel_region0Info, wx.ID_ANY, wx.DefaultPosition, wx.Size( 210,-1 ), m_choice_region0AesModeChoices, 0 )
-		self.m_choice_region0AesMode.SetSelection( 1 )
+		self.m_choice_region0AesMode.SetSelection( 0 )
 		self.m_choice_region0AesMode.SetForegroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
 		self.m_choice_region0AesMode.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
 
 		gSizer_region0Info.Add( self.m_choice_region0AesMode, 0, wx.ALL, 5 )
 
-		self.m_staticText_region0FacCnt = wx.StaticText( self.m_panel_region0Info, wx.ID_ANY, u"FAC Region Count:", wx.DefaultPosition, wx.Size( 210,-1 ), 0 )
+		self.m_staticText_region0FacCnt = wx.StaticText( self.m_panel_region0Info, wx.ID_ANY, u"Protected Region Count:", wx.DefaultPosition, wx.Size( 210,-1 ), 0 )
 		self.m_staticText_region0FacCnt.Wrap( -1 )
 
 		gSizer_region0Info.Add( self.m_staticText_region0FacCnt, 0, wx.ALL, 5 )
@@ -143,7 +143,7 @@ class advSettingsWin_FlexibleUserKeys ( wx.Frame ):
 		self.m_choice_region0FacCnt.SetSelection( 0 )
 		gSizer_region0Info.Add( self.m_choice_region0FacCnt, 0, wx.ALL, 5 )
 
-		self.m_staticText_region0Fac0Start = wx.StaticText( self.m_panel_region0Info, wx.ID_ANY, u"FAC0 Region Start (eg. 0x60001000):", wx.DefaultPosition, wx.Size( 210,-1 ), 0 )
+		self.m_staticText_region0Fac0Start = wx.StaticText( self.m_panel_region0Info, wx.ID_ANY, u"Protected Region 0 Start:", wx.DefaultPosition, wx.Size( 210,-1 ), 0 )
 		self.m_staticText_region0Fac0Start.Wrap( -1 )
 
 		gSizer_region0Info.Add( self.m_staticText_region0Fac0Start, 0, wx.ALL, 5 )
@@ -151,7 +151,7 @@ class advSettingsWin_FlexibleUserKeys ( wx.Frame ):
 		self.m_textCtrl_region0Fac0Start = wx.TextCtrl( self.m_panel_region0Info, wx.ID_ANY, u"0x60001000", wx.DefaultPosition, wx.Size( 210,-1 ), 0 )
 		gSizer_region0Info.Add( self.m_textCtrl_region0Fac0Start, 0, wx.ALL, 5 )
 
-		self.m_staticText_region0Fac0Length = wx.StaticText( self.m_panel_region0Info, wx.ID_ANY, u"FAC0 Region Length (eg. 0x1000):", wx.DefaultPosition, wx.Size( 210,-1 ), 0 )
+		self.m_staticText_region0Fac0Length = wx.StaticText( self.m_panel_region0Info, wx.ID_ANY, u"Protected Region 0 Length:", wx.DefaultPosition, wx.Size( 210,-1 ), 0 )
 		self.m_staticText_region0Fac0Length.Wrap( -1 )
 
 		gSizer_region0Info.Add( self.m_staticText_region0Fac0Length, 0, wx.ALL, 5 )
@@ -159,7 +159,7 @@ class advSettingsWin_FlexibleUserKeys ( wx.Frame ):
 		self.m_textCtrl_region0Fac0Length = wx.TextCtrl( self.m_panel_region0Info, wx.ID_ANY, u"0x2000", wx.DefaultPosition, wx.Size( 210,-1 ), 0 )
 		gSizer_region0Info.Add( self.m_textCtrl_region0Fac0Length, 0, wx.ALL, 5 )
 
-		self.m_staticText_region0Fac1Start = wx.StaticText( self.m_panel_region0Info, wx.ID_ANY, u"FAC1 Region Start:", wx.DefaultPosition, wx.Size( 210,-1 ), 0 )
+		self.m_staticText_region0Fac1Start = wx.StaticText( self.m_panel_region0Info, wx.ID_ANY, u"Protected Region 1 Start:", wx.DefaultPosition, wx.Size( 210,-1 ), 0 )
 		self.m_staticText_region0Fac1Start.Wrap( -1 )
 
 		gSizer_region0Info.Add( self.m_staticText_region0Fac1Start, 0, wx.ALL, 5 )
@@ -167,7 +167,7 @@ class advSettingsWin_FlexibleUserKeys ( wx.Frame ):
 		self.m_textCtrl_region0Fac1Start = wx.TextCtrl( self.m_panel_region0Info, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.Size( 210,-1 ), 0 )
 		gSizer_region0Info.Add( self.m_textCtrl_region0Fac1Start, 0, wx.ALL, 5 )
 
-		self.m_staticText_region0Fac1Length = wx.StaticText( self.m_panel_region0Info, wx.ID_ANY, u"FAC1 Region Length:", wx.DefaultPosition, wx.Size( 210,-1 ), 0 )
+		self.m_staticText_region0Fac1Length = wx.StaticText( self.m_panel_region0Info, wx.ID_ANY, u"Protected Region 1 Length:", wx.DefaultPosition, wx.Size( 210,-1 ), 0 )
 		self.m_staticText_region0Fac1Length.Wrap( -1 )
 
 		gSizer_region0Info.Add( self.m_staticText_region0Fac1Length, 0, wx.ALL, 5 )
@@ -175,7 +175,7 @@ class advSettingsWin_FlexibleUserKeys ( wx.Frame ):
 		self.m_textCtrl_region0Fac1Length = wx.TextCtrl( self.m_panel_region0Info, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.Size( 210,-1 ), 0 )
 		gSizer_region0Info.Add( self.m_textCtrl_region0Fac1Length, 0, wx.ALL, 5 )
 
-		self.m_staticText_region0Fac2Start = wx.StaticText( self.m_panel_region0Info, wx.ID_ANY, u"FAC2 Region Start:", wx.DefaultPosition, wx.Size( 210,-1 ), 0 )
+		self.m_staticText_region0Fac2Start = wx.StaticText( self.m_panel_region0Info, wx.ID_ANY, u"Protected Region 2 Start:", wx.DefaultPosition, wx.Size( 210,-1 ), 0 )
 		self.m_staticText_region0Fac2Start.Wrap( -1 )
 
 		gSizer_region0Info.Add( self.m_staticText_region0Fac2Start, 0, wx.ALL, 5 )
@@ -183,7 +183,7 @@ class advSettingsWin_FlexibleUserKeys ( wx.Frame ):
 		self.m_textCtrl_region0Fac2Start = wx.TextCtrl( self.m_panel_region0Info, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.Size( 210,-1 ), 0 )
 		gSizer_region0Info.Add( self.m_textCtrl_region0Fac2Start, 0, wx.ALL, 5 )
 
-		self.m_staticText_region0Fac2Length = wx.StaticText( self.m_panel_region0Info, wx.ID_ANY, u"FAC2 Region Length:", wx.DefaultPosition, wx.Size( 210,-1 ), 0 )
+		self.m_staticText_region0Fac2Length = wx.StaticText( self.m_panel_region0Info, wx.ID_ANY, u"Protected Region 2 Length:", wx.DefaultPosition, wx.Size( 210,-1 ), 0 )
 		self.m_staticText_region0Fac2Length.Wrap( -1 )
 
 		gSizer_region0Info.Add( self.m_staticText_region0Fac2Length, 0, wx.ALL, 5 )
@@ -196,7 +196,7 @@ class advSettingsWin_FlexibleUserKeys ( wx.Frame ):
 
 		gSizer_region0Info.Add( self.m_staticText_region0AccessPermision, 0, wx.ALL, 5 )
 
-		m_choice_region0AccessPermisionChoices = [ u"No Limitation", u"Debug Disabled", u"Execute Only, Debug Allowed", u"Execute Only, Debug Disabled" ]
+		m_choice_region0AccessPermisionChoices = [ u"No Limitation" ]
 		self.m_choice_region0AccessPermision = wx.Choice( self.m_panel_region0Info, wx.ID_ANY, wx.DefaultPosition, wx.Size( 210,-1 ), m_choice_region0AccessPermisionChoices, 0 )
 		self.m_choice_region0AccessPermision.SetSelection( 0 )
 		gSizer_region0Info.Add( self.m_choice_region0AccessPermision, 0, wx.ALL, 5 )
@@ -246,12 +246,12 @@ class advSettingsWin_FlexibleUserKeys ( wx.Frame ):
 
 		gSizer_region1Info.Add( self.m_staticText_region1AesMode, 0, wx.ALL, 5 )
 
-		m_choice_region1AesModeChoices = [ u"ECB", u"CTR" ]
+		m_choice_region1AesModeChoices = [ u"CTR" ]
 		self.m_choice_region1AesMode = wx.Choice( self.m_panel_region1Info, wx.ID_ANY, wx.DefaultPosition, wx.Size( 210,-1 ), m_choice_region1AesModeChoices, 0 )
-		self.m_choice_region1AesMode.SetSelection( 1 )
+		self.m_choice_region1AesMode.SetSelection( 0 )
 		gSizer_region1Info.Add( self.m_choice_region1AesMode, 0, wx.ALL, 5 )
 
-		self.m_staticText_region1FacCnt = wx.StaticText( self.m_panel_region1Info, wx.ID_ANY, u"FAC Region Count:", wx.DefaultPosition, wx.Size( 210,-1 ), 0 )
+		self.m_staticText_region1FacCnt = wx.StaticText( self.m_panel_region1Info, wx.ID_ANY, u"Protected Region Count:", wx.DefaultPosition, wx.Size( 210,-1 ), 0 )
 		self.m_staticText_region1FacCnt.Wrap( -1 )
 
 		gSizer_region1Info.Add( self.m_staticText_region1FacCnt, 0, wx.ALL, 5 )
@@ -261,7 +261,7 @@ class advSettingsWin_FlexibleUserKeys ( wx.Frame ):
 		self.m_choice_region1FacCnt.SetSelection( 0 )
 		gSizer_region1Info.Add( self.m_choice_region1FacCnt, 0, wx.ALL, 5 )
 
-		self.m_staticText_region1Fac0Start = wx.StaticText( self.m_panel_region1Info, wx.ID_ANY, u"FAC0 Region Start (eg. 0x60001000):", wx.DefaultPosition, wx.Size( 210,-1 ), 0 )
+		self.m_staticText_region1Fac0Start = wx.StaticText( self.m_panel_region1Info, wx.ID_ANY, u"Protected Region 0 Start:", wx.DefaultPosition, wx.Size( 210,-1 ), 0 )
 		self.m_staticText_region1Fac0Start.Wrap( -1 )
 
 		gSizer_region1Info.Add( self.m_staticText_region1Fac0Start, 0, wx.ALL, 5 )
@@ -269,7 +269,7 @@ class advSettingsWin_FlexibleUserKeys ( wx.Frame ):
 		self.m_textCtrl_region1Fac0Start = wx.TextCtrl( self.m_panel_region1Info, wx.ID_ANY, u"0x60003000", wx.DefaultPosition, wx.Size( 210,-1 ), 0 )
 		gSizer_region1Info.Add( self.m_textCtrl_region1Fac0Start, 0, wx.ALL, 5 )
 
-		self.m_staticText_region1Fac0Length = wx.StaticText( self.m_panel_region1Info, wx.ID_ANY, u"FAC0 Region Length (eg. 0x1000):", wx.DefaultPosition, wx.Size( 210,-1 ), 0 )
+		self.m_staticText_region1Fac0Length = wx.StaticText( self.m_panel_region1Info, wx.ID_ANY, u"Protected Region 0 Length:", wx.DefaultPosition, wx.Size( 210,-1 ), 0 )
 		self.m_staticText_region1Fac0Length.Wrap( -1 )
 
 		gSizer_region1Info.Add( self.m_staticText_region1Fac0Length, 0, wx.ALL, 5 )
@@ -277,7 +277,7 @@ class advSettingsWin_FlexibleUserKeys ( wx.Frame ):
 		self.m_textCtrl_region1Fac0Length = wx.TextCtrl( self.m_panel_region1Info, wx.ID_ANY, u"0xc000", wx.DefaultPosition, wx.Size( 210,-1 ), 0 )
 		gSizer_region1Info.Add( self.m_textCtrl_region1Fac0Length, 0, wx.ALL, 5 )
 
-		self.m_staticText_region1Fac1Start = wx.StaticText( self.m_panel_region1Info, wx.ID_ANY, u"FAC1 Region Start:", wx.DefaultPosition, wx.Size( 210,-1 ), 0 )
+		self.m_staticText_region1Fac1Start = wx.StaticText( self.m_panel_region1Info, wx.ID_ANY, u"Protected Region 1 Start:", wx.DefaultPosition, wx.Size( 210,-1 ), 0 )
 		self.m_staticText_region1Fac1Start.Wrap( -1 )
 
 		gSizer_region1Info.Add( self.m_staticText_region1Fac1Start, 0, wx.ALL, 5 )
@@ -285,7 +285,7 @@ class advSettingsWin_FlexibleUserKeys ( wx.Frame ):
 		self.m_textCtrl_region1Fac1Start = wx.TextCtrl( self.m_panel_region1Info, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.Size( 210,-1 ), 0 )
 		gSizer_region1Info.Add( self.m_textCtrl_region1Fac1Start, 0, wx.ALL, 5 )
 
-		self.m_staticText_region1Fac1Length = wx.StaticText( self.m_panel_region1Info, wx.ID_ANY, u"FAC1 Region Length:", wx.DefaultPosition, wx.Size( 210,-1 ), 0 )
+		self.m_staticText_region1Fac1Length = wx.StaticText( self.m_panel_region1Info, wx.ID_ANY, u"Protected Region 1 Length:", wx.DefaultPosition, wx.Size( 210,-1 ), 0 )
 		self.m_staticText_region1Fac1Length.Wrap( -1 )
 
 		gSizer_region1Info.Add( self.m_staticText_region1Fac1Length, 0, wx.ALL, 5 )
@@ -293,7 +293,7 @@ class advSettingsWin_FlexibleUserKeys ( wx.Frame ):
 		self.m_textCtrl_region1Fac1Length = wx.TextCtrl( self.m_panel_region1Info, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.Size( 210,-1 ), 0 )
 		gSizer_region1Info.Add( self.m_textCtrl_region1Fac1Length, 0, wx.ALL, 5 )
 
-		self.m_staticText_region1Fac2Start = wx.StaticText( self.m_panel_region1Info, wx.ID_ANY, u"FAC2 Region Start:", wx.DefaultPosition, wx.Size( 210,-1 ), 0 )
+		self.m_staticText_region1Fac2Start = wx.StaticText( self.m_panel_region1Info, wx.ID_ANY, u"Protected Region 2 Start:", wx.DefaultPosition, wx.Size( 210,-1 ), 0 )
 		self.m_staticText_region1Fac2Start.Wrap( -1 )
 
 		gSizer_region1Info.Add( self.m_staticText_region1Fac2Start, 0, wx.ALL, 5 )
@@ -301,7 +301,7 @@ class advSettingsWin_FlexibleUserKeys ( wx.Frame ):
 		self.m_textCtrl_region1Fac2Start = wx.TextCtrl( self.m_panel_region1Info, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.Size( 210,-1 ), 0 )
 		gSizer_region1Info.Add( self.m_textCtrl_region1Fac2Start, 0, wx.ALL, 5 )
 
-		self.m_staticText_region1Fac2Length = wx.StaticText( self.m_panel_region1Info, wx.ID_ANY, u"FAC2 Region Length:", wx.DefaultPosition, wx.Size( 210,-1 ), 0 )
+		self.m_staticText_region1Fac2Length = wx.StaticText( self.m_panel_region1Info, wx.ID_ANY, u"Protected Region 2 Length:", wx.DefaultPosition, wx.Size( 210,-1 ), 0 )
 		self.m_staticText_region1Fac2Length.Wrap( -1 )
 
 		gSizer_region1Info.Add( self.m_staticText_region1Fac2Length, 0, wx.ALL, 5 )
@@ -314,7 +314,7 @@ class advSettingsWin_FlexibleUserKeys ( wx.Frame ):
 
 		gSizer_region1Info.Add( self.m_staticText_region1AccessPermision, 0, wx.ALL, 5 )
 
-		m_choice_region1AccessPermisionChoices = [ u"No Limitation", u"Debug Disabled", u"Execute Only, Debug Allowed", u"Execute Only, Debug Disabled" ]
+		m_choice_region1AccessPermisionChoices = [ u"No Limitation" ]
 		self.m_choice_region1AccessPermision = wx.Choice( self.m_panel_region1Info, wx.ID_ANY, wx.DefaultPosition, wx.Size( 210,-1 ), m_choice_region1AccessPermisionChoices, 0 )
 		self.m_choice_region1AccessPermision.SetSelection( 0 )
 		gSizer_region1Info.Add( self.m_choice_region1AccessPermision, 0, wx.ALL, 5 )

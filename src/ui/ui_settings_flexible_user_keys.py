@@ -140,9 +140,21 @@ class secBootUiSettingsFlexibleUserKeys(advSettingsWin_FlexibleUserKeys.advSetti
 
     def _getAesMode( self, regionIndex=0 ):
         if regionIndex == 0:
-            self.userKeyCmdDict['region0_arg'] = str(self.m_choice_region0AesMode.GetSelection())
+            aesMode = self.m_choice_region0AesMode.GetString(self.m_choice_region0AesMode.GetSelection())
+            if aesMode == 'ECB':
+                self.userKeyCmdDict['region0_arg'] = '0'
+            elif aesMode == 'CTR':
+                self.userKeyCmdDict['region0_arg'] = '1'
+            else:
+                pass
         elif regionIndex == 1:
-            self.userKeyCmdDict['region1_arg'] = str(self.m_choice_region1AesMode.GetSelection())
+            aesMode = self.m_choice_region1AesMode.GetString(self.m_choice_region1AesMode.GetSelection())
+            if aesMode == 'ECB':
+                self.userKeyCmdDict['region1_arg'] = '0'
+            elif aesMode == 'CTR':
+                self.userKeyCmdDict['region1_arg'] = '1'
+            else:
+                pass
         else:
             pass
 
@@ -340,7 +352,8 @@ class secBootUiSettingsFlexibleUserKeys(advSettingsWin_FlexibleUserKeys.advSetti
     def _recoverRegionArg( self, regionIndex ):
         if regionIndex == 0:
             self.m_choice_region0FacCnt.SetSelection(self.userKeyCtrlDict['region0_fac_cnt'] - 1)
-            self.m_choice_region0AesMode.SetSelection(int(self.userKeyCmdDict['region0_arg'][0]))
+            if self.userKeyCmdDict['region0_arg'][0] == '1':
+                self.m_choice_region0AesMode.SetSelection(0)
             locStart = 0
             locEnd = 0
             if self.userKeyCtrlDict['region0_fac_cnt'] > 0:
@@ -374,7 +387,8 @@ class secBootUiSettingsFlexibleUserKeys(advSettingsWin_FlexibleUserKeys.advSetti
             self.m_choice_region0AccessPermision.SetSelection(int(self.userKeyCmdDict['region0_arg'][locEnd-1:locEnd]))
         elif regionIndex == 1:
             self.m_choice_region1FacCnt.SetSelection(self.userKeyCtrlDict['region1_fac_cnt'] - 1)
-            self.m_choice_region1AesMode.SetSelection(int(self.userKeyCmdDict['region1_arg'][0]))
+            if self.userKeyCmdDict['region1_arg'][0] == '1':
+                self.m_choice_region1AesMode.SetSelection(0)
             locStart = 0
             locEnd = 0
             if self.userKeyCtrlDict['region1_fac_cnt'] > 0:
