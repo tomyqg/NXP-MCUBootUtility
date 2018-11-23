@@ -110,7 +110,7 @@ class secBootMem(fusecore.secBootFuse):
                 if not self.isNandDevice:
                     if addr <= self.bootDeviceMemBase + memdef.kMemBlockSize_CFG:
                         if self.needToShowCfgIntr:
-                            self.printMem('------------------------------------CFG-----------------------------------------------', uidef.kMemBlockColor_CFG)
+                            self.printMem('------------------------------------FDCB----------------------------------------------', uidef.kMemBlockColor_CFG)
                             self.needToShowCfgIntr = False
                         self.printMem(contentToShow, uidef.kMemBlockColor_CFG)
                     elif addr <= self.bootDeviceMemBase + self.destAppIvtOffset:

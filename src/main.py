@@ -176,6 +176,36 @@ class secBootMain(memcore.secBootMem):
     def callbackSetSecureBootType( self, event ):
         self.setSecureBootSeqColor()
 
+    def callbackAllInOneAction( self, event ):
+        status = False
+        if self.secureBootType == uidef.kSecureBootType_HabAuth or \
+           self.secureBootType == uidef.kSecureBootType_HabCrypto or \
+           (self.secureBootType == uidef.kSecureBootType_BeeCrypto and self.bootDevice == uidef.kBootDevice_FlexspiNor and self.isCertEnabledForBee):
+            status = self._doGenCert()
+            if not status:
+                return
+            status = self._doProgramSrk()
+            if not status:
+                return
+        status = self._doGenImage()
+        if not status:
+            return
+        if self.secureBootType == uidef.kSecureBootType_BeeCrypto and self.bootDevice == uidef.kBootDevice_FlexspiNor:
+            status = self._doBeeEncryption()
+            if not status:
+                return
+            if self.keyStorageRegion == uidef.kKeyStorageRegion_FlexibleUserKeys:
+                status = self._doProgramBeeDek()
+                if not status:
+                    return
+        status = self._doFlashImage()
+        if not status:
+            return
+        if self.secureBootType == uidef.kSecureBootType_HabCrypto:
+            status = self._doFlashHabDek()
+            if not status:
+                return
+
     def callbackAdvCertSettings( self, event ):
         if self.secureBootType == uidef.kSecureBootType_BeeCrypto and self.bootDevice != uidef.kBootDevice_FlexspiNor:
             self.popupMsgBox('Action is not available because BEE encryption boot is only designed for FlexSPI NOR device!')
@@ -204,7 +234,8 @@ class secBootMain(memcore.secBootMem):
                     certAnswer = wx.YES
         return (certAnswer == wx.YES)
 
-    def callbackGenCert( self, event ):
+    def _doGenCert( self ):
+        status = False
         if self.secureBootType == uidef.kSecureBootType_BeeCrypto and self.bootDevice != uidef.kBootDevice_FlexspiNor:
             self.popupMsgBox('Action is not available because BEE encryption boot is only designed for FlexSPI NOR device!')
         elif self.secureBootType != uidef.kSecureBootType_Development:
@@ -216,23 +247,41 @@ class secBootMain(memcore.secBootMem):
                 self.updateAllCstPathToCorrectVersion()
                 if not self._wantToReuseAvailableCert():
                     if self.createSerialAndKeypassfile():
+                        self.setSecureBootButtonColor()
                         self.genCertificate()
                         self.genSuperRootKeys()
                         self.showSuperRootKeys()
+                        status = True
+                else:
+                    status = True
                 self._stopGaugeTimer()
         else:
             self.popupMsgBox('No need to generate certificate when booting unsigned image!')
+        return status
 
-    def callbackGenImage( self, event ):
+    def callbackGenCert( self, event ):
+        self._doGenCert()
+
+    def callbackChangedAppFile( self, event ):
+        self.getUserAppFilePath()
+        self.setSecureBootButtonColor()
+
+    def _doGenImage( self ):
+        status = False
         if self.secureBootType == uidef.kSecureBootType_BeeCrypto and self.bootDevice != uidef.kBootDevice_FlexspiNor:
             self.popupMsgBox('Action is not available because BEE encryption boot is only designed for FlexSPI NOR device!')
         else:
             self._startGaugeTimer()
             self.printLog("'Generate Bootable Image' button is clicked")
             if self.createMatchedAppBdfile():
-                self.genBootableImage()
-                self.showHabDekIfApplicable()
+                if self.genBootableImage():
+                    self.showHabDekIfApplicable()
+                    status = True
             self._stopGaugeTimer()
+        return status
+
+    def callbackGenImage( self, event ):
+        self._doGenImage()
 
     def callbackSetCertForBee( self, event ):
         if self.secureBootType == uidef.kSecureBootType_BeeCrypto:
@@ -258,24 +307,33 @@ class secBootMain(memcore.secBootMem):
         else:
             self.popupMsgBox('Key setting is only available when booting BEE encrypted image in FlexSPI NOR device!')
 
-    def callbackDoBeeEncryption( self, event ):
+    def _doBeeEncryption( self ):
+        status = False
         if self.secureBootType == uidef.kSecureBootType_BeeCrypto and self.bootDevice == uidef.kBootDevice_FlexspiNor:
             self._startGaugeTimer()
             if self.keyStorageRegion == uidef.kKeyStorageRegion_FixedOtpmkKey:
                 if self.connectStage == uidef.kConnectStage_Reset:
                     if not self.prepareForFixedOtpmkEncryption():
                         self.popupMsgBox('Failed to prepare for fixed OTPMK SNVS encryption, Please reset board and try again!')
+                    else:
+                        status = True
                 else:
                     self.popupMsgBox('Please configure boot device via Flashloader first!')
             elif self.keyStorageRegion == uidef.kKeyStorageRegion_FlexibleUserKeys:
                 self.encrypteImageUsingFlexibleUserKeys()
+                status = True
             else:
                 pass
             self._stopGaugeTimer()
         else:
             self.popupMsgBox('BEE encryption is only available when booting BEE encrypted image in FlexSPI NOR device!')
+        return status
 
-    def callbackProgramSrk( self, event ):
+    def callbackDoBeeEncryption( self, event ):
+        self._doBeeEncryption()
+
+    def _doProgramSrk( self ):
+        status = False
         if self.secureBootType == uidef.kSecureBootType_BeeCrypto and self.bootDevice != uidef.kBootDevice_FlexspiNor:
             self.popupMsgBox('Action is not available because BEE encryption boot is only designed for FlexSPI NOR device!')
         elif self.secureBootType != uidef.kSecureBootType_Development:
@@ -287,19 +345,26 @@ class secBootMain(memcore.secBootMem):
                     self._startGaugeTimer()
                     self.printLog("'Load SRK data' button is clicked")
                     self.burnSrkData()
+                    status = True
                     self._stopGaugeTimer()
                 else:
                     self.popupMsgBox('Please connect to Flashloader first!')
         else:
             self.popupMsgBox('No need to burn SRK data when booting unsigned image!')
+        return status
 
-    def callbackProgramBeeDek( self, event ):
+    def callbackProgramSrk( self, event ):
+        self._doProgramSrk()
+
+    def _doProgramBeeDek( self ):
+        status = False
         if self.secureBootType == uidef.kSecureBootType_BeeCrypto and self.bootDevice == uidef.kBootDevice_FlexspiNor:
             if self.keyStorageRegion == uidef.kKeyStorageRegion_FlexibleUserKeys:
                 if self.connectStage == uidef.kConnectStage_ExternalMemory or \
                    self.connectStage == uidef.kConnectStage_Reset:
                     self._startGaugeTimer()
                     self.burnBeeDekData()
+                    status = True
                     self._stopGaugeTimer()
                 else:
                     self.popupMsgBox('Please connect to Flashloader first!')
@@ -307,8 +372,13 @@ class secBootMain(memcore.secBootMem):
                 self.popupMsgBox('No need to burn BEE DEK data as OTPMK key is selected!')
         else:
             self.popupMsgBox('BEE DEK Burning is only available when booting BEE encrypted image in FlexSPI NOR device!')
+        return status
 
-    def callbackFlashImage( self, event ):
+    def callbackProgramBeeDek( self, event ):
+        self._doProgramBeeDek()
+
+    def _doFlashImage( self ):
+        status = False
         if self.secureBootType == uidef.kSecureBootType_BeeCrypto and self.bootDevice != uidef.kBootDevice_FlexspiNor:
             self.popupMsgBox('Action is not available because BEE encryption boot is only designed for FlexSPI NOR device!')
         else:
@@ -325,11 +395,17 @@ class secBootMain(memcore.secBootMem):
                             self.enableHab()
                     if self.secureBootType == uidef.kSecureBootType_BeeCrypto and self.bootDevice == uidef.kBootDevice_FlexspiNor:
                         self.burnBeeKeySel()
+                    status = True
                 self._stopGaugeTimer()
             else:
                 self.popupMsgBox('Please configure boot device via Flashloader first!')
+        return status
 
-    def callbackFlashHabDek( self, event ):
+    def callbackFlashImage( self, event ):
+        self._doFlashImage()
+
+    def _doFlashHabDek( self ):
+        status = False
         if self.secureBootType == uidef.kSecureBootType_BeeCrypto and self.bootDevice != uidef.kBootDevice_FlexspiNor:
             self.popupMsgBox('Action is not available because BEE encryption boot is only designed for FlexSPI NOR device!')
         elif self.secureBootType == uidef.kSecureBootType_HabCrypto:
@@ -343,11 +419,16 @@ class secBootMain(memcore.secBootMem):
                     while self.connectStage != uidef.kConnectStage_Reset:
                         self._connectStateMachine()
                 self.flashHabDekToGenerateKeyBlob()
+                status = True
                 self._stopGaugeTimer()
             else:
                 self.popupMsgBox('Please configure boot device via Flashloader first!')
         else:
             self.popupMsgBox('KeyBlob loading is only available when booting HAB encrypted image!')
+        return status
+
+    def callbackFlashHabDek( self, event ):
+        self._doFlashHabDek()
 
     def callbackScanFuse( self, event ):
         if self.connectStage == uidef.kConnectStage_ExternalMemory or \
@@ -415,7 +496,7 @@ if __name__ == '__main__':
     app = wx.App()
 
     main_win = secBootMain(None)
-    main_win.SetTitle(u"nxpSecBoot v0.8.5")
+    main_win.SetTitle(u"nxpSecBoot v0.9.0")
     main_win.Show()
 
     app.MainLoop()

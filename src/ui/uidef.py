@@ -27,7 +27,7 @@ kBootDevice_LpspiNor       = 'LPSPI NOR,EEPROM'
 kBootDevice_RamFlashloader = 'RAM FLASHLOADER'
 
 kSecureBootType_Development = 'Unsigned (XIP) Image Boot'
-kSecureBootType_HabAuth     = 'Signed (XIP) Image Boot'
+kSecureBootType_HabAuth     = 'HAB Signed (XIP) Image Boot'
 kSecureBootType_HabCrypto   = 'HAB Signed Encrypted Image Boot'
 kSecureBootType_BeeCrypto   = 'BEE (Signed) Encrypted XIP Image Boot'
 
@@ -74,3 +74,11 @@ kMemBlockColor_DCD        = wx.Colour( 0x6f, 0x42, 0x42 ) #wx.SALMON
 kMemBlockColor_Image      = wx.BLUE
 kMemBlockColor_CSF        = wx.Colour( 0xff, 0xc0, 0xcb ) #wx.PINK
 kMemBlockColor_KeyBlob    = wx.Colour( 0xff, 0x7f, 0x00 ) #wx.CORAL
+
+kSecureBootSeqStep_GenCert    = 0
+kSecureBootSeqStep_GenImage   = 1
+kSecureBootSeqStep_PrepBee    = 2
+kSecureBootSeqStep_ProgSrk    = 3
+kSecureBootSeqStep_OperBee    = 4
+kSecureBootSeqStep_FlashImage = 5
+kSecureBootSeqStep_ProgDek    = 6

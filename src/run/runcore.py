@@ -518,6 +518,7 @@ class secBootRun(gencore.secBootGen):
             return False
         if not self._programFlexspiNorConfigBlock():
             return False
+        self.invalidateStepButtonColor(uidef.kSecureBootSeqStep_PrepBee)
         return True
 
     def _isDeviceFuseSrkRegionBlank( self ):
@@ -539,6 +540,7 @@ class secBootRun(gencore.secBootGen):
                 for i in range(keyWords):
                     val32 = self.getVal32FromBinFile(self.srkFuseFilename, (i * 4))
                     self.burnMcuDeviceFuseByBlhost(fusedef.kEfuseIndex_SRK0 + i, val32)
+                self.invalidateStepButtonColor(uidef.kSecureBootSeqStep_ProgSrk)
             else:
                 self.popupMsgBox('Fuse SRK Region has been burned, it is program-once!')
         else:
@@ -603,6 +605,7 @@ class secBootRun(gencore.secBootGen):
                 self.popupMsgBox('Fuse GP4 Region has been burned, it is program-once!')
         else:
             pass
+        self.invalidateStepButtonColor(uidef.kSecureBootSeqStep_OperBee)
 
     def _genDestEncAppFileWithoutCfgBlock( self ):
         destEncAppPath, destEncAppFile = os.path.split(self.destEncAppFilename)
@@ -659,6 +662,7 @@ class secBootRun(gencore.secBootGen):
                 return False
         else:
             pass
+        self.invalidateStepButtonColor(uidef.kSecureBootSeqStep_FlashImage)
         return True
 
     def _getMcuDeviceBeeKeySel( self ):
@@ -796,9 +800,11 @@ class secBootRun(gencore.secBootGen):
                 if not self._programFlexspiNorConfigBlock():
                     return False
             self.showImageLayout(u"../img/image_signed_hab_encrypted.png")
+            self.invalidateStepButtonColor(uidef.kSecureBootSeqStep_ProgDek)
+            return True
         else:
             self.popupMsgBox('Dek file hasn\'t been generated!')
-        return True
+            return False
 
     def enableHab( self ):
         if self.mcuDeviceHabStatus != fusedef.kHabStatus_Closed0 and \

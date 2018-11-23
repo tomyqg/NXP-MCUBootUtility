@@ -252,7 +252,7 @@ class secBootWin ( wx.Frame ):
 
 		wSizer_bootType = wx.WrapSizer( wx.HORIZONTAL, wx.WRAPSIZER_DEFAULT_FLAGS )
 
-		self.m_staticText_null1BootType = wx.StaticText( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.Size( 400,-1 ), 0 )
+		self.m_staticText_null1BootType = wx.StaticText( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.Size( 280,-1 ), 0 )
 		self.m_staticText_null1BootType.Wrap( -1 )
 
 		wSizer_bootType.Add( self.m_staticText_null1BootType, 0, wx.ALL, 5 )
@@ -262,10 +262,13 @@ class secBootWin ( wx.Frame ):
 
 		wSizer_bootType.Add( self.m_staticText_secureBootType, 0, wx.ALL, 5 )
 
-		m_choice_secureBootTypeChoices = [ u"Unsigned (XIP) Image Boot", u"Signed (XIP) Image Boot", u"HAB Signed Encrypted Image Boot", u"BEE (Signed) Encrypted XIP Image Boot" ]
+		m_choice_secureBootTypeChoices = [ u"Unsigned (XIP) Image Boot", u"HAB Signed (XIP) Image Boot", u"HAB Signed Encrypted Image Boot", u"BEE (Signed) Encrypted XIP Image Boot" ]
 		self.m_choice_secureBootType = wx.Choice( self, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, m_choice_secureBootTypeChoices, 0 )
 		self.m_choice_secureBootType.SetSelection( 0 )
 		wSizer_bootType.Add( self.m_choice_secureBootType, 0, wx.ALL, 5 )
+
+		self.m_button_allInOneAction = wx.Button( self, wx.ID_ANY, u"All-In-One Action", wx.DefaultPosition, wx.Size( 120,-1 ), 0 )
+		wSizer_bootType.Add( self.m_button_allInOneAction, 0, wx.ALL, 5 )
 
 
 		bSizer_boot.Add( wSizer_bootType, 1, wx.EXPAND, 5 )
@@ -1479,8 +1482,10 @@ class secBootWin ( wx.Frame ):
 		self.m_radioBtn_usbhid.Bind( wx.EVT_RADIOBUTTON, self.callbackSetUsbhidPort )
 		self.m_button_connect.Bind( wx.EVT_BUTTON, self.callbackConnectToDevice )
 		self.m_choice_secureBootType.Bind( wx.EVT_CHOICE, self.callbackSetSecureBootType )
+		self.m_button_allInOneAction.Bind( wx.EVT_BUTTON, self.callbackAllInOneAction )
 		self.m_button_advCertSettings.Bind( wx.EVT_BUTTON, self.callbackAdvCertSettings )
 		self.m_button_genCert.Bind( wx.EVT_BUTTON, self.callbackGenCert )
+		self.m_filePicker_appPath.Bind( wx.EVT_FILEPICKER_CHANGED, self.callbackChangedAppFile )
 		self.m_choice_enableCertForBee.Bind( wx.EVT_CHOICE, self.callbackSetCertForBee )
 		self.m_button_genImage.Bind( wx.EVT_BUTTON, self.callbackGenImage )
 		self.m_choice_keyStorageRegion.Bind( wx.EVT_CHOICE, self.callbackSetKeyStorageRegion )
@@ -1543,10 +1548,16 @@ class secBootWin ( wx.Frame ):
 	def callbackSetSecureBootType( self, event ):
 		event.Skip()
 
+	def callbackAllInOneAction( self, event ):
+		event.Skip()
+
 	def callbackAdvCertSettings( self, event ):
 		event.Skip()
 
 	def callbackGenCert( self, event ):
+		event.Skip()
+
+	def callbackChangedAppFile( self, event ):
 		event.Skip()
 
 	def callbackSetCertForBee( self, event ):
