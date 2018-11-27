@@ -41,6 +41,7 @@ class secBootGen(uicore.secBootUi):
         self.genCertToElftosbPath = '../../../gen/hab_cert/'
         self.genCryptoToElftosbPath = '../../../gen/hab_crypto/'
         self.lastCstVersion = uidef.kCstVersion_Invalid
+        self.opensslBinFolder = os.path.join(self.exeTopRoot, 'tools', 'openssl', '1.1.0j', 'win32')
         self.habDekFilename = os.path.join(self.exeTopRoot, 'gen', 'hab_crypto', 'hab_dek.bin')
         self.habDekDataOffset = None
         self.srcAppFilename = None
@@ -74,6 +75,13 @@ class secBootGen(uicore.secBootUi):
     def _copyCstBinToElftosbFolder( self ):
         shutil.copy(self.cstBinFolder + '\\cst.exe', os.path.split(self.elftosbPath)[0])
 
+    def _copyOpensslBinToCstFolder( self ):
+        shutil.copy(self.opensslBinFolder + '\\openssl.exe', self.hab4PkiTreePath)
+        shutil.copy(self.opensslBinFolder + '\\libcrypto-1_1.dll', self.hab4PkiTreePath)
+        shutil.copy(self.opensslBinFolder + '\\libssl-1_1.dll', self.hab4PkiTreePath)
+        shutil.copy(self.opensslBinFolder + '\\libcrypto-1_1.dll', self.cstBinFolder)
+        shutil.copy(self.opensslBinFolder + '\\libssl-1_1.dll', self.cstBinFolder)
+
     def updateAllCstPathToCorrectVersion( self ):
         certSettingsDict = uivar.getAdvancedSettings(uidef.kAdvancedSettings_Cert)
         if self.lastCstVersion != certSettingsDict['cstVersion']:
@@ -86,6 +94,7 @@ class secBootGen(uicore.secBootUi):
             self.cstCrtsToElftosbPath = self.cstCrtsToElftosbPath.replace(self.lastCstVersion, certSettingsDict['cstVersion'])
             self.lastCstVersion = certSettingsDict['cstVersion']
             self._copyCstBinToElftosbFolder()
+            self._copyOpensslBinToCstFolder()
 
     def _copySerialAndKeypassfileToCstFolder( self ):
         shutil.copy(self.serialFilename, self.cstKeysFolder)
