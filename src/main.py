@@ -205,6 +205,7 @@ class secBootMain(memcore.secBootMem):
             status = self._doFlashHabDek()
             if not status:
                 return
+        self.invalidateStepButtonColor(uidef.kSecureBootSeqStep_AllInOne)
 
     def callbackAdvCertSettings( self, event ):
         if self.secureBootType == uidef.kSecureBootType_BeeCrypto and self.bootDevice != uidef.kBootDevice_FlexspiNor:
@@ -260,7 +261,10 @@ class secBootMain(memcore.secBootMem):
         return status
 
     def callbackGenCert( self, event ):
-        self._doGenCert()
+        if not self.isToolRunAsEntryMode:
+            self._doGenCert()
+        else:
+            self.popupMsgBox('Separated action is not available under Entry Mode, You should use All-In-One Action!')
 
     def callbackChangedAppFile( self, event ):
         self.getUserAppFilePath()
@@ -281,7 +285,10 @@ class secBootMain(memcore.secBootMem):
         return status
 
     def callbackGenImage( self, event ):
-        self._doGenImage()
+        if not self.isToolRunAsEntryMode:
+            self._doGenImage()
+        else:
+            self.popupMsgBox('Separated action is not available under Entry Mode, You should use All-In-One Action!')
 
     def callbackSetCertForBee( self, event ):
         if self.secureBootType == uidef.kSecureBootType_BeeCrypto:
@@ -330,7 +337,10 @@ class secBootMain(memcore.secBootMem):
         return status
 
     def callbackDoBeeEncryption( self, event ):
-        self._doBeeEncryption()
+        if not self.isToolRunAsEntryMode:
+            self._doBeeEncryption()
+        else:
+            self.popupMsgBox('Separated action is not available under Entry Mode, You should use All-In-One Action!')
 
     def _doProgramSrk( self ):
         status = False
@@ -344,8 +354,8 @@ class secBootMain(memcore.secBootMem):
                    self.connectStage == uidef.kConnectStage_Reset:
                     self._startGaugeTimer()
                     self.printLog("'Load SRK data' button is clicked")
-                    self.burnSrkData()
-                    status = True
+                    if self.burnSrkData():
+                        status = True
                     self._stopGaugeTimer()
                 else:
                     self.popupMsgBox('Please connect to Flashloader first!')
@@ -354,7 +364,10 @@ class secBootMain(memcore.secBootMem):
         return status
 
     def callbackProgramSrk( self, event ):
-        self._doProgramSrk()
+        if not self.isToolRunAsEntryMode:
+            self._doProgramSrk()
+        else:
+            self.popupMsgBox('Separated action is not available under Entry Mode, You should use All-In-One Action!')
 
     def _doProgramBeeDek( self ):
         status = False
@@ -363,8 +376,8 @@ class secBootMain(memcore.secBootMem):
                 if self.connectStage == uidef.kConnectStage_ExternalMemory or \
                    self.connectStage == uidef.kConnectStage_Reset:
                     self._startGaugeTimer()
-                    self.burnBeeDekData()
-                    status = True
+                    if self.burnBeeDekData():
+                        status = True
                     self._stopGaugeTimer()
                 else:
                     self.popupMsgBox('Please connect to Flashloader first!')
@@ -375,7 +388,10 @@ class secBootMain(memcore.secBootMem):
         return status
 
     def callbackProgramBeeDek( self, event ):
-        self._doProgramBeeDek()
+        if not self.isToolRunAsEntryMode:
+            self._doProgramBeeDek()
+        else:
+            self.popupMsgBox('Separated action is not available under Entry Mode, You should use All-In-One Action!')
 
     def _doFlashImage( self ):
         status = False
@@ -394,15 +410,20 @@ class secBootMain(memcore.secBootMem):
                            self.mcuDeviceHabStatus != fusedef.kHabStatus_Closed1:
                             self.enableHab()
                     if self.secureBootType == uidef.kSecureBootType_BeeCrypto and self.bootDevice == uidef.kBootDevice_FlexspiNor:
-                        self.burnBeeKeySel()
-                    status = True
+                        if self.burnBeeKeySel():
+                            status = True
+                    else:
+                        status = True
                 self._stopGaugeTimer()
             else:
                 self.popupMsgBox('Please configure boot device via Flashloader first!')
         return status
 
     def callbackFlashImage( self, event ):
-        self._doFlashImage()
+        if not self.isToolRunAsEntryMode:
+            self._doFlashImage()
+        else:
+            self.popupMsgBox('Separated action is not available under Entry Mode, You should use All-In-One Action!')
 
     def _doFlashHabDek( self ):
         status = False
@@ -428,7 +449,10 @@ class secBootMain(memcore.secBootMem):
         return status
 
     def callbackFlashHabDek( self, event ):
-        self._doFlashHabDek()
+        if not self.isToolRunAsEntryMode:
+            self._doFlashHabDek()
+        else:
+            self.popupMsgBox('Separated action is not available under Entry Mode, You should use All-In-One Action!')
 
     def callbackScanFuse( self, event ):
         if self.connectStage == uidef.kConnectStage_ExternalMemory or \
@@ -488,7 +512,7 @@ class secBootMain(memcore.secBootMem):
         wx.MessageBox(msgText, "About Author", wx.OK | wx.ICON_INFORMATION)
 
     def callbackShowSpecialThanks( self, event ):
-        helper = "Special thanks to 周小朋Clare、杨帆 \n"
+        helper = "Special thanks to 周小朋Clare、杨帆、刘华东Howard \n"
         msgText = ((helper.encode('utf-8')))
         wx.MessageBox(msgText, "Special Thanks", wx.OK | wx.ICON_INFORMATION)
 
@@ -496,7 +520,7 @@ if __name__ == '__main__':
     app = wx.App()
 
     main_win = secBootMain(None)
-    main_win.SetTitle(u"nxpSecBoot v0.9.0")
+    main_win.SetTitle(u"nxpSecBoot v0.9.1")
     main_win.Show()
 
     app.MainLoop()

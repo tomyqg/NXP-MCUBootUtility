@@ -521,13 +521,19 @@ class secBootRun(gencore.secBootGen):
         self.invalidateStepButtonColor(uidef.kSecureBootSeqStep_PrepBee)
         return True
 
-    def _isDeviceFuseSrkRegionBlank( self ):
+    def _isDeviceFuseSrkRegionReadyForBurn( self, srkFuseFilename ):
+        isReady = True
+        isBlank = True
         keyWords = gendef.kSecKeyLengthInBits_SRK / 32
         for i in range(keyWords):
             srk = self.readMcuDeviceFuseByBlhost(fusedef.kEfuseIndex_SRK0 + i, '(' + str(hex(0x580 + i * 0x10)) + ') ' + 'SRK' + str(i), False)
             if srk != None and srk != 0:
-                return False
-        return True
+                isBlank = False
+                val32 = self.getVal32FromBinFile(srkFuseFilename, (i * 4))
+                if srk != val32:
+                    isReady = False
+                    break
+        return isReady, isBlank
 
     def burnMcuDeviceFuseByBlhost( self, fuseIndex, fuseValue):
         status, results, cmdStr = self.blhost.efuseProgramOnce(fuseIndex, self.getFormattedFuseValue(fuseValue))
@@ -535,32 +541,48 @@ class secBootRun(gencore.secBootGen):
 
     def burnSrkData ( self ):
         if os.path.isfile(self.srkFuseFilename):
-            if self._isDeviceFuseSrkRegionBlank():
-                keyWords = gendef.kSecKeyLengthInBits_SRK / 32
-                for i in range(keyWords):
-                    val32 = self.getVal32FromBinFile(self.srkFuseFilename, (i * 4))
-                    self.burnMcuDeviceFuseByBlhost(fusedef.kEfuseIndex_SRK0 + i, val32)
+            isReady, isBlank = self._isDeviceFuseSrkRegionReadyForBurn(self.srkFuseFilename)
+            if isReady:
+                if isBlank:
+                    keyWords = gendef.kSecKeyLengthInBits_SRK / 32
+                    for i in range(keyWords):
+                        val32 = self.getVal32FromBinFile(self.srkFuseFilename, (i * 4))
+                        self.burnMcuDeviceFuseByBlhost(fusedef.kEfuseIndex_SRK0 + i, val32)
                 self.invalidateStepButtonColor(uidef.kSecureBootSeqStep_ProgSrk)
+                return True
             else:
                 self.popupMsgBox('Fuse SRK Region has been burned, it is program-once!')
         else:
             self.popupMsgBox('Super Root Keys hasn\'t been generated!')
+        return False
 
-    def _isDeviceFuseSwGp2RegionBlank( self ):
+    def _isDeviceFuseSwGp2RegionReadyForBurn( self, swgp2DekFilename ):
+        isReady = True
+        isBlank = True
         keyWords = gendef.kSecKeyLengthInBits_DEK / 32
         for i in range(keyWords):
             dek = self.readMcuDeviceFuseByBlhost(fusedef.kEfuseIndex_SW_GP2_0 + i, '(' + str(hex(0x690 + i * 0x10)) + ') ' + 'SW_GP2_' + str(i), False)
             if dek != None and dek != 0:
-                return False
-        return True
+                isBlank = False
+                val32 = self.getVal32FromBinFile(swgp2DekFilename, (i * 4))
+                if dek != val32:
+                    isReady = False
+                    break
+        return isReady, isBlank
 
-    def _isDeviceFuseGp4RegionBlank( self ):
+    def _isDeviceFuseGp4RegionReadyForBurn( self, gp4DekFilename ):
+        isReady = True
+        isBlank = True
         keyWords = gendef.kSecKeyLengthInBits_DEK / 32
         for i in range(keyWords):
-            dek = self.readMcuDeviceFuseByBlhost(fusedef.kEfuseIndex_GP4_0 + i, '(' + str(hex(0x8C0 + i * 0x10)) + ') ' + 'GP4_' + str(i))
+            dek = self.readMcuDeviceFuseByBlhost(fusedef.kEfuseIndex_GP4_0 + i, '(' + str(hex(0x8C0 + i * 0x10)) + ') ' + 'GP4_' + str(i), False)
             if dek != None and dek != 0:
-                return False
-        return True
+                isBlank = False
+                val32 = self.getVal32FromBinFile(gp4DekFilename, (i * 4))
+                if dek != val32:
+                    isReady = False
+                    break
+        return isReady, isBlank
 
     def burnBeeDekData ( self ):
         needToBurnSwGp2 = False
@@ -588,24 +610,31 @@ class secBootRun(gencore.secBootGen):
                 pass
         keyWords = gendef.kSecKeyLengthInBits_DEK / 32
         if needToBurnSwGp2:
-            if self._isDeviceFuseSwGp2RegionBlank():
-                for i in range(keyWords):
-                    val32 = self.getVal32FromBinFile(swgp2DekFilename, (i * 4))
-                    self.burnMcuDeviceFuseByBlhost(fusedef.kEfuseIndex_SW_GP2_0 + i, val32)
+            isReady, isBlank = self._isDeviceFuseSwGp2RegionReadyForBurn(swgp2DekFilename)
+            if isReady:
+                if isBlank:
+                    for i in range(keyWords):
+                        val32 = self.getVal32FromBinFile(swgp2DekFilename, (i * 4))
+                        self.burnMcuDeviceFuseByBlhost(fusedef.kEfuseIndex_SW_GP2_0 + i, val32)
             else:
                 self.popupMsgBox('Fuse SW_GP2 Region has been burned, it is program-once!')
+                return False
         else:
             pass
         if needToBurnGp4:
-            if self._isDeviceFuseGp4RegionBlank():
-                for i in range(keyWords):
-                    val32 = self.getVal32FromBinFile(gp4DekFilename, (i * 4))
-                    self.burnMcuDeviceFuseByBlhost(fusedef.kEfuseIndex_GP4_0 + i, val32)
+            isReady, isBlank = self._isDeviceFuseGp4RegionReadyForBurn(gp4DekFilename)
+            if isReady:
+                if isBlank:
+                    for i in range(keyWords):
+                        val32 = self.getVal32FromBinFile(gp4DekFilename, (i * 4))
+                        self.burnMcuDeviceFuseByBlhost(fusedef.kEfuseIndex_GP4_0 + i, val32)
             else:
                 self.popupMsgBox('Fuse GP4 Region has been burned, it is program-once!')
+                return False
         else:
             pass
         self.invalidateStepButtonColor(uidef.kSecureBootSeqStep_OperBee)
+        return True
 
     def _genDestEncAppFileWithoutCfgBlock( self ):
         destEncAppPath, destEncAppFile = os.path.split(self.destEncAppFilename)
@@ -711,13 +740,14 @@ class secBootRun(gencore.secBootGen):
                 getBeeKeySel = getBeeKeySel | (setBeeKey0Sel << fusedef.kEfuseShift_BeeKey0Sel)
                 if ((getBeeKeySel & fusedef.kEfuseMask_BeeKey0Sel) >> fusedef.kEfuseShift_BeeKey0Sel) != setBeeKey0Sel:
                     self.popupMsgBox('Fuse BOOT_CFG1[5:4] BEE_KEY0_SEL has been burned, it is program-once!')
-                    return
+                    return False
             if setBeeKey1Sel != None:
                 getBeeKeySel = getBeeKeySel | (setBeeKey1Sel << fusedef.kEfuseShift_BeeKey1Sel)
                 if ((getBeeKeySel & fusedef.kEfuseMask_BeeKey1Sel) >> fusedef.kEfuseShift_BeeKey1Sel) != setBeeKey1Sel:
                     self.popupMsgBox('Fuse BOOT_CFG1[7:6] BEE_KEY1_SEL has been burned, it is program-once!')
-                    return
+                    return False
             self.burnMcuDeviceFuseByBlhost(fusedef.kEfuseLocation_BeeKeySel, getBeeKeySel)
+        return True
 
     def flashHabDekToGenerateKeyBlob ( self ):
         if os.path.isfile(self.habDekFilename) and self.habDekDataOffset != None:

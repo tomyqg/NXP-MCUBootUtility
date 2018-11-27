@@ -183,7 +183,9 @@ class secBootUi(secBootWin.secBootWin):
         self.Refresh()
 
     def invalidateStepButtonColor( self, stepName ):
-        if stepName == uidef.kSecureBootSeqStep_GenCert:
+        if stepName == uidef.kSecureBootSeqStep_AllInOne:
+            self.m_button_allInOneAction.SetBackgroundColour( uidef.kBootSeqColor_Invalid )
+        elif stepName == uidef.kSecureBootSeqStep_GenCert:
             self.m_button_genCert.SetBackgroundColour( uidef.kBootSeqColor_Invalid )
         elif stepName == uidef.kSecureBootSeqStep_GenImage:
             self.m_button_genImage.SetBackgroundColour( uidef.kBootSeqColor_Invalid )
@@ -233,6 +235,7 @@ class secBootUi(secBootWin.secBootWin):
                 self.m_button_flashImage.SetBackgroundColour( uidef.kBootSeqColor_Active )
         else:
             pass
+        self.m_button_allInOneAction.SetBackgroundColour( uidef.kBootSeqColor_Active )
         self.Refresh()
 
     def setSecureBootSeqColor( self ):
