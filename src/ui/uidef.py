@@ -13,6 +13,12 @@ kBootSeqColor_Invalid  = wx.Colour( 160, 160, 160 )
 kBootSeqColor_Optional = wx.Colour( 166, 255, 255 )
 kBootSeqColor_Active   = wx.Colour( 147, 255, 174 )
 
+kMcuSeries_iMXRT   = 'i.MXRT'
+kMcuSeries_LPC     = 'LPC'
+kMcuSeries_Kinetis = 'Kinetis'
+
+kMcuSeries_v0_9_x = [kMcuSeries_iMXRT]
+
 kMcuDevice_iMXRT102x = 'i.MXRT102x'
 kMcuDevice_iMXRT105x = 'i.MXRT105x'
 kMcuDevice_iMXRT106x = 'i.MXRT106x'
@@ -25,6 +31,8 @@ kBootDevice_UsdhcSd        = 'uSDHC SD'
 kBootDevice_UsdhcMmc       = 'uSDHC MMC/eMMC'
 kBootDevice_LpspiNor       = 'LPSPI NOR,EEPROM'
 kBootDevice_RamFlashloader = 'RAM FLASHLOADER'
+
+kBootDevice_v0_9_x = [kBootDevice_FlexspiNor, kBootDevice_SemcNand]
 
 kSecureBootType_Development = 'Unsigned (XIP) Image Boot'
 kSecureBootType_HabAuth     = 'HAB Signed (XIP) Image Boot'

@@ -29,6 +29,7 @@ class secBootUi(secBootWin.secBootWin):
         self.mcuSeries = None
         self.mcuDevice = None
         self.bootDevice = None
+        self._initTargetSetupValue()
         self.setTargetSetupValue()
         uivar.initVar()
 
@@ -49,6 +50,14 @@ class secBootUi(secBootWin.secBootWin):
 
     def setToolRunMode( self ):
         self.isToolRunAsEntryMode = self.m_menuItem_entryMode.IsChecked()
+
+    def _initTargetSetupValue( self ):
+        self.m_choice_mcuSeries.Clear()
+        self.m_choice_bootDevice.Clear()
+        self.m_choice_mcuSeries.SetItems(uidef.kMcuSeries_v0_9_x)
+        self.m_choice_bootDevice.SetItems(uidef.kBootDevice_v0_9_x)
+        self.m_choice_mcuSeries.SetSelection(0)
+        self.m_choice_bootDevice.SetSelection(0)
 
     def setTargetSetupValue( self ):
         self.mcuSeries = self.m_choice_mcuSeries.GetString(self.m_choice_mcuSeries.GetSelection())

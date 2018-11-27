@@ -122,7 +122,7 @@ class secBootWin ( wx.Frame ):
 
 		wSizer_targetSetup.Add( self.m_staticText_mcuDevice, 0, wx.ALL, 5 )
 
-		m_choice_mcuDeviceChoices = [ u"i.MXRT105x", u"i.MXRT106x", u"i.MXRT102x" ]
+		m_choice_mcuDeviceChoices = [ u"i.MXRT102x", u"i.MXRT105x", u"i.MXRT106x" ]
 		self.m_choice_mcuDevice = wx.Choice( self.m_panel_targetSetup, wx.ID_ANY, wx.DefaultPosition, wx.Size( 150,-1 ), m_choice_mcuDeviceChoices, 0 )
 		self.m_choice_mcuDevice.SetSelection( 1 )
 		wSizer_targetSetup.Add( self.m_choice_mcuDevice, 0, wx.ALL, 5 )
