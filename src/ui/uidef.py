@@ -52,6 +52,8 @@ kCstVersion_v2_3_3  = '2.3.3'
 kCstVersion_v3_0_1  = '3.0.1'
 kCstVersion_v3_1_0  = '3.1.0'
 
+kCstVersion_Avail   = [kCstVersion_v3_0_1]
+
 kPkiTreeKeySel_IsEcc  = ['p256', 'p384', 'p521']
 kPkiTreeKeySel_NotEcc = ['1024', '2048', '3072', '4096']
 

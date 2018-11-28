@@ -522,7 +522,7 @@ class secBootGen(uicore.secBootUi):
             pass
         self.destAppBinaryBytes = imageLength
         if not self.isCertificateGenerated(self.secureBootType):
-            self.popupMsgBox('You should first generate certificates!')
+            self.popupMsgBox('You should first generate certificates, or make sure you don\'t put the tool in path with blank space!')
             return False
         return self._updateBdfileContent(self.secureBootType, self.bootDevice, imageStartAddr, imageEntryAddr)
 
@@ -578,7 +578,7 @@ class secBootGen(uicore.secBootUi):
             return True
         else:
             self.habDekDataOffset = None
-            self.popupMsgBox('Bootable image is not generated successfully! Make sure you don\'t put the tool in path with blank space!')
+            self.popupMsgBox('Bootable image is not generated successfully! Make sure you don\'t put the tool/image file in path with blank space!')
             return False
 
     def genBootableImage( self ):

@@ -11,8 +11,14 @@ class secBootUiSettingsCert(advSettingsWin_Cert.advSettingsWin_Cert):
 
     def __init__(self, parent):
         advSettingsWin_Cert.advSettingsWin_Cert.__init__(self, parent)
+        self._initCstVersion()
         self.certSettingsDict = uivar.getAdvancedSettings(uidef.kAdvancedSettings_Cert)
         self._recoverLastSettings()
+
+    def _initCstVersion( self ):
+        self.m_choice_cstVersion.Clear()
+        self.m_choice_cstVersion.SetItems(uidef.kCstVersion_Avail)
+        self.m_choice_cstVersion.SetSelection(0)
 
     def _setPkiTreeKeyLenItems( self ):
         keySel = None
