@@ -86,6 +86,6 @@ kEfuseEntryModeRegion1IndexStart = 0x18
 kEfuseEntryModeRegion1IndexEnd   = 0x1F
 kEfuseEntryModeRegion2IndexStart = 0x29
 kEfuseEntryModeRegion2IndexEnd   = 0x2E
-kEfuseEntryModeRegion3IndexStart = 0x8C
-kEfuseEntryModeRegion3IndexEnd   = 0x8F
+kEfuseEntryModeRegion3IndexStart = 0x4C
+kEfuseEntryModeRegion3IndexEnd   = 0x4F
 

@@ -55,6 +55,7 @@ class secBootUiSettingsFlexibleUserKeys(advSettingsWin_FlexibleUserKeys.advSetti
         self.m_choice_region1keySource.SetItems(keySource)
         self.m_choice_region0keySource.SetSelection(0)
         self.m_choice_region1keySource.SetSelection(0)
+        self._recoverLastSettings()
 
     def _recoverLastSettings ( self ):
         if self.userKeyCtrlDict['region_sel'] == uidef.kUserRegionSel_Region0:

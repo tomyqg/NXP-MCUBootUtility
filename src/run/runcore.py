@@ -676,6 +676,7 @@ class secBootRun(gencore.secBootGen):
                    self.secureBootType == uidef.kSecureBootType_HabAuth or \
                    (self.secureBootType == uidef.kSecureBootType_BeeCrypto and self.keyStorageRegion == uidef.kKeyStorageRegion_FlexibleUserKeys):
                     if not self._programFlexspiNorConfigBlock():
+                        self.isFlexspiNorErasedForImage = False
                         return False
             if self.secureBootType == uidef.kSecureBootType_BeeCrypto and self.keyStorageRegion == uidef.kKeyStorageRegion_FlexibleUserKeys:
                 self._genDestEncAppFileWithoutCfgBlock()

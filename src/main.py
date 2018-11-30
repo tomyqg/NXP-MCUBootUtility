@@ -177,34 +177,51 @@ class secBootMain(memcore.secBootMem):
         self.setSecureBootSeqColor()
 
     def callbackAllInOneAction( self, event ):
-        status = False
-        if self.secureBootType == uidef.kSecureBootType_HabAuth or \
-           self.secureBootType == uidef.kSecureBootType_HabCrypto or \
-           (self.secureBootType == uidef.kSecureBootType_BeeCrypto and self.bootDevice == uidef.kBootDevice_FlexspiNor and self.isCertEnabledForBee):
-            status = self._doGenCert()
-            if not status:
-                return
-            status = self._doProgramSrk()
-            if not status:
-                return
-        status = self._doGenImage()
-        if not status:
-            return
-        if self.secureBootType == uidef.kSecureBootType_BeeCrypto and self.bootDevice == uidef.kBootDevice_FlexspiNor:
-            status = self._doBeeEncryption()
-            if not status:
-                return
-            if self.keyStorageRegion == uidef.kKeyStorageRegion_FlexibleUserKeys:
-                status = self._doProgramBeeDek()
+        allInOneSeqCnt = 1
+        directReuseCert = False
+        while allInOneSeqCnt:
+            status = False
+            if self.secureBootType == uidef.kSecureBootType_HabAuth or \
+               self.secureBootType == uidef.kSecureBootType_HabCrypto or \
+               (self.secureBootType == uidef.kSecureBootType_BeeCrypto and self.bootDevice == uidef.kBootDevice_FlexspiNor and self.isCertEnabledForBee):
+                status = self._doGenCert(directReuseCert)
                 if not status:
                     return
-        status = self._doFlashImage()
-        if not status:
-            return
-        if self.secureBootType == uidef.kSecureBootType_HabCrypto:
-            status = self._doFlashHabDek()
+                status = self._doProgramSrk()
+                if not status:
+                    return
+            status = self._doGenImage()
             if not status:
                 return
+            if self.secureBootType == uidef.kSecureBootType_BeeCrypto and self.bootDevice == uidef.kBootDevice_FlexspiNor:
+                status = self._doBeeEncryption()
+                if not status:
+                    return
+                if self.keyStorageRegion == uidef.kKeyStorageRegion_FlexibleUserKeys:
+                    status = self._doProgramBeeDek()
+                    if not status:
+                        return
+                elif self.keyStorageRegion == uidef.kKeyStorageRegion_FixedOtpmkKey:
+                    if self.isCertEnabledForBee:
+                        # If HAB is not closed here, we need to close HAB and re-do All-In-One Action
+                        if self.mcuDeviceHabStatus != fusedef.kHabStatus_Closed0 and \
+                           self.mcuDeviceHabStatus != fusedef.kHabStatus_Closed1:
+                            self.enableHab()
+                            self._connectStateMachine()
+                            while self.connectStage != uidef.kConnectStage_Reset:
+                                self._connectStateMachine()
+                            directReuseCert = True
+                            allInOneSeqCnt += 1
+                else:
+                    pass
+            status = self._doFlashImage()
+            if not status:
+                return
+            if self.secureBootType == uidef.kSecureBootType_HabCrypto:
+                status = self._doFlashHabDek()
+                if not status:
+                    return
+            allInOneSeqCnt -= 1
         self.invalidateStepButtonColor(uidef.kSecureBootSeqStep_AllInOne)
 
     def callbackAdvCertSettings( self, event ):
@@ -221,21 +238,24 @@ class secBootMain(memcore.secBootMem):
         else:
             self.popupMsgBox('No need to set certificate option when booting unsigned image!')
 
-    def _wantToReuseAvailableCert( self ):
+    def _wantToReuseAvailableCert( self, directReuseCert ):
         certAnswer = wx.NO
         if self.isCertificateGenerated(self.secureBootType):
-            msgText = (("There is available certificate, Do you want to reuse existing certificate? \n"))
-            certAnswer = wx.MessageBox(msgText, "Certificate Question", wx.YES_NO | wx.ICON_QUESTION)
-            if certAnswer == wx.NO:
-                msgText = (("New certificate will be different even you don’t change any settings, Do you really want to have new certificate? \n"))
+            if not directReuseCert:
+                msgText = (("There is available certificate, Do you want to reuse existing certificate? \n"))
                 certAnswer = wx.MessageBox(msgText, "Certificate Question", wx.YES_NO | wx.ICON_QUESTION)
-                if certAnswer == wx.YES:
-                    certAnswer = wx.NO
-                else:
-                    certAnswer = wx.YES
+                if certAnswer == wx.NO:
+                    msgText = (("New certificate will be different even you don’t change any settings, Do you really want to have new certificate? \n"))
+                    certAnswer = wx.MessageBox(msgText, "Certificate Question", wx.YES_NO | wx.ICON_QUESTION)
+                    if certAnswer == wx.YES:
+                        certAnswer = wx.NO
+                    else:
+                        certAnswer = wx.YES
+            else:
+                certAnswer = wx.YES
         return (certAnswer == wx.YES)
 
-    def _doGenCert( self ):
+    def _doGenCert( self, directReuseCert=False ):
         status = False
         if self.secureBootType == uidef.kSecureBootType_BeeCrypto and self.bootDevice != uidef.kBootDevice_FlexspiNor:
             self.popupMsgBox('Action is not available because BEE encryption boot is only designed for FlexSPI NOR device!')
@@ -246,7 +266,7 @@ class secBootMain(memcore.secBootMem):
                 self._startGaugeTimer()
                 self.printLog("'Generate Certificate' button is clicked")
                 self.updateAllCstPathToCorrectVersion()
-                if not self._wantToReuseAvailableCert():
+                if not self._wantToReuseAvailableCert(directReuseCert):
                     if self.createSerialAndKeypassfile():
                         self.setSecureBootButtonColor()
                         self.genCertificate()

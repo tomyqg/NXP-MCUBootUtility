@@ -15,6 +15,7 @@ class secBootFuse(runcore.secBootRun):
         self.scannedFuseList = [None] * fusedef.kMaxEfuseWords
         self.toBeBurnnedFuseList = [None] * fusedef.kMaxEfuseWords
         self.entryModeFuseFlagList = [None] * fusedef.kMaxEfuseWords
+        self.remappedEntryModeFuseFlagList = [None] * fusedef.kMaxEfuseWords
 
         self.applyFuseOperToRunMode()
 
@@ -34,7 +35,19 @@ class secBootFuse(runcore.secBootRun):
 
     def applyFuseOperToRunMode( self ):
         self._initEntryModeFuseFlag()
+        self._updateRemappedEntryModeFuseFlagList()
         self.updateFuseRegionField()
+
+    def _updateRemappedEntryModeFuseFlagList( self ):
+        self.remappedEntryModeFuseFlagList = self.entryModeFuseFlagList
+        if self.mcuDevice == uidef.kMcuDevice_iMXRT106x:
+            for i in range(fusedef.kEfuseRemapLen):
+                self.remappedEntryModeFuseFlagList[fusedef.kEfuseRemapIndex_Src + i] = self.entryModeFuseFlagList[fusedef.kEfuseRemapIndex_Dest + i]
+                self.remappedEntryModeFuseFlagList[fusedef.kEfuseRemapIndex_Dest + i] = self.entryModeFuseFlagList[fusedef.kEfuseRemapIndex_Src + i]
+        elif self.mcuDevice == uidef.kMcuDevice_iMXRT105x and self.mcuDevice == uidef.kMcuDevice_iMXRT102x:
+            pass
+        else:
+            pass
 
     def _swapRemappedScannedFuseIfAppliable( self ):
         if self.mcuDevice == uidef.kMcuDevice_iMXRT106x:
@@ -47,9 +60,12 @@ class secBootFuse(runcore.secBootRun):
             pass
 
     def scanAllFuseRegions( self ):
+        self._updateRemappedEntryModeFuseFlagList()
         for i in range(fusedef.kMaxEfuseWords):
-            if self.entryModeFuseFlagList[i]:
+            if self.remappedEntryModeFuseFlagList[i]:
                 self.scannedFuseList[i] = self.readMcuDeviceFuseByBlhost(fusedef.kEfuseIndex_START + i, '', False)
+            else:
+                self.scannedFuseList[i] = None
         self._swapRemappedScannedFuseIfAppliable()
         self.showScannedFuses(self.scannedFuseList)
 
@@ -66,8 +82,9 @@ class secBootFuse(runcore.secBootRun):
     def burnAllFuseRegions( self ):
         self.toBeBurnnedFuseList = self.getUserFuses()
         self._swapRemappedToBeBurnFuseIfAppliable()
+        self._updateRemappedEntryModeFuseFlagList()
         for i in range(fusedef.kMaxEfuseWords):
-            if self.entryModeFuseFlagList[i]:
+            if self.remappedEntryModeFuseFlagList[i]:
                 if self.toBeBurnnedFuseList[i] != self.scannedFuseList[i] and \
                    self.toBeBurnnedFuseList[i] != None and \
                    self.scannedFuseList[i] != None:
