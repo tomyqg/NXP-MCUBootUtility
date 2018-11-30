@@ -1,5 +1,7 @@
 # nxpSecBoot
 
+[![GitHub release](https://img.shields.io/github/release/JayHeng/nxp-sec-boot-ui.svg)](https://github.com/JayHeng/nxp-sec-boot-ui/releases/latest) [![GitHub commits](https://img.shields.io/github/commits-since/JayHeng/nxp-sec-boot-ui/v0.9.3.svg)](https://github.com/JayHeng/nxp-sec-boot-ui/compare/v0.9.3...master)
+
 ### 1 软件概览
 #### 1.1 介绍
 　　nxpSecBoot是一个专为NXP MCU安全加密启动而设计的工具，其特性与NXP MCU里BootROM功能相对应，目前主要支持i.MXRT系列MCU芯片，与NXP官方提供的标准安全加密配套工具集（OpenSSL, CST, sdphost, blhost, elftosb, BD, MfgTool2）相比，nxpSecBoot是一个真正的一站式工具，一个工具包含NXP官方所有加密配套工具的功能，并且是全图形用户界面操作。借助于nxpSecBoot，你可以轻松上手NXP MCU安全加密启动。  
@@ -10,13 +12,15 @@
 > * 支持.elf和.srec格式的源image文件输入  
 > * 支持FlexSPI NOR和SEMC NAND接口的外部启动设备  
 > * 支持基于HAB实现的安全加密启动（单签名，签名和加密）  
-> * 支持基于BEE实现的安全加密启动（默认SNVS-OTPMK key，用户自定义key）  
+> * 支持基于BEE实现的安全加密启动（唯一SNVS key，用户自定义key）  
+> * 支持基于HAB和BEE联合实现的安全加密启动（HAB签名，BEE加密）  
 > * 支持eFuse memory的回读和烧写操作  
 > * 支持从外部启动设备回读已下载的bootable image数据，并对数据组成部分进行标注  
 
 #### 1.2 下载
 　　nxpSecBoot完全基于Python语言开发，并且源代码全部开源，其具体开发环境为Python 2.7.14、wxPython 4.0.3、pySerial 3.4、bincopy 15.0.0、PyInstaller 3.3.1。  
 
+> * 安装包: https://github.com/JayHeng/nxp-sec-boot-ui/releases  
 > * 源代码: https://github.com/JayHeng/nxp-sec-boot-ui  
 
 　　nxpSecBoot在发布时借助PyInstaller将所有的Python依赖全部打包进一个可执行文件（\nxp-sec-boot-ui\bin\nxpSecBoot.exe），因此如果不是对nxpSecBoot的二次开发，你不需要安装任何Python软件及相关库。  
