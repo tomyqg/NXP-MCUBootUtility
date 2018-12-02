@@ -39,7 +39,8 @@ g_otpmkKeyOpt = None
 g_otpmkEncryptedRegionStart = None
 g_otpmkEncryptedRegionLength = None
 
-g_UserKeyCtrlDict = {'engine_sel':None,
+g_UserKeyCtrlDict = {'mcu_device':None,
+                     'engine_sel':None,
                      'engine0_key_src':None,
                      'engine0_fac_cnt':None,
                      'engine1_key_src':None,

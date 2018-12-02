@@ -61,6 +61,10 @@ kUserEngineSel_Engine0     = 'Engine 0'
 kUserEngineSel_Engine1     = 'Engine 1'
 kUserEngineSel_BothEngines = 'Both Engines'
 
+kSupportedEngineSel_iMXRT102x = [kUserEngineSel_Engine0, kUserEngineSel_Engine1]
+kSupportedEngineSel_iMXRT105x = [kUserEngineSel_Engine0, kUserEngineSel_Engine1]
+kSupportedEngineSel_iMXRT106x = [kUserEngineSel_Engine0, kUserEngineSel_Engine1, kUserEngineSel_BothEngines]
+
 kUserKeySource_OTPMK  = 'Fuse OTPMK[255:128]'
 kUserKeySource_SW_GP2 = 'Fuse SW-GP2'
 kUserKeySource_GP4    = 'Fuse GP4[127:0]'

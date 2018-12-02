@@ -2,6 +2,7 @@
 import wx
 import sys
 import os
+import random
 import uidef
 import uivar
 sys.path.append(os.path.abspath(".."))
@@ -39,23 +40,32 @@ class secBootUiSettingsFlexibleUserKeys(advSettingsWin_FlexibleUserKeys.advSetti
             return None
 
     def setNecessaryInfo( self, mcuDevice ):
-        self.mcuDevice = mcuDevice
-        keySource = None
-        if self.mcuDevice == uidef.kMcuDevice_iMXRT102x:
-            keySource = uidef.kSupportedKeySource_iMXRT102x
-        elif self.mcuDevice == uidef.kMcuDevice_iMXRT105x:
-            keySource = uidef.kSupportedKeySource_iMXRT105x
-        elif self.mcuDevice == uidef.kMcuDevice_iMXRT106x:
-            keySource = uidef.kSupportedKeySource_iMXRT106x
-        else:
-            pass
-        self.m_choice_engine0keySource.Clear()
-        self.m_choice_engine1keySource.Clear()
-        self.m_choice_engine0keySource.SetItems(keySource)
-        self.m_choice_engine1keySource.SetItems(keySource)
-        self.m_choice_engine0keySource.SetSelection(0)
-        self.m_choice_engine1keySource.SetSelection(0)
-        self._recoverLastSettings()
+        if self.userKeyCtrlDict['mcu_device'] != mcuDevice:
+            keySource = None
+            engineSel = None
+            if mcuDevice == uidef.kMcuDevice_iMXRT102x:
+                keySource = uidef.kSupportedKeySource_iMXRT102x
+                engineSel = uidef.kSupportedEngineSel_iMXRT102x
+            elif mcuDevice == uidef.kMcuDevice_iMXRT105x:
+                keySource = uidef.kSupportedKeySource_iMXRT105x
+                engineSel = uidef.kSupportedEngineSel_iMXRT105x
+            elif mcuDevice == uidef.kMcuDevice_iMXRT106x:
+                keySource = uidef.kSupportedKeySource_iMXRT106x
+                engineSel = uidef.kSupportedEngineSel_iMXRT106x
+            else:
+                pass
+            self.m_choice_engineSel.Clear()
+            self.m_choice_engineSel.SetItems(engineSel)
+            self.m_choice_engineSel.SetSelection(0)
+            self._changeEngineSelection()
+            self.m_choice_engine0keySource.Clear()
+            self.m_choice_engine1keySource.Clear()
+            self.m_choice_engine0keySource.SetItems(keySource)
+            self.m_choice_engine1keySource.SetItems(keySource)
+            self.m_choice_engine0keySource.SetSelection(0)
+            self.m_choice_engine1keySource.SetSelection(0)
+            self._recoverLastSettings()
+            self.userKeyCtrlDict['mcu_device'] = mcuDevice
 
     def _recoverLastSettings ( self ):
         if self.userKeyCtrlDict['engine_sel'] == uidef.kUserEngineSel_Engine0:
@@ -670,7 +680,7 @@ class secBootUiSettingsFlexibleUserKeys(advSettingsWin_FlexibleUserKeys.advSetti
             pass
         self.Refresh()
 
-    def callbackChangeEngineSelection( self, event ):
+    def _changeEngineSelection( self ):
         self._getEngineSelection()
         if self.userKeyCtrlDict['engine_sel'] == uidef.kUserEngineSel_Engine0:
             self._updateEngineInfoField(0, True)
@@ -683,6 +693,9 @@ class secBootUiSettingsFlexibleUserKeys(advSettingsWin_FlexibleUserKeys.advSetti
             self._updateEngineInfoField(1, True)
         else:
             pass
+
+    def callbackChangeEngineSelection( self, event ):
+        self._changeEngineSelection()
 
     def callbackChangeEngine0KeySource( self, event ):
         if self.userKeyCtrlDict['engine_sel'] == uidef.kUserEngineSel_Engine0 or \
@@ -728,6 +741,27 @@ class secBootUiSettingsFlexibleUserKeys(advSettingsWin_FlexibleUserKeys.advSetti
             else:
                 self._getFacCount(1)
                 self._updateFacRangeInfoField(1)
+        else:
+            pass
+
+    def _genRandomUserKeyData( self ):
+        userKey = ''
+        for i in range(32):
+            userKey += random.choice('0123456789abcdef')
+        return userKey
+
+    def callbackGenRandomUserKey( self, event ):
+        if self.userKeyCtrlDict['engine_sel'] == uidef.kUserEngineSel_Engine0:
+            self.m_textCtrl_engine0UserKeyData.Clear()
+            self.m_textCtrl_engine0UserKeyData.write(self._genRandomUserKeyData())
+        elif self.userKeyCtrlDict['engine_sel'] == uidef.kUserEngineSel_Engine1:
+            self.m_textCtrl_engine1UserKeyData.Clear()
+            self.m_textCtrl_engine1UserKeyData.write(self._genRandomUserKeyData())
+        elif self.userKeyCtrlDict['engine_sel'] == uidef.kUserEngineSel_BothEngines:
+            self.m_textCtrl_engine0UserKeyData.Clear()
+            self.m_textCtrl_engine0UserKeyData.write(self._genRandomUserKeyData())
+            self.m_textCtrl_engine1UserKeyData.Clear()
+            self.m_textCtrl_engine1UserKeyData.write(self._genRandomUserKeyData())
         else:
             pass
 

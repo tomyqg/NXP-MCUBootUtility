@@ -342,10 +342,13 @@ class advSettingsWin_FlexibleUserKeys ( wx.Frame ):
 
 		wSizer_action = wx.WrapSizer( wx.HORIZONTAL, wx.WRAPSIZER_DEFAULT_FLAGS )
 
-		self.m_staticText_null0Action = wx.StaticText( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.Size( 677,-1 ), 0 )
+		self.m_staticText_null0Action = wx.StaticText( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.Size( 477,-1 ), 0 )
 		self.m_staticText_null0Action.Wrap( -1 )
 
 		wSizer_action.Add( self.m_staticText_null0Action, 0, wx.ALL, 5 )
+
+		self.m_button_genRandomKey = wx.Button( self, wx.ID_ANY, u"Generate Random User Key", wx.DefaultPosition, wx.Size( 190,-1 ), 0 )
+		wSizer_action.Add( self.m_button_genRandomKey, 0, wx.ALL, 5 )
 
 		self.m_button_ok = wx.Button( self, wx.ID_ANY, u"Ok", wx.DefaultPosition, wx.Size( 100,-1 ), 0 )
 		wSizer_action.Add( self.m_button_ok, 0, wx.ALL, 5 )
@@ -368,6 +371,7 @@ class advSettingsWin_FlexibleUserKeys ( wx.Frame ):
 		self.m_choice_engine0FacCnt.Bind( wx.EVT_CHOICE, self.callbackChangeEngine0FacCnt )
 		self.m_choice_engine1keySource.Bind( wx.EVT_CHOICE, self.callbackChangeEngine1KeySource )
 		self.m_choice_engine1FacCnt.Bind( wx.EVT_CHOICE, self.callbackChangeEngine1FacCnt )
+		self.m_button_genRandomKey.Bind( wx.EVT_BUTTON, self.callbackGenRandomUserKey )
 		self.m_button_ok.Bind( wx.EVT_BUTTON, self.callbackOk )
 		self.m_button_cancel.Bind( wx.EVT_BUTTON, self.callbackCancel )
 
@@ -389,6 +393,9 @@ class advSettingsWin_FlexibleUserKeys ( wx.Frame ):
 		event.Skip()
 
 	def callbackChangeEngine1FacCnt( self, event ):
+		event.Skip()
+
+	def callbackGenRandomUserKey( self, event ):
 		event.Skip()
 
 	def callbackOk( self, event ):
