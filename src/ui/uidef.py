@@ -57,9 +57,9 @@ kCstVersion_Avail   = [kCstVersion_v3_0_1]
 kPkiTreeKeySel_IsEcc  = ['p256', 'p384', 'p521']
 kPkiTreeKeySel_NotEcc = ['1024', '2048', '3072', '4096']
 
-kUserRegionSel_Region0     = 'Region 0'
-kUserRegionSel_Region1     = 'Region 1'
-kUserRegionSel_BothRegions = 'Both Regions'
+kUserEngineSel_Engine0     = 'Engine 0'
+kUserEngineSel_Engine1     = 'Engine 1'
+kUserEngineSel_BothEngines = 'Both Engines'
 
 kUserKeySource_OTPMK  = 'Fuse OTPMK[255:128]'
 kUserKeySource_SW_GP2 = 'Fuse SW-GP2'

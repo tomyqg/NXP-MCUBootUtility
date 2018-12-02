@@ -39,18 +39,18 @@ g_otpmkKeyOpt = None
 g_otpmkEncryptedRegionStart = None
 g_otpmkEncryptedRegionLength = None
 
-g_UserKeyCtrlDict = {'region_sel':None,
-                     'region0_key_src':None,
-                     'region0_fac_cnt':None,
-                     'region1_key_src':None,
-                     'region1_fac_cnt':None}
+g_UserKeyCtrlDict = {'engine_sel':None,
+                     'engine0_key_src':None,
+                     'engine0_fac_cnt':None,
+                     'engine1_key_src':None,
+                     'engine1_fac_cnt':None}
 g_UserKeyCmdDict = {'base_addr':None,
-                    'region0_key':None,
-                    'region0_arg':None,
-                    'region0_lock':None,
-                    'region1_key':None,
-                    'region1_arg':None,
-                    'region1_lock':None,
+                    'engine0_key':None,
+                    'engine0_arg':None,
+                    'engine0_lock':None,
+                    'engine1_key':None,
+                    'engine1_arg':None,
+                    'engine1_lock':None,
                     'use_zero_key':None,
                     'is_boot_image':None}
 
@@ -113,18 +113,18 @@ def initVar():
 
     global g_UserKeyCtrlDict
     global g_UserKeyCmdDict
-    g_UserKeyCtrlDict['region_sel'] = uidef.kUserRegionSel_BothRegions
-    g_UserKeyCtrlDict['region0_key_src'] = uidef.kUserKeySource_OTPMK
-    g_UserKeyCtrlDict['region0_fac_cnt'] = 1
-    g_UserKeyCtrlDict['region1_key_src'] = uidef.kUserKeySource_OTPMK
-    g_UserKeyCtrlDict['region1_fac_cnt'] = 1
+    g_UserKeyCtrlDict['engine_sel'] = uidef.kUserEngineSel_BothEngines
+    g_UserKeyCtrlDict['engine0_key_src'] = uidef.kUserKeySource_OTPMK
+    g_UserKeyCtrlDict['engine0_fac_cnt'] = 1
+    g_UserKeyCtrlDict['engine1_key_src'] = uidef.kUserKeySource_OTPMK
+    g_UserKeyCtrlDict['engine1_fac_cnt'] = 1
     g_UserKeyCmdDict['base_addr'] = '0x60000000'
-    g_UserKeyCmdDict['region0_key'] = '0123456789abcdeffedcba9876543210'
-    g_UserKeyCmdDict['region0_arg'] = '1,[0x60001000,0x1000,0]'
-    g_UserKeyCmdDict['region0_lock'] = '0'
-    g_UserKeyCmdDict['region1_key'] = '0123456789abcdeffedcba9876543210'
-    g_UserKeyCmdDict['region1_arg'] = '1,[0x60002000,0x1000,0]'
-    g_UserKeyCmdDict['region1_lock'] = '0'
+    g_UserKeyCmdDict['engine0_key'] = '0123456789abcdeffedcba9876543210'
+    g_UserKeyCmdDict['engine0_arg'] = '1,[0x60001000,0x1000,0]'
+    g_UserKeyCmdDict['engine0_lock'] = '0'
+    g_UserKeyCmdDict['engine1_key'] = '0123456789abcdeffedcba9876543210'
+    g_UserKeyCmdDict['engine1_arg'] = '1,[0x60002000,0x1000,0]'
+    g_UserKeyCmdDict['engine1_lock'] = '0'
     g_UserKeyCmdDict['use_zero_key'] = '1'
     g_UserKeyCmdDict['is_boot_image'] = '1'
 

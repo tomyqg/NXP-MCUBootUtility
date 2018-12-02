@@ -332,11 +332,11 @@ class secBootUi(secBootWin.secBootWin):
         self.m_panel_prepBee1_beeKeyRegion.SetBackgroundColour( uidef.kBootSeqColor_Active )
         self.m_panel_prepBee2_beeCryptoAlgo.SetBackgroundColour( uidef.kBootSeqColor_Active )
         if self.keyStorageRegion == uidef.kKeyStorageRegion_FixedOtpmkKey:
-            self.m_choice_availBeeRegions.SetSelection(0)
+            self.m_choice_availBeeEngines.SetSelection(0)
             self.m_button_prepBee.SetLabel('Prepare For Encryption')
             self.m_button_prepBee.SetBackgroundColour( uidef.kBootSeqColor_Active )
         elif self.keyStorageRegion == uidef.kKeyStorageRegion_FlexibleUserKeys:
-            self.m_choice_availBeeRegions.SetSelection(1)
+            self.m_choice_availBeeEngines.SetSelection(1)
             self.m_button_prepBee.SetLabel('Encrypt Bootable Image')
             self.m_button_prepBee.SetBackgroundColour( uidef.kBootSeqColor_Active )
             self.m_panel_operBee1_beeKeyInfo.SetBackgroundColour( uidef.kBootSeqColor_Active )

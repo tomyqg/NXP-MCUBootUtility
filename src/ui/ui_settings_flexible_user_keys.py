@@ -16,10 +16,10 @@ class secBootUiSettingsFlexibleUserKeys(advSettingsWin_FlexibleUserKeys.advSetti
         userKeyCtrlDict, userKeyCmdDict = uivar.getAdvancedSettings(uidef.kAdvancedSettings_UserKeys)
         self.userKeyCtrlDict = userKeyCtrlDict
         self.userKeyCmdDict = userKeyCmdDict
-        self.region0FacStart = [None] * uidef.kMaxFacRegionCount
-        self.region0FacLength = [None] * uidef.kMaxFacRegionCount
-        self.region1FacStart = [None] * uidef.kMaxFacRegionCount
-        self.region1FacLength = [None] * uidef.kMaxFacRegionCount
+        self.engine0FacStart = [None] * uidef.kMaxFacRegionCount
+        self.engine0FacLength = [None] * uidef.kMaxFacRegionCount
+        self.engine1FacStart = [None] * uidef.kMaxFacRegionCount
+        self.engine1FacLength = [None] * uidef.kMaxFacRegionCount
         self._recoverLastSettings()
 
     def _getDek128ContentFromBinFile( self, filename ):
@@ -49,39 +49,39 @@ class secBootUiSettingsFlexibleUserKeys(advSettingsWin_FlexibleUserKeys.advSetti
             keySource = uidef.kSupportedKeySource_iMXRT106x
         else:
             pass
-        self.m_choice_region0keySource.Clear()
-        self.m_choice_region1keySource.Clear()
-        self.m_choice_region0keySource.SetItems(keySource)
-        self.m_choice_region1keySource.SetItems(keySource)
-        self.m_choice_region0keySource.SetSelection(0)
-        self.m_choice_region1keySource.SetSelection(0)
+        self.m_choice_engine0keySource.Clear()
+        self.m_choice_engine1keySource.Clear()
+        self.m_choice_engine0keySource.SetItems(keySource)
+        self.m_choice_engine1keySource.SetItems(keySource)
+        self.m_choice_engine0keySource.SetSelection(0)
+        self.m_choice_engine1keySource.SetSelection(0)
         self._recoverLastSettings()
 
     def _recoverLastSettings ( self ):
-        if self.userKeyCtrlDict['region_sel'] == uidef.kUserRegionSel_Region0:
-            self.m_choice_regionSel.SetSelection(0)
-            self._recoverRegionInfo(0)
+        if self.userKeyCtrlDict['engine_sel'] == uidef.kUserEngineSel_Engine0:
+            self.m_choice_engineSel.SetSelection(0)
+            self._recoverEngineInfo(0)
             self._updateKeySourceInfoField(0)
-            self._updateRegionRangeInfoField(0)
-            self._updateRegionInfoField(0, True)
-            self._updateRegionInfoField(1, False)
-        elif self.userKeyCtrlDict['region_sel'] == uidef.kUserRegionSel_Region1:
-            self.m_choice_regionSel.SetSelection(1)
-            self._recoverRegionInfo(1)
+            self._updateFacRangeInfoField(0)
+            self._updateEngineInfoField(0, True)
+            self._updateEngineInfoField(1, False)
+        elif self.userKeyCtrlDict['engine_sel'] == uidef.kUserEngineSel_Engine1:
+            self.m_choice_engineSel.SetSelection(1)
+            self._recoverEngineInfo(1)
             self._updateKeySourceInfoField(1)
-            self._updateRegionRangeInfoField(1)
-            self._updateRegionInfoField(0, False)
-            self._updateRegionInfoField(1, True)
-        elif self.userKeyCtrlDict['region_sel'] == uidef.kUserRegionSel_BothRegions:
-            self.m_choice_regionSel.SetSelection(2)
-            self._recoverRegionInfo(0)
+            self._updateFacRangeInfoField(1)
+            self._updateEngineInfoField(0, False)
+            self._updateEngineInfoField(1, True)
+        elif self.userKeyCtrlDict['engine_sel'] == uidef.kUserEngineSel_BothEngines:
+            self.m_choice_engineSel.SetSelection(2)
+            self._recoverEngineInfo(0)
             self._updateKeySourceInfoField(0)
-            self._updateRegionRangeInfoField(0)
-            self._recoverRegionInfo(1)
+            self._updateFacRangeInfoField(0)
+            self._recoverEngineInfo(1)
             self._updateKeySourceInfoField(1)
-            self._updateRegionRangeInfoField(1)
-            self._updateRegionInfoField(0, True)
-            self._updateRegionInfoField(1, True)
+            self._updateFacRangeInfoField(1)
+            self._updateEngineInfoField(0, True)
+            self._updateEngineInfoField(1, True)
         else:
             pass
         self.m_choice_beeEngKeySel.SetSelection(int(self.userKeyCmdDict['use_zero_key']))
@@ -91,8 +91,8 @@ class secBootUiSettingsFlexibleUserKeys(advSettingsWin_FlexibleUserKeys.advSetti
         else:
             pass
 
-    def _getRegionSelection( self ):
-        self.userKeyCtrlDict['region_sel'] = self.m_choice_regionSel.GetString(self.m_choice_regionSel.GetSelection())
+    def _getEngineSelection( self ):
+        self.userKeyCtrlDict['engine_sel'] = self.m_choice_engineSel.GetString(self.m_choice_engineSel.GetSelection())
 
     def _getBeeEngKeySelection( self ):
         self.userKeyCmdDict['use_zero_key'] = str(self.m_choice_beeEngKeySel.GetSelection())
@@ -103,15 +103,15 @@ class secBootUiSettingsFlexibleUserKeys(advSettingsWin_FlexibleUserKeys.advSetti
     def _getXipBaseAddr( self ):
         self.userKeyCmdDict['base_addr'] = self.m_choice_xipBaseAddr.GetString(self.m_choice_xipBaseAddr.GetSelection())
 
-    def _getKeySource( self, regionIndex=0 ):
-        if regionIndex == 0:
-            self.userKeyCtrlDict['region0_key_src'] = self.m_choice_region0keySource.GetString(self.m_choice_region0keySource.GetSelection())
-        elif regionIndex == 1:
-            self.userKeyCtrlDict['region1_key_src'] = self.m_choice_region1keySource.GetString(self.m_choice_region1keySource.GetSelection())
+    def _getKeySource( self, engineIndex=0 ):
+        if engineIndex == 0:
+            self.userKeyCtrlDict['engine0_key_src'] = self.m_choice_engine0keySource.GetString(self.m_choice_engine0keySource.GetSelection())
+        elif engineIndex == 1:
+            self.userKeyCtrlDict['engine1_key_src'] = self.m_choice_engine1keySource.GetString(self.m_choice_engine1keySource.GetSelection())
         else:
             pass
 
-    def _validateKeyData( self, regionIndex, keyDat ):
+    def _validateKeyData( self, engineIndex, keyDat ):
         status = False
         if len(keyDat) == 32:
             try:
@@ -120,67 +120,67 @@ class secBootUiSettingsFlexibleUserKeys(advSettingsWin_FlexibleUserKeys.advSetti
             except:
                 pass
         if not status:
-            self.popupMsgBox('Illegal input detected! Region %d Key data should be exactly 128bits (32 chars)' %(regionIndex))
+            self.popupMsgBox('Illegal input detected! Region %d Key data should be exactly 128bits (32 chars)' %(engineIndex))
         return status, keyDat
 
-    def _getUserKeyData( self, regionIndex=0 ):
+    def _getUserKeyData( self, engineIndex=0 ):
         validateStatus = False
-        if regionIndex == 0:
-            validateStatus, self.userKeyCmdDict['region0_key'] = self._validateKeyData(regionIndex, self.m_textCtrl_region0UserKeyData.GetLineText(0))
-        elif regionIndex == 1:
-            if self.userKeyCtrlDict['region_sel'] == uidef.kUserRegionSel_BothRegions:
-                if self.userKeyCtrlDict['region1_key_src'] == self.userKeyCtrlDict['region0_key_src']:
-                    validateStatus, self.userKeyCmdDict['region1_key'] = self._validateKeyData(regionIndex, self.m_textCtrl_region0UserKeyData.GetLineText(0))
+        if engineIndex == 0:
+            validateStatus, self.userKeyCmdDict['engine0_key'] = self._validateKeyData(engineIndex, self.m_textCtrl_engine0UserKeyData.GetLineText(0))
+        elif engineIndex == 1:
+            if self.userKeyCtrlDict['engine_sel'] == uidef.kUserEngineSel_BothEngines:
+                if self.userKeyCtrlDict['engine1_key_src'] == self.userKeyCtrlDict['engine0_key_src']:
+                    validateStatus, self.userKeyCmdDict['engine1_key'] = self._validateKeyData(engineIndex, self.m_textCtrl_engine0UserKeyData.GetLineText(0))
                 else:
-                    validateStatus, self.userKeyCmdDict['region1_key'] = self._validateKeyData(regionIndex, self.m_textCtrl_region1UserKeyData.GetLineText(0))
+                    validateStatus, self.userKeyCmdDict['engine1_key'] = self._validateKeyData(engineIndex, self.m_textCtrl_engine1UserKeyData.GetLineText(0))
             else:
-                validateStatus, self.userKeyCmdDict['region1_key'] = self._validateKeyData(regionIndex, self.m_textCtrl_region1UserKeyData.GetLineText(0))
+                validateStatus, self.userKeyCmdDict['engine1_key'] = self._validateKeyData(engineIndex, self.m_textCtrl_engine1UserKeyData.GetLineText(0))
         else:
             pass
         return validateStatus
 
-    def _getAesMode( self, regionIndex=0 ):
-        if regionIndex == 0:
-            aesMode = self.m_choice_region0AesMode.GetString(self.m_choice_region0AesMode.GetSelection())
+    def _getAesMode( self, engineIndex=0 ):
+        if engineIndex == 0:
+            aesMode = self.m_choice_engine0AesMode.GetString(self.m_choice_engine0AesMode.GetSelection())
             if aesMode == 'ECB':
-                self.userKeyCmdDict['region0_arg'] = '0'
+                self.userKeyCmdDict['engine0_arg'] = '0'
             elif aesMode == 'CTR':
-                self.userKeyCmdDict['region0_arg'] = '1'
+                self.userKeyCmdDict['engine0_arg'] = '1'
             else:
                 pass
-        elif regionIndex == 1:
-            aesMode = self.m_choice_region1AesMode.GetString(self.m_choice_region1AesMode.GetSelection())
+        elif engineIndex == 1:
+            aesMode = self.m_choice_engine1AesMode.GetString(self.m_choice_engine1AesMode.GetSelection())
             if aesMode == 'ECB':
-                self.userKeyCmdDict['region1_arg'] = '0'
+                self.userKeyCmdDict['engine1_arg'] = '0'
             elif aesMode == 'CTR':
-                self.userKeyCmdDict['region1_arg'] = '1'
+                self.userKeyCmdDict['engine1_arg'] = '1'
             else:
                 pass
         else:
             pass
 
-    def _getFacCount( self, regionIndex=0 ):
-        if regionIndex == 0:
-            self.userKeyCtrlDict['region0_fac_cnt'] = self.m_choice_region0FacCnt.GetSelection() + 1
-        elif regionIndex == 1:
-            self.userKeyCtrlDict['region1_fac_cnt'] = self.m_choice_region1FacCnt.GetSelection() + 1
+    def _getFacCount( self, engineIndex=0 ):
+        if engineIndex == 0:
+            self.userKeyCtrlDict['engine0_fac_cnt'] = self.m_choice_engine0FacCnt.GetSelection() + 1
+        elif engineIndex == 1:
+            self.userKeyCtrlDict['engine1_fac_cnt'] = self.m_choice_engine1FacCnt.GetSelection() + 1
         else:
             pass
 
-    def _getAccessPermision( self, regionIndex=0 ):
-        if regionIndex == 0:
-            self.userKeyCmdDict['region0_arg'] += str(self.m_choice_region0AccessPermision.GetSelection()) + ']'
-        elif regionIndex == 1:
-            self.userKeyCmdDict['region1_arg'] += str(self.m_choice_region1AccessPermision.GetSelection()) + ']'
+    def _getAccessPermision( self, engineIndex=0 ):
+        if engineIndex == 0:
+            self.userKeyCmdDict['engine0_arg'] += str(self.m_choice_engine0AccessPermision.GetSelection()) + ']'
+        elif engineIndex == 1:
+            self.userKeyCmdDict['engine1_arg'] += str(self.m_choice_engine1AccessPermision.GetSelection()) + ']'
         else:
             pass
 
-    def _validateRegionRange( self, regionInfoStr ):
+    def _validateEngineRange( self, engineInfoStr ):
         status = False
         val32 = None
-        if len(regionInfoStr) > 2 and regionInfoStr[0:2] == '0x':
+        if len(engineInfoStr) > 2 and engineInfoStr[0:2] == '0x':
             try:
-                val32 = int(regionInfoStr[2:len(regionInfoStr)], 16)
+                val32 = int(engineInfoStr[2:len(engineInfoStr)], 16)
                 status = True
             except:
                 pass
@@ -188,505 +188,505 @@ class secBootUiSettingsFlexibleUserKeys(advSettingsWin_FlexibleUserKeys.advSetti
             self.popupMsgBox('Illegal input detected! You should input like this format: 0x5000')
         return status, val32
 
-    def _getRegionRange( self, regionIndex=0, facIndex=0 ):
-        if regionIndex == 0:
+    def _getEngineRange( self, engineIndex=0, facIndex=0 ):
+        if engineIndex == 0:
             if facIndex == 0:
-                validateStatus, self.region0FacStart[0] = self._validateRegionRange(self.m_textCtrl_region0Fac0Start.GetLineText(0))
+                validateStatus, self.engine0FacStart[0] = self._validateEngineRange(self.m_textCtrl_engine0Fac0Start.GetLineText(0))
                 if validateStatus:
-                    if self.region0FacStart[0] < rundef.kBootDeviceMemBase_FlexspiNor + gendef.kIvtOffset_NOR:
-                        self.popupMsgBox('Region 0 FAC 0 start address shouldn\'t less than 0x%x' %(rundef.kBootDeviceMemBase_FlexspiNor + gendef.kIvtOffset_NOR))
+                    if self.engine0FacStart[0] < rundef.kBootDeviceMemBase_FlexspiNor + gendef.kIvtOffset_NOR:
+                        self.popupMsgBox('Engine 0 Protected region 0 start address shouldn\'t less than 0x%x' %(rundef.kBootDeviceMemBase_FlexspiNor + gendef.kIvtOffset_NOR))
                         return False
                 else:
                     return False
-                validateStatus, self.region0FacLength[0] = self._validateRegionRange(self.m_textCtrl_region0Fac0Length.GetLineText(0))
+                validateStatus, self.engine0FacLength[0] = self._validateEngineRange(self.m_textCtrl_engine0Fac0Length.GetLineText(0))
                 if validateStatus:
-                    if self.region0FacLength[0] % gendef.kSecFacRegionAlignedUnit != 0:
-                        self.popupMsgBox('Region 0 FAC 0 length should be aligned with %dKB' %(gendef.kSecFacRegionAlignedUnit / 0x400))
+                    if self.engine0FacLength[0] % gendef.kSecFacRegionAlignedUnit != 0:
+                        self.popupMsgBox('Engine 0 Protected region 0 length should be aligned with %dKB' %(gendef.kSecFacRegionAlignedUnit / 0x400))
                         return False
                 else:
                     return False
-                self.userKeyCmdDict['region0_arg'] += ',[' + self.m_textCtrl_region0Fac0Start.GetLineText(0) + ',' + self.m_textCtrl_region0Fac0Length.GetLineText(0) + ','
+                self.userKeyCmdDict['engine0_arg'] += ',[' + self.m_textCtrl_engine0Fac0Start.GetLineText(0) + ',' + self.m_textCtrl_engine0Fac0Length.GetLineText(0) + ','
             elif facIndex == 1:
-                validateStatus, self.region0FacStart[1] = self._validateRegionRange(self.m_textCtrl_region0Fac1Start.GetLineText(0))
+                validateStatus, self.engine0FacStart[1] = self._validateEngineRange(self.m_textCtrl_engine0Fac1Start.GetLineText(0))
                 if validateStatus:
-                    if self.region0FacStart[1] < self.region0FacStart[0] + self.region0FacLength[0]:
-                        self.popupMsgBox('Region 0 FAC 1 start address shouldn\'t less than Region 0 FAC 0 end address 0x%x' %(self.region0FacStart[0] + self.region0FacLength[0]))
+                    if self.engine0FacStart[1] < self.engine0FacStart[0] + self.engine0FacLength[0]:
+                        self.popupMsgBox('Engine 0 Protected region 1 start address shouldn\'t less than Engine 0 Protected region 0 end address 0x%x' %(self.engine0FacStart[0] + self.engine0FacLength[0]))
                         return False
                 else:
                     return False
-                validateStatus, self.region0FacLength[1] = self._validateRegionRange(self.m_textCtrl_region0Fac1Length.GetLineText(0))
+                validateStatus, self.engine0FacLength[1] = self._validateEngineRange(self.m_textCtrl_engine0Fac1Length.GetLineText(0))
                 if validateStatus:
-                    if self.region0FacLength[1] % gendef.kSecFacRegionAlignedUnit != 0:
-                        self.popupMsgBox('Region 0 FAC 1 length should be aligned with %dKB' %(gendef.kSecFacRegionAlignedUnit / 0x400))
+                    if self.engine0FacLength[1] % gendef.kSecFacRegionAlignedUnit != 0:
+                        self.popupMsgBox('Engine 0 Protected region 1 length should be aligned with %dKB' %(gendef.kSecFacRegionAlignedUnit / 0x400))
                         return False
                 else:
                     return False
-                self.userKeyCmdDict['region0_arg'] += ',[' + self.m_textCtrl_region0Fac1Start.GetLineText(0) + ',' + self.m_textCtrl_region0Fac1Length.GetLineText(0) + ','
+                self.userKeyCmdDict['engine0_arg'] += ',[' + self.m_textCtrl_engine0Fac1Start.GetLineText(0) + ',' + self.m_textCtrl_engine0Fac1Length.GetLineText(0) + ','
             elif facIndex == 2:
-                validateStatus, self.region0FacStart[2] = self._validateRegionRange(self.m_textCtrl_region0Fac2Start.GetLineText(0))
+                validateStatus, self.engine0FacStart[2] = self._validateEngineRange(self.m_textCtrl_engine0Fac2Start.GetLineText(0))
                 if validateStatus:
-                    if self.region0FacStart[2] < self.region0FacStart[1] + self.region0FacLength[1]:
-                        self.popupMsgBox('Region 0 FAC 2 start address shouldn\'t less than Region 0 FAC 1 end address 0x%x' %(self.region0FacStart[1] + self.region0FacLength[1]))
+                    if self.engine0FacStart[2] < self.engine0FacStart[1] + self.engine0FacLength[1]:
+                        self.popupMsgBox('Engine 0 Protected region 2 start address shouldn\'t less than Engine 0 Protected region 1 end address 0x%x' %(self.engine0FacStart[1] + self.engine0FacLength[1]))
                         return False
                 else:
                     return False
-                validateStatus, self.region0FacLength[2] = self._validateRegionRange(self.m_textCtrl_region0Fac2Length.GetLineText(0))
+                validateStatus, self.engine0FacLength[2] = self._validateEngineRange(self.m_textCtrl_engine0Fac2Length.GetLineText(0))
                 if validateStatus:
-                    if self.region0FacLength[2] % gendef.kSecFacRegionAlignedUnit != 0:
-                        self.popupMsgBox('Region 0 FAC 2 length should be aligned with %dKB' %(gendef.kSecFacRegionAlignedUnit / 0x400))
+                    if self.engine0FacLength[2] % gendef.kSecFacRegionAlignedUnit != 0:
+                        self.popupMsgBox('Engine 0 Protected region 2 length should be aligned with %dKB' %(gendef.kSecFacRegionAlignedUnit / 0x400))
                         return False
                 else:
                     return False
-                self.userKeyCmdDict['region0_arg'] += ',[' + self.m_textCtrl_region0Fac2Start.GetLineText(0) + ',' + self.m_textCtrl_region0Fac2Length.GetLineText(0) + ','
+                self.userKeyCmdDict['engine0_arg'] += ',[' + self.m_textCtrl_engine0Fac2Start.GetLineText(0) + ',' + self.m_textCtrl_engine0Fac2Length.GetLineText(0) + ','
             else:
                 pass
-        elif regionIndex == 1:
+        elif engineIndex == 1:
             if facIndex == 0:
-                validateStatus, self.region1FacStart[0] = self._validateRegionRange(self.m_textCtrl_region1Fac0Start.GetLineText(0))
+                validateStatus, self.engine1FacStart[0] = self._validateEngineRange(self.m_textCtrl_engine1Fac0Start.GetLineText(0))
                 if validateStatus:
-                    if self.userKeyCtrlDict['region_sel'] == uidef.kUserRegionSel_BothRegions:
-                        if self.region0FacStart[2] != None:
-                            if self.region1FacStart[0] < self.region0FacStart[2] + self.region0FacLength[2]:
-                                self.popupMsgBox('Region 1 FAC 0 start address shouldn\'t less than Region 0 FAC 2 end address 0x%x' %(self.region0FacStart[2] + self.region0FacLength[2]))
+                    if self.userKeyCtrlDict['engine_sel'] == uidef.kUserEngineSel_BothEngines:
+                        if self.engine0FacStart[2] != None:
+                            if self.engine1FacStart[0] < self.engine0FacStart[2] + self.engine0FacLength[2]:
+                                self.popupMsgBox('Engine 1 Protected region 0 start address shouldn\'t less than Engine 0 Protected region 2 end address 0x%x' %(self.engine0FacStart[2] + self.engine0FacLength[2]))
                                 return False
-                        elif self.region0FacStart[1] != None:
-                            if self.region1FacStart[0] < self.region0FacStart[1] + self.region0FacLength[1]:
-                                self.popupMsgBox('Region 1 FAC 0 start address shouldn\'t less than Region 0 FAC 1 end address 0x%x' %(self.region0FacStart[1] + self.region0FacLength[1]))
+                        elif self.engine0FacStart[1] != None:
+                            if self.engine1FacStart[0] < self.engine0FacStart[1] + self.engine0FacLength[1]:
+                                self.popupMsgBox('Engine 1 Protected region 0 start address shouldn\'t less than Engine 0 Protected region 1 end address 0x%x' %(self.engine0FacStart[1] + self.engine0FacLength[1]))
                                 return False
-                        elif self.region0FacStart[0] != None:
-                            if self.region1FacStart[0] < self.region0FacStart[0] + self.region0FacLength[0]:
-                                self.popupMsgBox('Region 1 FAC 0 start address shouldn\'t less than Region 0 FAC 0 end address 0x%x' %(self.region0FacStart[0] + self.region0FacLength[0]))
+                        elif self.engine0FacStart[0] != None:
+                            if self.engine1FacStart[0] < self.engine0FacStart[0] + self.engine0FacLength[0]:
+                                self.popupMsgBox('Engine 1 Protected region 0 start address shouldn\'t less than Engine 0 Protected region 0 end address 0x%x' %(self.engine0FacStart[0] + self.engine0FacLength[0]))
                                 return False
                         else:
                             pass
-                        # startRegion = self.region0FacStart[2] + self.region0FacLength[2]
+                        # startRegion = self.engine0FacStart[2] + self.engine0FacLength[2]
                     else:
-                        if self.region1FacStart[0] < rundef.kBootDeviceMemBase_FlexspiNor + gendef.kIvtOffset_NOR:
-                            self.popupMsgBox('Region 1 FAC 0 start address shouldn\'t less than 0x%x' %(rundef.kBootDeviceMemBase_FlexspiNor + gendef.kIvtOffset_NOR))
+                        if self.engine1FacStart[0] < rundef.kBootDeviceMemBase_FlexspiNor + gendef.kIvtOffset_NOR:
+                            self.popupMsgBox('Engine 1 Protected region 0 start address shouldn\'t less than 0x%x' %(rundef.kBootDeviceMemBase_FlexspiNor + gendef.kIvtOffset_NOR))
                             return False
                 else:
                     return False
-                validateStatus, self.region1FacLength[0] = self._validateRegionRange(self.m_textCtrl_region1Fac0Length.GetLineText(0))
+                validateStatus, self.engine1FacLength[0] = self._validateEngineRange(self.m_textCtrl_engine1Fac0Length.GetLineText(0))
                 if validateStatus:
-                    if self.region1FacLength[0] % gendef.kSecFacRegionAlignedUnit != 0:
-                        self.popupMsgBox('Region 1 FAC 0 length should be aligned with %dKB' %(gendef.kSecFacRegionAlignedUnit / 0x400))
+                    if self.engine1FacLength[0] % gendef.kSecFacRegionAlignedUnit != 0:
+                        self.popupMsgBox('Engine 1 Protected region 0 length should be aligned with %dKB' %(gendef.kSecFacRegionAlignedUnit / 0x400))
                         return False
                 else:
                     return False
-                self.userKeyCmdDict['region1_arg'] += ',[' + self.m_textCtrl_region1Fac0Start.GetLineText(0) + ',' + self.m_textCtrl_region1Fac0Length.GetLineText(0) + ','
+                self.userKeyCmdDict['engine1_arg'] += ',[' + self.m_textCtrl_engine1Fac0Start.GetLineText(0) + ',' + self.m_textCtrl_engine1Fac0Length.GetLineText(0) + ','
             elif facIndex == 1:
-                validateStatus, self.region1FacStart[1] = self._validateRegionRange(self.m_textCtrl_region1Fac1Start.GetLineText(0))
+                validateStatus, self.engine1FacStart[1] = self._validateEngineRange(self.m_textCtrl_engine1Fac1Start.GetLineText(0))
                 if validateStatus:
-                    if self.region1FacStart[1] < self.region1FacStart[0] + self.region1FacLength[0]:
-                        self.popupMsgBox('Region 1 FAC 1 start address shouldn\'t less than Region 1 FAC 0 end address 0x%x' %(self.region1FacStart[0] + self.region1FacLength[0]))
+                    if self.engine1FacStart[1] < self.engine1FacStart[0] + self.engine1FacLength[0]:
+                        self.popupMsgBox('Engine 1 Protected region 1 start address shouldn\'t less than Engine 1 Protected region 0 end address 0x%x' %(self.engine1FacStart[0] + self.engine1FacLength[0]))
                         return False
                 else:
                     return False
-                validateStatus, self.region1FacLength[1] = self._validateRegionRange(self.m_textCtrl_region1Fac1Length.GetLineText(0))
+                validateStatus, self.engine1FacLength[1] = self._validateEngineRange(self.m_textCtrl_engine1Fac1Length.GetLineText(0))
                 if validateStatus:
-                    if self.region1FacLength[1] % gendef.kSecFacRegionAlignedUnit != 0:
-                        self.popupMsgBox('Region 1 FAC 1 length should be aligned with %dKB' %(gendef.kSecFacRegionAlignedUnit / 0x400))
+                    if self.engine1FacLength[1] % gendef.kSecFacRegionAlignedUnit != 0:
+                        self.popupMsgBox('Engine 1 Protected region 1 length should be aligned with %dKB' %(gendef.kSecFacRegionAlignedUnit / 0x400))
                         return False
                 else:
                     return False
-                self.userKeyCmdDict['region1_arg'] += ',[' + self.m_textCtrl_region1Fac1Start.GetLineText(0) + ',' + self.m_textCtrl_region1Fac1Length.GetLineText(0) + ','
+                self.userKeyCmdDict['engine1_arg'] += ',[' + self.m_textCtrl_engine1Fac1Start.GetLineText(0) + ',' + self.m_textCtrl_engine1Fac1Length.GetLineText(0) + ','
             elif facIndex == 2:
-                validateStatus, self.region1FacStart[2] = self._validateRegionRange(self.m_textCtrl_region1Fac2Start.GetLineText(0))
+                validateStatus, self.engine1FacStart[2] = self._validateEngineRange(self.m_textCtrl_engine1Fac2Start.GetLineText(0))
                 if validateStatus:
-                    if self.region1FacStart[2] < self.region1FacStart[1] + self.region1FacLength[1]:
-                        self.popupMsgBox('Region 1 FAC 2 start address shouldn\'t less than Region 1 FAC 1 end address 0x%x' %(self.region1FacStart[1] + self.region1FacLength[1]))
+                    if self.engine1FacStart[2] < self.engine1FacStart[1] + self.engine1FacLength[1]:
+                        self.popupMsgBox('Engine 1 Protected region 2 start address shouldn\'t less than Engine 1 Protected region 1 end address 0x%x' %(self.engine1FacStart[1] + self.engine1FacLength[1]))
                         return False
                 else:
                     return False
-                validateStatus, self.region1FacLength[2] = self._validateRegionRange(self.m_textCtrl_region1Fac2Length.GetLineText(0))
+                validateStatus, self.engine1FacLength[2] = self._validateEngineRange(self.m_textCtrl_engine1Fac2Length.GetLineText(0))
                 if validateStatus:
-                    if self.region1FacLength[2] % gendef.kSecFacRegionAlignedUnit != 0:
-                        self.popupMsgBox('Region 1 FAC 2 length should be aligned with %dKB' %(gendef.kSecFacRegionAlignedUnit / 0x400))
+                    if self.engine1FacLength[2] % gendef.kSecFacRegionAlignedUnit != 0:
+                        self.popupMsgBox('Engine 1 Protected region 2 length should be aligned with %dKB' %(gendef.kSecFacRegionAlignedUnit / 0x400))
                         return False
                 else:
                     return False
-                self.userKeyCmdDict['region1_arg'] += ',[' + self.m_textCtrl_region1Fac2Start.GetLineText(0) + ',' + self.m_textCtrl_region1Fac2Length.GetLineText(0) + ','
+                self.userKeyCmdDict['engine1_arg'] += ',[' + self.m_textCtrl_engine1Fac2Start.GetLineText(0) + ',' + self.m_textCtrl_engine1Fac2Length.GetLineText(0) + ','
             else:
                 pass
         else:
             pass
         return True
 
-    def _getRegionLock( self, regionIndex=0 ):
-        if regionIndex == 0:
-            self.userKeyCmdDict['region0_lock'] = str(self.m_choice_region0Lock.GetSelection())
-        elif regionIndex == 1:
-            self.userKeyCmdDict['region1_lock'] = str(self.m_choice_region1Lock.GetSelection())
+    def _getEngineLock( self, engineIndex=0 ):
+        if engineIndex == 0:
+            self.userKeyCmdDict['engine0_lock'] = str(self.m_choice_engine0Lock.GetSelection())
+        elif engineIndex == 1:
+            self.userKeyCmdDict['engine1_lock'] = str(self.m_choice_engine1Lock.GetSelection())
         else:
             pass
 
-    def _getRegionArg( self, regionIndex=0 ):
-        self._getFacCount(regionIndex)
-        self._getAesMode(regionIndex)
+    def _getEngineArg( self, engineIndex=0 ):
+        self._getFacCount(engineIndex)
+        self._getAesMode(engineIndex)
         facCnt = 0
-        if regionIndex == 0:
-            facCnt = self.userKeyCtrlDict['region0_fac_cnt']
-        elif regionIndex == 1:
-            facCnt = self.userKeyCtrlDict['region1_fac_cnt']
+        if engineIndex == 0:
+            facCnt = self.userKeyCtrlDict['engine0_fac_cnt']
+        elif engineIndex == 1:
+            facCnt = self.userKeyCtrlDict['engine1_fac_cnt']
         else:
             pass
         for i in range(facCnt):
-            status = self._getRegionRange(regionIndex, i)
+            status = self._getEngineRange(engineIndex, i)
             if not status:
-                self.region0FacStart = [None] * uidef.kMaxFacRegionCount
-                self.region0FacLength = [None] * uidef.kMaxFacRegionCount
-                self.region1FacStart = [None] * uidef.kMaxFacRegionCount
-                self.region1FacLength = [None] * uidef.kMaxFacRegionCount
+                self.engine0FacStart = [None] * uidef.kMaxFacRegionCount
+                self.engine0FacLength = [None] * uidef.kMaxFacRegionCount
+                self.engine1FacStart = [None] * uidef.kMaxFacRegionCount
+                self.engine1FacLength = [None] * uidef.kMaxFacRegionCount
                 return False
-            self._getAccessPermision(regionIndex)
+            self._getAccessPermision(engineIndex)
         return True
 
-    def _getRegionInfo( self, regionIndex=0 ):
-        self._getKeySource(regionIndex)
-        if not self._getUserKeyData(regionIndex):
+    def _getEngineInfo( self, engineIndex=0 ):
+        self._getKeySource(engineIndex)
+        if not self._getUserKeyData(engineIndex):
             return False
-        if not self._getRegionArg(regionIndex):
+        if not self._getEngineArg(engineIndex):
             return False
-        self._getRegionLock(regionIndex)
+        self._getEngineLock(engineIndex)
         return True
 
-    def _recoverRegionArg( self, regionIndex ):
-        if regionIndex == 0:
-            self.m_choice_region0FacCnt.SetSelection(self.userKeyCtrlDict['region0_fac_cnt'] - 1)
-            if self.userKeyCmdDict['region0_arg'][0] == '1':
-                self.m_choice_region0AesMode.SetSelection(0)
+    def _recoverEngineArg( self, engineIndex ):
+        if engineIndex == 0:
+            self.m_choice_engine0FacCnt.SetSelection(self.userKeyCtrlDict['engine0_fac_cnt'] - 1)
+            if self.userKeyCmdDict['engine0_arg'][0] == '1':
+                self.m_choice_engine0AesMode.SetSelection(0)
             locStart = 0
             locEnd = 0
-            if self.userKeyCtrlDict['region0_fac_cnt'] > 0:
-                self.m_textCtrl_region0Fac0Start.Clear()
-                locStart = self.userKeyCmdDict['region0_arg'].find('[')
-                locEnd = self.userKeyCmdDict['region0_arg'].find(',', locStart)
-                self.m_textCtrl_region0Fac0Start.write(self.userKeyCmdDict['region0_arg'][locStart+1:locEnd])
-                self.m_textCtrl_region0Fac0Length.Clear()
+            if self.userKeyCtrlDict['engine0_fac_cnt'] > 0:
+                self.m_textCtrl_engine0Fac0Start.Clear()
+                locStart = self.userKeyCmdDict['engine0_arg'].find('[')
+                locEnd = self.userKeyCmdDict['engine0_arg'].find(',', locStart)
+                self.m_textCtrl_engine0Fac0Start.write(self.userKeyCmdDict['engine0_arg'][locStart+1:locEnd])
+                self.m_textCtrl_engine0Fac0Length.Clear()
                 locStart = locEnd
-                locEnd = self.userKeyCmdDict['region0_arg'].find(',', locStart + 1)
-                self.m_textCtrl_region0Fac0Length.write(self.userKeyCmdDict['region0_arg'][locStart+1:locEnd])
-            if self.userKeyCtrlDict['region0_fac_cnt'] > 1:
-                self.m_textCtrl_region0Fac1Start.Clear()
-                locStart = self.userKeyCmdDict['region0_arg'].find('[', locEnd)
-                locEnd = self.userKeyCmdDict['region0_arg'].find(',', locStart)
-                self.m_textCtrl_region0Fac1Start.write(self.userKeyCmdDict['region0_arg'][locStart+1:locEnd])
-                self.m_textCtrl_region0Fac1Length.Clear()
+                locEnd = self.userKeyCmdDict['engine0_arg'].find(',', locStart + 1)
+                self.m_textCtrl_engine0Fac0Length.write(self.userKeyCmdDict['engine0_arg'][locStart+1:locEnd])
+            if self.userKeyCtrlDict['engine0_fac_cnt'] > 1:
+                self.m_textCtrl_engine0Fac1Start.Clear()
+                locStart = self.userKeyCmdDict['engine0_arg'].find('[', locEnd)
+                locEnd = self.userKeyCmdDict['engine0_arg'].find(',', locStart)
+                self.m_textCtrl_engine0Fac1Start.write(self.userKeyCmdDict['engine0_arg'][locStart+1:locEnd])
+                self.m_textCtrl_engine0Fac1Length.Clear()
                 locStart = locEnd
-                locEnd = self.userKeyCmdDict['region0_arg'].find(',', locStart + 1)
-                self.m_textCtrl_region0Fac1Length.write(self.userKeyCmdDict['region0_arg'][locStart+1:locEnd])
-            if self.userKeyCtrlDict['region0_fac_cnt'] > 2:
-                self.m_textCtrl_region0Fac2Start.Clear()
-                locStart = self.userKeyCmdDict['region0_arg'].find('[', locEnd)
-                locEnd = self.userKeyCmdDict['region0_arg'].find(',', locStart)
-                self.m_textCtrl_region0Fac2Start.write(self.userKeyCmdDict['region0_arg'][locStart+1:locEnd])
-                self.m_textCtrl_region0Fac2Length.Clear()
+                locEnd = self.userKeyCmdDict['engine0_arg'].find(',', locStart + 1)
+                self.m_textCtrl_engine0Fac1Length.write(self.userKeyCmdDict['engine0_arg'][locStart+1:locEnd])
+            if self.userKeyCtrlDict['engine0_fac_cnt'] > 2:
+                self.m_textCtrl_engine0Fac2Start.Clear()
+                locStart = self.userKeyCmdDict['engine0_arg'].find('[', locEnd)
+                locEnd = self.userKeyCmdDict['engine0_arg'].find(',', locStart)
+                self.m_textCtrl_engine0Fac2Start.write(self.userKeyCmdDict['engine0_arg'][locStart+1:locEnd])
+                self.m_textCtrl_engine0Fac2Length.Clear()
                 locStart = locEnd
-                locEnd = self.userKeyCmdDict['region0_arg'].find(',', locStart + 1)
-                self.m_textCtrl_region0Fac2Length.write(self.userKeyCmdDict['region0_arg'][locStart+1:locEnd])
-            locEnd = self.userKeyCmdDict['region0_arg'].find(']', locEnd)
-            self.m_choice_region0AccessPermision.SetSelection(int(self.userKeyCmdDict['region0_arg'][locEnd-1:locEnd]))
-        elif regionIndex == 1:
-            self.m_choice_region1FacCnt.SetSelection(self.userKeyCtrlDict['region1_fac_cnt'] - 1)
-            if self.userKeyCmdDict['region1_arg'][0] == '1':
-                self.m_choice_region1AesMode.SetSelection(0)
+                locEnd = self.userKeyCmdDict['engine0_arg'].find(',', locStart + 1)
+                self.m_textCtrl_engine0Fac2Length.write(self.userKeyCmdDict['engine0_arg'][locStart+1:locEnd])
+            locEnd = self.userKeyCmdDict['engine0_arg'].find(']', locEnd)
+            self.m_choice_engine0AccessPermision.SetSelection(int(self.userKeyCmdDict['engine0_arg'][locEnd-1:locEnd]))
+        elif engineIndex == 1:
+            self.m_choice_engine1FacCnt.SetSelection(self.userKeyCtrlDict['engine1_fac_cnt'] - 1)
+            if self.userKeyCmdDict['engine1_arg'][0] == '1':
+                self.m_choice_engine1AesMode.SetSelection(0)
             locStart = 0
             locEnd = 0
-            if self.userKeyCtrlDict['region1_fac_cnt'] > 0:
-                self.m_textCtrl_region1Fac0Start.Clear()
-                locStart = self.userKeyCmdDict['region1_arg'].find('[')
-                locEnd = self.userKeyCmdDict['region1_arg'].find(',', locStart)
-                self.m_textCtrl_region1Fac0Start.write(self.userKeyCmdDict['region1_arg'][locStart+1:locEnd])
-                self.m_textCtrl_region1Fac0Length.Clear()
+            if self.userKeyCtrlDict['engine1_fac_cnt'] > 0:
+                self.m_textCtrl_engine1Fac0Start.Clear()
+                locStart = self.userKeyCmdDict['engine1_arg'].find('[')
+                locEnd = self.userKeyCmdDict['engine1_arg'].find(',', locStart)
+                self.m_textCtrl_engine1Fac0Start.write(self.userKeyCmdDict['engine1_arg'][locStart+1:locEnd])
+                self.m_textCtrl_engine1Fac0Length.Clear()
                 locStart = locEnd
-                locEnd = self.userKeyCmdDict['region1_arg'].find(',', locStart + 1)
-                self.m_textCtrl_region1Fac0Length.write(self.userKeyCmdDict['region1_arg'][locStart+1:locEnd])
-            if self.userKeyCtrlDict['region1_fac_cnt'] > 1:
-                self.m_textCtrl_region1Fac1Start.Clear()
-                locStart = self.userKeyCmdDict['region1_arg'].find('[', locEnd)
-                locEnd = self.userKeyCmdDict['region1_arg'].find(',', locStart)
-                self.m_textCtrl_region1Fac1Start.write(self.userKeyCmdDict['region1_arg'][locStart+1:locEnd])
-                self.m_textCtrl_region1Fac1Length.Clear()
+                locEnd = self.userKeyCmdDict['engine1_arg'].find(',', locStart + 1)
+                self.m_textCtrl_engine1Fac0Length.write(self.userKeyCmdDict['engine1_arg'][locStart+1:locEnd])
+            if self.userKeyCtrlDict['engine1_fac_cnt'] > 1:
+                self.m_textCtrl_engine1Fac1Start.Clear()
+                locStart = self.userKeyCmdDict['engine1_arg'].find('[', locEnd)
+                locEnd = self.userKeyCmdDict['engine1_arg'].find(',', locStart)
+                self.m_textCtrl_engine1Fac1Start.write(self.userKeyCmdDict['engine1_arg'][locStart+1:locEnd])
+                self.m_textCtrl_engine1Fac1Length.Clear()
                 locStart = locEnd
-                locEnd = self.userKeyCmdDict['region1_arg'].find(',', locStart + 1)
-                self.m_textCtrl_region1Fac1Length.write(self.userKeyCmdDict['region1_arg'][locStart+1:locEnd])
-            if self.userKeyCtrlDict['region1_fac_cnt'] > 2:
-                self.m_textCtrl_region1Fac2Start.Clear()
-                locStart = self.userKeyCmdDict['region1_arg'].find('[', locEnd)
-                locEnd = self.userKeyCmdDict['region1_arg'].find(',', locStart)
-                self.m_textCtrl_region1Fac2Start.write(self.userKeyCmdDict['region1_arg'][locStart+1:locEnd])
-                self.m_textCtrl_region1Fac2Length.Clear()
+                locEnd = self.userKeyCmdDict['engine1_arg'].find(',', locStart + 1)
+                self.m_textCtrl_engine1Fac1Length.write(self.userKeyCmdDict['engine1_arg'][locStart+1:locEnd])
+            if self.userKeyCtrlDict['engine1_fac_cnt'] > 2:
+                self.m_textCtrl_engine1Fac2Start.Clear()
+                locStart = self.userKeyCmdDict['engine1_arg'].find('[', locEnd)
+                locEnd = self.userKeyCmdDict['engine1_arg'].find(',', locStart)
+                self.m_textCtrl_engine1Fac2Start.write(self.userKeyCmdDict['engine1_arg'][locStart+1:locEnd])
+                self.m_textCtrl_engine1Fac2Length.Clear()
                 locStart = locEnd
-                locEnd = self.userKeyCmdDict['region1_arg'].find(',', locStart + 1)
-                self.m_textCtrl_region1Fac2Length.write(self.userKeyCmdDict['region1_arg'][locStart+1:locEnd])
-            locEnd = self.userKeyCmdDict['region1_arg'].find(']', locEnd)
-            self.m_choice_region1AccessPermision.SetSelection(int(self.userKeyCmdDict['region1_arg'][locEnd-1:locEnd]))
+                locEnd = self.userKeyCmdDict['engine1_arg'].find(',', locStart + 1)
+                self.m_textCtrl_engine1Fac2Length.write(self.userKeyCmdDict['engine1_arg'][locStart+1:locEnd])
+            locEnd = self.userKeyCmdDict['engine1_arg'].find(']', locEnd)
+            self.m_choice_engine1AccessPermision.SetSelection(int(self.userKeyCmdDict['engine1_arg'][locEnd-1:locEnd]))
         else:
             pass
 
-    def _recoverRegionInfo( self, regionIndex ):
-        if regionIndex == 0:
-            if self.m_choice_region0keySource.GetCount() == 2:
-                if self.userKeyCtrlDict['region0_key_src'] == uidef.kUserKeySource_SW_GP2:
-                    self.m_choice_region0keySource.SetSelection(0)
-                elif self.userKeyCtrlDict['region0_key_src'] == uidef.kUserKeySource_GP4:
-                    self.m_choice_region0keySource.SetSelection(1)
+    def _recoverEngineInfo( self, engineIndex ):
+        if engineIndex == 0:
+            if self.m_choice_engine0keySource.GetCount() == 2:
+                if self.userKeyCtrlDict['engine0_key_src'] == uidef.kUserKeySource_SW_GP2:
+                    self.m_choice_engine0keySource.SetSelection(0)
+                elif self.userKeyCtrlDict['engine0_key_src'] == uidef.kUserKeySource_GP4:
+                    self.m_choice_engine0keySource.SetSelection(1)
                 else:
                     pass
             else:
-                self.m_choice_region0keySource.SetSelection(0)
-            self.m_textCtrl_region0UserKeyData.Clear()
-            if self.userKeyCmdDict['region0_key'] != None:
-                self.m_textCtrl_region0UserKeyData.write(self.userKeyCmdDict['region0_key'])
-            self._recoverRegionArg(0)
-            if self.userKeyCmdDict['region0_lock'] == 'No Lock':
-                self.m_choice_region0Lock.SetSelection(0)
-        elif regionIndex == 1:
-            if self.m_choice_region1keySource.GetCount() == 2:
-                if self.userKeyCtrlDict['region1_key_src'] == uidef.kUserKeySource_SW_GP2:
-                    self.m_choice_region1keySource.SetSelection(0)
-                elif self.userKeyCtrlDict['region1_key_src'] == uidef.kUserKeySource_GP4:
-                    self.m_choice_region1keySource.SetSelection(1)
+                self.m_choice_engine0keySource.SetSelection(0)
+            self.m_textCtrl_engine0UserKeyData.Clear()
+            if self.userKeyCmdDict['engine0_key'] != None:
+                self.m_textCtrl_engine0UserKeyData.write(self.userKeyCmdDict['engine0_key'])
+            self._recoverEngineArg(0)
+            if self.userKeyCmdDict['engine0_lock'] == 'No Lock':
+                self.m_choice_engine0Lock.SetSelection(0)
+        elif engineIndex == 1:
+            if self.m_choice_engine1keySource.GetCount() == 2:
+                if self.userKeyCtrlDict['engine1_key_src'] == uidef.kUserKeySource_SW_GP2:
+                    self.m_choice_engine1keySource.SetSelection(0)
+                elif self.userKeyCtrlDict['engine1_key_src'] == uidef.kUserKeySource_GP4:
+                    self.m_choice_engine1keySource.SetSelection(1)
                 else:
                     pass
             else:
-                self.m_choice_region1keySource.SetSelection(0)
-            self.m_textCtrl_region1UserKeyData.Clear()
-            if self.userKeyCmdDict['region1_key'] != None:
-                self.m_textCtrl_region1UserKeyData.write(self.userKeyCmdDict['region1_key'])
-            self._recoverRegionArg(1)
-            if self.userKeyCmdDict['region1_lock'] == 'No Lock':
-                self.m_choice_region1Lock.SetSelection(0)
+                self.m_choice_engine1keySource.SetSelection(0)
+            self.m_textCtrl_engine1UserKeyData.Clear()
+            if self.userKeyCmdDict['engine1_key'] != None:
+                self.m_textCtrl_engine1UserKeyData.write(self.userKeyCmdDict['engine1_key'])
+            self._recoverEngineArg(1)
+            if self.userKeyCmdDict['engine1_lock'] == 'No Lock':
+                self.m_choice_engine1Lock.SetSelection(0)
         else:
             pass
 
-    def _updateKeySourceInfoField ( self, regionIndex=0 ):
-        if regionIndex == 0:
-            self.m_textCtrl_region0UserKeyData.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
-            if self.userKeyCtrlDict['region_sel'] == uidef.kUserRegionSel_BothRegions:
-                if self.userKeyCtrlDict['region1_key_src'] == self.userKeyCtrlDict['region0_key_src']:
-                    self.m_textCtrl_region1UserKeyData.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_GRAYTEXT ) )
-                    self.m_textCtrl_region1UserKeyData.Clear()
+    def _updateKeySourceInfoField ( self, engineIndex=0 ):
+        if engineIndex == 0:
+            self.m_textCtrl_engine0UserKeyData.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
+            if self.userKeyCtrlDict['engine_sel'] == uidef.kUserEngineSel_BothEngines:
+                if self.userKeyCtrlDict['engine1_key_src'] == self.userKeyCtrlDict['engine0_key_src']:
+                    self.m_textCtrl_engine1UserKeyData.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_GRAYTEXT ) )
+                    self.m_textCtrl_engine1UserKeyData.Clear()
                 else:
-                    self.m_textCtrl_region1UserKeyData.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
-        elif regionIndex == 1:
-            if self.userKeyCtrlDict['region_sel'] == uidef.kUserRegionSel_BothRegions:
-                if self.userKeyCtrlDict['region1_key_src'] == self.userKeyCtrlDict['region0_key_src']:
-                    self.m_textCtrl_region1UserKeyData.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_GRAYTEXT ) )
-                    self.m_textCtrl_region1UserKeyData.Clear()
+                    self.m_textCtrl_engine1UserKeyData.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
+        elif engineIndex == 1:
+            if self.userKeyCtrlDict['engine_sel'] == uidef.kUserEngineSel_BothEngines:
+                if self.userKeyCtrlDict['engine1_key_src'] == self.userKeyCtrlDict['engine0_key_src']:
+                    self.m_textCtrl_engine1UserKeyData.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_GRAYTEXT ) )
+                    self.m_textCtrl_engine1UserKeyData.Clear()
                 else:
-                    self.m_textCtrl_region1UserKeyData.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
+                    self.m_textCtrl_engine1UserKeyData.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
             else:
-                self.m_textCtrl_region1UserKeyData.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
+                self.m_textCtrl_engine1UserKeyData.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
         else:
             pass
         self.Refresh()
 
-    def _updateRegionRangeInfoField ( self, regionIndex=0 ):
-        if regionIndex == 0:
-            if self.userKeyCtrlDict['region0_fac_cnt'] < 1:
-                self.m_staticText_region0Fac0Start.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_GRAYTEXT ) )
-                self.m_staticText_region0Fac0Length.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_GRAYTEXT ) )
-                self.m_textCtrl_region0Fac0Start.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_GRAYTEXT ) )
-                self.m_textCtrl_region0Fac0Length.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_GRAYTEXT ) )
+    def _updateFacRangeInfoField ( self, engineIndex=0 ):
+        if engineIndex == 0:
+            if self.userKeyCtrlDict['engine0_fac_cnt'] < 1:
+                self.m_staticText_engine0Fac0Start.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_GRAYTEXT ) )
+                self.m_staticText_engine0Fac0Length.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_GRAYTEXT ) )
+                self.m_textCtrl_engine0Fac0Start.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_GRAYTEXT ) )
+                self.m_textCtrl_engine0Fac0Length.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_GRAYTEXT ) )
             else:
-                self.m_staticText_region0Fac0Start.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
-                self.m_staticText_region0Fac0Length.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
-                self.m_textCtrl_region0Fac0Start.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
-                self.m_textCtrl_region0Fac0Length.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
-            if self.userKeyCtrlDict['region0_fac_cnt'] < 2:
-                self.m_staticText_region0Fac1Start.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_GRAYTEXT ) )
-                self.m_staticText_region0Fac1Length.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_GRAYTEXT ) )
-                self.m_textCtrl_region0Fac1Start.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_GRAYTEXT ) )
-                self.m_textCtrl_region0Fac1Length.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_GRAYTEXT ) )
+                self.m_staticText_engine0Fac0Start.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
+                self.m_staticText_engine0Fac0Length.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
+                self.m_textCtrl_engine0Fac0Start.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
+                self.m_textCtrl_engine0Fac0Length.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
+            if self.userKeyCtrlDict['engine0_fac_cnt'] < 2:
+                self.m_staticText_engine0Fac1Start.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_GRAYTEXT ) )
+                self.m_staticText_engine0Fac1Length.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_GRAYTEXT ) )
+                self.m_textCtrl_engine0Fac1Start.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_GRAYTEXT ) )
+                self.m_textCtrl_engine0Fac1Length.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_GRAYTEXT ) )
             else:
-                self.m_staticText_region0Fac1Start.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
-                self.m_staticText_region0Fac1Length.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
-                self.m_textCtrl_region0Fac1Start.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
-                self.m_textCtrl_region0Fac1Length.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
-            if self.userKeyCtrlDict['region0_fac_cnt'] < 3:
-                self.m_staticText_region0Fac2Start.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_GRAYTEXT ) )
-                self.m_staticText_region0Fac2Length.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_GRAYTEXT ) )
-                self.m_textCtrl_region0Fac2Start.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_GRAYTEXT ) )
-                self.m_textCtrl_region0Fac2Length.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_GRAYTEXT ) )
+                self.m_staticText_engine0Fac1Start.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
+                self.m_staticText_engine0Fac1Length.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
+                self.m_textCtrl_engine0Fac1Start.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
+                self.m_textCtrl_engine0Fac1Length.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
+            if self.userKeyCtrlDict['engine0_fac_cnt'] < 3:
+                self.m_staticText_engine0Fac2Start.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_GRAYTEXT ) )
+                self.m_staticText_engine0Fac2Length.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_GRAYTEXT ) )
+                self.m_textCtrl_engine0Fac2Start.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_GRAYTEXT ) )
+                self.m_textCtrl_engine0Fac2Length.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_GRAYTEXT ) )
             else:
-                self.m_staticText_region0Fac2Start.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
-                self.m_staticText_region0Fac2Length.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
-                self.m_textCtrl_region0Fac2Start.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
-                self.m_textCtrl_region0Fac2Length.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
-        elif regionIndex == 1:
-            if self.userKeyCtrlDict['region1_fac_cnt'] < 1:
-                self.m_staticText_region1Fac0Start.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_GRAYTEXT ) )
-                self.m_staticText_region1Fac0Length.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_GRAYTEXT ) )
-                self.m_textCtrl_region1Fac0Start.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_GRAYTEXT ) )
-                self.m_textCtrl_region1Fac0Length.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_GRAYTEXT ) )
+                self.m_staticText_engine0Fac2Start.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
+                self.m_staticText_engine0Fac2Length.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
+                self.m_textCtrl_engine0Fac2Start.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
+                self.m_textCtrl_engine0Fac2Length.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
+        elif engineIndex == 1:
+            if self.userKeyCtrlDict['engine1_fac_cnt'] < 1:
+                self.m_staticText_engine1Fac0Start.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_GRAYTEXT ) )
+                self.m_staticText_engine1Fac0Length.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_GRAYTEXT ) )
+                self.m_textCtrl_engine1Fac0Start.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_GRAYTEXT ) )
+                self.m_textCtrl_engine1Fac0Length.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_GRAYTEXT ) )
             else:
-                self.m_staticText_region1Fac0Start.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
-                self.m_staticText_region1Fac0Length.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
-                self.m_textCtrl_region1Fac0Start.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
-                self.m_textCtrl_region1Fac0Length.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
-            if self.userKeyCtrlDict['region1_fac_cnt'] < 2:
-                self.m_staticText_region1Fac1Start.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_GRAYTEXT ) )
-                self.m_staticText_region1Fac1Length.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_GRAYTEXT ) )
-                self.m_textCtrl_region1Fac1Start.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_GRAYTEXT ) )
-                self.m_textCtrl_region1Fac1Length.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_GRAYTEXT ) )
+                self.m_staticText_engine1Fac0Start.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
+                self.m_staticText_engine1Fac0Length.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
+                self.m_textCtrl_engine1Fac0Start.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
+                self.m_textCtrl_engine1Fac0Length.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
+            if self.userKeyCtrlDict['engine1_fac_cnt'] < 2:
+                self.m_staticText_engine1Fac1Start.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_GRAYTEXT ) )
+                self.m_staticText_engine1Fac1Length.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_GRAYTEXT ) )
+                self.m_textCtrl_engine1Fac1Start.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_GRAYTEXT ) )
+                self.m_textCtrl_engine1Fac1Length.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_GRAYTEXT ) )
             else:
-                self.m_staticText_region1Fac1Start.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
-                self.m_staticText_region1Fac1Length.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
-                self.m_textCtrl_region1Fac1Start.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
-                self.m_textCtrl_region1Fac1Length.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
-            if self.userKeyCtrlDict['region1_fac_cnt'] < 3:
-                self.m_staticText_region1Fac2Start.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_GRAYTEXT ) )
-                self.m_staticText_region1Fac2Length.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_GRAYTEXT ) )
-                self.m_textCtrl_region1Fac2Start.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_GRAYTEXT ) )
-                self.m_textCtrl_region1Fac2Length.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_GRAYTEXT ) )
+                self.m_staticText_engine1Fac1Start.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
+                self.m_staticText_engine1Fac1Length.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
+                self.m_textCtrl_engine1Fac1Start.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
+                self.m_textCtrl_engine1Fac1Length.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
+            if self.userKeyCtrlDict['engine1_fac_cnt'] < 3:
+                self.m_staticText_engine1Fac2Start.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_GRAYTEXT ) )
+                self.m_staticText_engine1Fac2Length.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_GRAYTEXT ) )
+                self.m_textCtrl_engine1Fac2Start.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_GRAYTEXT ) )
+                self.m_textCtrl_engine1Fac2Length.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_GRAYTEXT ) )
             else:
-                self.m_staticText_region1Fac2Start.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
-                self.m_staticText_region1Fac2Length.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
-                self.m_textCtrl_region1Fac2Start.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
-                self.m_textCtrl_region1Fac2Length.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
+                self.m_staticText_engine1Fac2Start.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
+                self.m_staticText_engine1Fac2Length.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
+                self.m_textCtrl_engine1Fac2Start.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
+                self.m_textCtrl_engine1Fac2Length.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
         else:
             pass
         self.Refresh()
 
-    def _updateRegionInfoField ( self, regionIndex=0, isRegionEnabled=False ):
-        if regionIndex == 0:
-            if isRegionEnabled:
-                self.m_staticText_region0keySource.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
-                self.m_staticText_region0UserKeyData.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
-                self.m_staticText_region0AesMode.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
-                self.m_staticText_region0FacCnt.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
-                self.m_staticText_region0Fac0Start.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
-                self.m_staticText_region0Fac0Length.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
-                self.m_staticText_region0Fac1Start.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
-                self.m_staticText_region0Fac1Length.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
-                self.m_staticText_region0Fac2Start.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
-                self.m_staticText_region0Fac2Length.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
-                self.m_staticText_region0AccessPermision.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
-                self.m_staticText_region0Lock.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
+    def _updateEngineInfoField ( self, engineIndex=0, isEngineEnabled=False ):
+        if engineIndex == 0:
+            if isEngineEnabled:
+                self.m_staticText_engine0keySource.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
+                self.m_staticText_engine0UserKeyData.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
+                self.m_staticText_engine0AesMode.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
+                self.m_staticText_engine0FacCnt.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
+                self.m_staticText_engine0Fac0Start.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
+                self.m_staticText_engine0Fac0Length.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
+                self.m_staticText_engine0Fac1Start.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
+                self.m_staticText_engine0Fac1Length.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
+                self.m_staticText_engine0Fac2Start.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
+                self.m_staticText_engine0Fac2Length.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
+                self.m_staticText_engine0AccessPermision.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
+                self.m_staticText_engine0Lock.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
 
-                self.m_choice_region0keySource.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
-                self.m_textCtrl_region0UserKeyData.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
-                self.m_choice_region0AesMode.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
-                self.m_choice_region0FacCnt.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
-                self.m_textCtrl_region0Fac0Start.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
-                self.m_textCtrl_region0Fac0Length.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
-                self.m_textCtrl_region0Fac1Start.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
-                self.m_textCtrl_region0Fac1Length.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
-                self.m_textCtrl_region0Fac2Start.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
-                self.m_textCtrl_region0Fac2Length.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
-                self.m_choice_region0AccessPermision.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
-                self.m_choice_region0Lock.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
+                self.m_choice_engine0keySource.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
+                self.m_textCtrl_engine0UserKeyData.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
+                self.m_choice_engine0AesMode.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
+                self.m_choice_engine0FacCnt.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
+                self.m_textCtrl_engine0Fac0Start.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
+                self.m_textCtrl_engine0Fac0Length.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
+                self.m_textCtrl_engine0Fac1Start.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
+                self.m_textCtrl_engine0Fac1Length.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
+                self.m_textCtrl_engine0Fac2Start.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
+                self.m_textCtrl_engine0Fac2Length.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
+                self.m_choice_engine0AccessPermision.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
+                self.m_choice_engine0Lock.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
 
                 self._getKeySource(0)
                 self._updateKeySourceInfoField(0)
                 self._getFacCount(0)
-                self._updateRegionRangeInfoField(0)
+                self._updateFacRangeInfoField(0)
             else:
-                self.m_staticText_region0keySource.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_GRAYTEXT ) )
-                self.m_staticText_region0UserKeyData.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_GRAYTEXT ) )
-                self.m_staticText_region0AesMode.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_GRAYTEXT ) )
-                self.m_staticText_region0FacCnt.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_GRAYTEXT ) )
-                self.m_staticText_region0Fac0Start.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_GRAYTEXT ) )
-                self.m_staticText_region0Fac0Length.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_GRAYTEXT ) )
-                self.m_staticText_region0Fac1Start.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_GRAYTEXT ) )
-                self.m_staticText_region0Fac1Length.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_GRAYTEXT ) )
-                self.m_staticText_region0Fac2Start.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_GRAYTEXT ) )
-                self.m_staticText_region0Fac2Length.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_GRAYTEXT ) )
-                self.m_staticText_region0AccessPermision.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_GRAYTEXT ) )
-                self.m_staticText_region0Lock.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_GRAYTEXT ) )
+                self.m_staticText_engine0keySource.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_GRAYTEXT ) )
+                self.m_staticText_engine0UserKeyData.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_GRAYTEXT ) )
+                self.m_staticText_engine0AesMode.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_GRAYTEXT ) )
+                self.m_staticText_engine0FacCnt.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_GRAYTEXT ) )
+                self.m_staticText_engine0Fac0Start.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_GRAYTEXT ) )
+                self.m_staticText_engine0Fac0Length.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_GRAYTEXT ) )
+                self.m_staticText_engine0Fac1Start.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_GRAYTEXT ) )
+                self.m_staticText_engine0Fac1Length.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_GRAYTEXT ) )
+                self.m_staticText_engine0Fac2Start.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_GRAYTEXT ) )
+                self.m_staticText_engine0Fac2Length.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_GRAYTEXT ) )
+                self.m_staticText_engine0AccessPermision.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_GRAYTEXT ) )
+                self.m_staticText_engine0Lock.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_GRAYTEXT ) )
 
-                self.m_choice_region0keySource.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_GRAYTEXT ) )
-                self.m_textCtrl_region0UserKeyData.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_GRAYTEXT ) )
-                self.m_choice_region0AesMode.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_GRAYTEXT ) )
-                self.m_choice_region0FacCnt.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_GRAYTEXT ) )
-                self.m_textCtrl_region0Fac0Start.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_GRAYTEXT ) )
-                self.m_textCtrl_region0Fac0Length.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_GRAYTEXT ) )
-                self.m_textCtrl_region0Fac1Start.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_GRAYTEXT ) )
-                self.m_textCtrl_region0Fac1Length.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_GRAYTEXT ) )
-                self.m_textCtrl_region0Fac2Start.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_GRAYTEXT ) )
-                self.m_textCtrl_region0Fac2Length.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_GRAYTEXT ) )
-                self.m_choice_region0AccessPermision.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_GRAYTEXT ) )
-                self.m_choice_region0Lock.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_GRAYTEXT ) )
-        elif regionIndex == 1:
-            if isRegionEnabled:
-                self.m_staticText_region1keySource.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
-                self.m_staticText_region1UserKeyData.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
-                self.m_staticText_region1AesMode.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
-                self.m_staticText_region1FacCnt.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
-                self.m_staticText_region1Fac0Start.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
-                self.m_staticText_region1Fac0Length.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
-                self.m_staticText_region1Fac1Start.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
-                self.m_staticText_region1Fac1Length.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
-                self.m_staticText_region1Fac2Start.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
-                self.m_staticText_region1Fac2Length.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
-                self.m_staticText_region1AccessPermision.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
-                self.m_staticText_region1Lock.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
+                self.m_choice_engine0keySource.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_GRAYTEXT ) )
+                self.m_textCtrl_engine0UserKeyData.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_GRAYTEXT ) )
+                self.m_choice_engine0AesMode.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_GRAYTEXT ) )
+                self.m_choice_engine0FacCnt.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_GRAYTEXT ) )
+                self.m_textCtrl_engine0Fac0Start.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_GRAYTEXT ) )
+                self.m_textCtrl_engine0Fac0Length.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_GRAYTEXT ) )
+                self.m_textCtrl_engine0Fac1Start.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_GRAYTEXT ) )
+                self.m_textCtrl_engine0Fac1Length.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_GRAYTEXT ) )
+                self.m_textCtrl_engine0Fac2Start.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_GRAYTEXT ) )
+                self.m_textCtrl_engine0Fac2Length.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_GRAYTEXT ) )
+                self.m_choice_engine0AccessPermision.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_GRAYTEXT ) )
+                self.m_choice_engine0Lock.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_GRAYTEXT ) )
+        elif engineIndex == 1:
+            if isEngineEnabled:
+                self.m_staticText_engine1keySource.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
+                self.m_staticText_engine1UserKeyData.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
+                self.m_staticText_engine1AesMode.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
+                self.m_staticText_engine1FacCnt.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
+                self.m_staticText_engine1Fac0Start.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
+                self.m_staticText_engine1Fac0Length.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
+                self.m_staticText_engine1Fac1Start.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
+                self.m_staticText_engine1Fac1Length.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
+                self.m_staticText_engine1Fac2Start.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
+                self.m_staticText_engine1Fac2Length.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
+                self.m_staticText_engine1AccessPermision.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
+                self.m_staticText_engine1Lock.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
 
-                self.m_choice_region1keySource.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
-                self.m_textCtrl_region1UserKeyData.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
-                self.m_choice_region1AesMode.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
-                self.m_choice_region1FacCnt.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
-                self.m_textCtrl_region1Fac0Start.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
-                self.m_textCtrl_region1Fac0Length.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
-                self.m_textCtrl_region1Fac1Start.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
-                self.m_textCtrl_region1Fac1Length.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
-                self.m_textCtrl_region1Fac2Start.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
-                self.m_textCtrl_region1Fac2Length.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
-                self.m_choice_region1AccessPermision.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
-                self.m_choice_region1Lock.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
+                self.m_choice_engine1keySource.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
+                self.m_textCtrl_engine1UserKeyData.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
+                self.m_choice_engine1AesMode.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
+                self.m_choice_engine1FacCnt.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
+                self.m_textCtrl_engine1Fac0Start.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
+                self.m_textCtrl_engine1Fac0Length.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
+                self.m_textCtrl_engine1Fac1Start.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
+                self.m_textCtrl_engine1Fac1Length.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
+                self.m_textCtrl_engine1Fac2Start.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
+                self.m_textCtrl_engine1Fac2Length.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
+                self.m_choice_engine1AccessPermision.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
+                self.m_choice_engine1Lock.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
 
                 self._getKeySource(1)
                 self._updateKeySourceInfoField(1)
                 self._getFacCount(1)
-                self._updateRegionRangeInfoField(1)
+                self._updateFacRangeInfoField(1)
             else:
-                self.m_staticText_region1keySource.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_GRAYTEXT ) )
-                self.m_staticText_region1UserKeyData.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_GRAYTEXT ) )
-                self.m_staticText_region1AesMode.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_GRAYTEXT ) )
-                self.m_staticText_region1FacCnt.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_GRAYTEXT ) )
-                self.m_staticText_region1Fac0Start.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_GRAYTEXT ) )
-                self.m_staticText_region1Fac0Length.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_GRAYTEXT ) )
-                self.m_staticText_region1Fac1Start.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_GRAYTEXT ) )
-                self.m_staticText_region1Fac1Length.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_GRAYTEXT ) )
-                self.m_staticText_region1Fac2Start.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_GRAYTEXT ) )
-                self.m_staticText_region1Fac2Length.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_GRAYTEXT ) )
-                self.m_staticText_region1AccessPermision.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_GRAYTEXT ) )
-                self.m_staticText_region1Lock.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_GRAYTEXT ) )
+                self.m_staticText_engine1keySource.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_GRAYTEXT ) )
+                self.m_staticText_engine1UserKeyData.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_GRAYTEXT ) )
+                self.m_staticText_engine1AesMode.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_GRAYTEXT ) )
+                self.m_staticText_engine1FacCnt.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_GRAYTEXT ) )
+                self.m_staticText_engine1Fac0Start.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_GRAYTEXT ) )
+                self.m_staticText_engine1Fac0Length.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_GRAYTEXT ) )
+                self.m_staticText_engine1Fac1Start.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_GRAYTEXT ) )
+                self.m_staticText_engine1Fac1Length.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_GRAYTEXT ) )
+                self.m_staticText_engine1Fac2Start.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_GRAYTEXT ) )
+                self.m_staticText_engine1Fac2Length.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_GRAYTEXT ) )
+                self.m_staticText_engine1AccessPermision.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_GRAYTEXT ) )
+                self.m_staticText_engine1Lock.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_GRAYTEXT ) )
 
-                self.m_choice_region1keySource.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_GRAYTEXT ) )
-                self.m_textCtrl_region1UserKeyData.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_GRAYTEXT ) )
-                self.m_choice_region1AesMode.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_GRAYTEXT ) )
-                self.m_choice_region1FacCnt.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_GRAYTEXT ) )
-                self.m_textCtrl_region1Fac0Start.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_GRAYTEXT ) )
-                self.m_textCtrl_region1Fac0Length.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_GRAYTEXT ) )
-                self.m_textCtrl_region1Fac1Start.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_GRAYTEXT ) )
-                self.m_textCtrl_region1Fac1Length.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_GRAYTEXT ) )
-                self.m_textCtrl_region1Fac2Start.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_GRAYTEXT ) )
-                self.m_textCtrl_region1Fac2Length.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_GRAYTEXT ) )
-                self.m_choice_region1AccessPermision.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_GRAYTEXT ) )
-                self.m_choice_region1Lock.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_GRAYTEXT ) )
+                self.m_choice_engine1keySource.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_GRAYTEXT ) )
+                self.m_textCtrl_engine1UserKeyData.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_GRAYTEXT ) )
+                self.m_choice_engine1AesMode.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_GRAYTEXT ) )
+                self.m_choice_engine1FacCnt.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_GRAYTEXT ) )
+                self.m_textCtrl_engine1Fac0Start.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_GRAYTEXT ) )
+                self.m_textCtrl_engine1Fac0Length.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_GRAYTEXT ) )
+                self.m_textCtrl_engine1Fac1Start.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_GRAYTEXT ) )
+                self.m_textCtrl_engine1Fac1Length.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_GRAYTEXT ) )
+                self.m_textCtrl_engine1Fac2Start.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_GRAYTEXT ) )
+                self.m_textCtrl_engine1Fac2Length.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_GRAYTEXT ) )
+                self.m_choice_engine1AccessPermision.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_GRAYTEXT ) )
+                self.m_choice_engine1Lock.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_GRAYTEXT ) )
         else:
             pass
         self.Refresh()
 
-    def callbackChangeRegionSelection( self, event ):
-        self._getRegionSelection()
-        if self.userKeyCtrlDict['region_sel'] == uidef.kUserRegionSel_Region0:
-            self._updateRegionInfoField(0, True)
-            self._updateRegionInfoField(1, False)
-        elif self.userKeyCtrlDict['region_sel'] == uidef.kUserRegionSel_Region1:
-            self._updateRegionInfoField(0, False)
-            self._updateRegionInfoField(1, True)
-        elif self.userKeyCtrlDict['region_sel'] == uidef.kUserRegionSel_BothRegions:
-            self._updateRegionInfoField(0, True)
-            self._updateRegionInfoField(1, True)
+    def callbackChangeEngineSelection( self, event ):
+        self._getEngineSelection()
+        if self.userKeyCtrlDict['engine_sel'] == uidef.kUserEngineSel_Engine0:
+            self._updateEngineInfoField(0, True)
+            self._updateEngineInfoField(1, False)
+        elif self.userKeyCtrlDict['engine_sel'] == uidef.kUserEngineSel_Engine1:
+            self._updateEngineInfoField(0, False)
+            self._updateEngineInfoField(1, True)
+        elif self.userKeyCtrlDict['engine_sel'] == uidef.kUserEngineSel_BothEngines:
+            self._updateEngineInfoField(0, True)
+            self._updateEngineInfoField(1, True)
         else:
             pass
 
-    def callbackChangeRegion0KeySource( self, event ):
-        if self.userKeyCtrlDict['region_sel'] == uidef.kUserRegionSel_Region0 or \
-           self.userKeyCtrlDict['region_sel'] == uidef.kUserRegionSel_BothRegions:
+    def callbackChangeEngine0KeySource( self, event ):
+        if self.userKeyCtrlDict['engine_sel'] == uidef.kUserEngineSel_Engine0 or \
+           self.userKeyCtrlDict['engine_sel'] == uidef.kUserEngineSel_BothEngines:
             self._getKeySource(0)
             self._updateKeySourceInfoField(0)
 
@@ -694,55 +694,55 @@ class secBootUiSettingsFlexibleUserKeys(advSettingsWin_FlexibleUserKeys.advSetti
         messageText = (msgStr)
         wx.MessageBox(messageText, "Error", wx.OK | wx.ICON_INFORMATION)
 
-    def callbackChangeRegion0FacCnt( self, event ):
-        if self.userKeyCtrlDict['region_sel'] == uidef.kUserRegionSel_Region0:
+    def callbackChangeEngine0FacCnt( self, event ):
+        if self.userKeyCtrlDict['engine_sel'] == uidef.kUserEngineSel_Engine0:
             self._getFacCount(0)
-            self._updateRegionRangeInfoField(0)
-        elif self.userKeyCtrlDict['region_sel'] == uidef.kUserRegionSel_BothRegions:
-            region0FacCnt = self.m_choice_region0FacCnt.GetSelection() + 1
-            if region0FacCnt + self.userKeyCtrlDict['region1_fac_cnt'] > uidef.kMaxFacRegionCount:
-                self.m_choice_region0FacCnt.SetSelection(self.userKeyCtrlDict['region0_fac_cnt'] - 1)
-                self.popupMsgBox('The sum of FAC Region count of Region0 and Region1 must be no more than ' + str(uidef.kMaxFacRegionCount))
+            self._updateFacRangeInfoField(0)
+        elif self.userKeyCtrlDict['engine_sel'] == uidef.kUserEngineSel_BothEngines:
+            region0FacCnt = self.m_choice_engine0FacCnt.GetSelection() + 1
+            if region0FacCnt + self.userKeyCtrlDict['engine1_fac_cnt'] > uidef.kMaxFacRegionCount:
+                self.m_choice_engine0FacCnt.SetSelection(self.userKeyCtrlDict['engine0_fac_cnt'] - 1)
+                self.popupMsgBox('The sum of Protected Region count of Engine0 and Engine1 must be no more than ' + str(uidef.kMaxFacRegionCount))
             else:
                 self._getFacCount(0)
-                self._updateRegionRangeInfoField(0)
+                self._updateFacRangeInfoField(0)
         else:
             pass
 
-    def callbackChangeRegion1KeySource( self, event ):
-        if self.userKeyCtrlDict['region_sel'] == uidef.kUserRegionSel_Region1 or \
-           self.userKeyCtrlDict['region_sel'] == uidef.kUserRegionSel_BothRegions:
+    def callbackChangeEngine1KeySource( self, event ):
+        if self.userKeyCtrlDict['engine_sel'] == uidef.kUserEngineSel_Engine1 or \
+           self.userKeyCtrlDict['engine_sel'] == uidef.kUserEngineSel_BothEngines:
             self._getKeySource(1)
             self._updateKeySourceInfoField(1)
 
 
-    def callbackChangeRegion1FacCnt( self, event ):
-        if self.userKeyCtrlDict['region_sel'] == uidef.kUserRegionSel_Region1:
+    def callbackChangeEngine1FacCnt( self, event ):
+        if self.userKeyCtrlDict['engine_sel'] == uidef.kUserEngineSel_Engine1:
             self._getFacCount(1)
-            self._updateRegionRangeInfoField(1)
-        elif self.userKeyCtrlDict['region_sel'] == uidef.kUserRegionSel_BothRegions:
-            region1FacCnt = self.m_choice_region1FacCnt.GetSelection() + 1
-            if region1FacCnt + self.userKeyCtrlDict['region0_fac_cnt'] > uidef.kMaxFacRegionCount:
-                self.m_choice_region1FacCnt.SetSelection(self.userKeyCtrlDict['region1_fac_cnt'] - 1)
-                self.popupMsgBox('The sum of FAC Region count of Region0 and Region1 must be no more than ' + str(uidef.kMaxFacRegionCount))
+            self._updateFacRangeInfoField(1)
+        elif self.userKeyCtrlDict['engine_sel'] == uidef.kUserEngineSel_BothEngines:
+            region1FacCnt = self.m_choice_engine1FacCnt.GetSelection() + 1
+            if region1FacCnt + self.userKeyCtrlDict['engine0_fac_cnt'] > uidef.kMaxFacRegionCount:
+                self.m_choice_engine1FacCnt.SetSelection(self.userKeyCtrlDict['engine1_fac_cnt'] - 1)
+                self.popupMsgBox('The sum of Protected Region count of Engine0 and Engine1 must be no more than ' + str(uidef.kMaxFacRegionCount))
             else:
                 self._getFacCount(1)
-                self._updateRegionRangeInfoField(1)
+                self._updateFacRangeInfoField(1)
         else:
             pass
 
     def callbackOk( self, event ):
-        self._getRegionSelection()
-        if self.userKeyCtrlDict['region_sel'] == uidef.kUserRegionSel_Region0:
-            if not self._getRegionInfo(0):
+        self._getEngineSelection()
+        if self.userKeyCtrlDict['engine_sel'] == uidef.kUserEngineSel_Engine0:
+            if not self._getEngineInfo(0):
                 return
-        elif self.userKeyCtrlDict['region_sel'] == uidef.kUserRegionSel_Region1:
-            if not self._getRegionInfo(1):
+        elif self.userKeyCtrlDict['engine_sel'] == uidef.kUserEngineSel_Engine1:
+            if not self._getEngineInfo(1):
                 return
-        elif self.userKeyCtrlDict['region_sel'] == uidef.kUserRegionSel_BothRegions:
-            if not self._getRegionInfo(0):
+        elif self.userKeyCtrlDict['engine_sel'] == uidef.kUserEngineSel_BothEngines:
+            if not self._getEngineInfo(0):
                 return
-            if not self._getRegionInfo(1):
+            if not self._getEngineInfo(1):
                 return
         else:
             pass
@@ -750,12 +750,12 @@ class secBootUiSettingsFlexibleUserKeys(advSettingsWin_FlexibleUserKeys.advSetti
         self._getImageType()
         self._getXipBaseAddr()
         #print 'base_addr=' + self.userKeyCmdDict['base_addr']
-        #print 'region0_key=' + self.userKeyCmdDict['region0_key'] + \
-        #      ' region0_arg=' + self.userKeyCmdDict['region0_arg'] + \
-        #      ' region0_lock=' + self.userKeyCmdDict['region0_lock']
-        #print 'region1_key=' + self.userKeyCmdDict['region1_key'] + \
-        #      ' region1_arg=' + self.userKeyCmdDict['region1_arg'] + \
-        #      ' region1_lock=' + self.userKeyCmdDict['region1_lock']
+        #print 'engine0_key=' + self.userKeyCmdDict['engine0_key'] + \
+        #      ' engine0_arg=' + self.userKeyCmdDict['engine0_arg'] + \
+        #      ' engine0_lock=' + self.userKeyCmdDict['engine0_lock']
+        #print 'engine1_key=' + self.userKeyCmdDict['engine1_key'] + \
+        #      ' engine1_arg=' + self.userKeyCmdDict['engine1_arg'] + \
+        #      ' engine1_lock=' + self.userKeyCmdDict['engine1_lock']
         #print 'use_zero_key=' + self.userKeyCmdDict['use_zero_key']
         #print 'is_boot_image=' + self.userKeyCmdDict['is_boot_image']
         uivar.setAdvancedSettings(uidef.kAdvancedSettings_UserKeys, self.userKeyCtrlDict, self.userKeyCmdDict)
