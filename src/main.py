@@ -501,6 +501,43 @@ class secBootMain(memcore.secBootMem):
     def callbackClearMem( self, event ):
         self.clearMem()
 
+    def _doReadMem( self ):
+        if self.connectStage == uidef.kConnectStage_Reset:
+            self.clearMem()
+            self.readBootDeviceMemory()
+        else:
+            self.popupMsgBox('Please configure boot device via Flashloader first!')
+
+    def callbackReadMem( self, event ):
+        if not self.isToolRunAsEntryMode:
+            self._doReadMem()
+        else:
+            self.popupMsgBox('Common memory operation is not available under Entry Mode, Please switch to Master Mode and try again!')
+
+    def _doEraseMem( self ):
+        if self.connectStage == uidef.kConnectStage_Reset:
+            self.eraseBootDeviceMemory()
+        else:
+            self.popupMsgBox('Please configure boot device via Flashloader first!')
+
+    def callbackEraseMem( self, event ):
+        if not self.isToolRunAsEntryMode:
+            self._doEraseMem()
+        else:
+            self.popupMsgBox('Common memory operation is not available under Entry Mode, Please switch to Master Mode and try again!')
+
+    def _doWriteMem( self ):
+        if self.connectStage == uidef.kConnectStage_Reset:
+            self.writeBootDeviceMemory()
+        else:
+            self.popupMsgBox('Please configure boot device via Flashloader first!')
+
+    def callbackWriteMem( self, event ):
+        if not self.isToolRunAsEntryMode:
+            self._doWriteMem()
+        else:
+            self.popupMsgBox('Common memory operation is not available under Entry Mode, Please switch to Master Mode and try again!')
+
     def callbackClearLog( self, event ):
         self.clearLog()
 
@@ -540,7 +577,7 @@ if __name__ == '__main__':
     app = wx.App()
 
     main_win = secBootMain(None)
-    main_win.SetTitle(u"nxpSecBoot v0.9.3")
+    main_win.SetTitle(u"nxpSecBoot v0.10.0")
     main_win.Show()
 
     app.MainLoop()

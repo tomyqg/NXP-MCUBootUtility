@@ -190,5 +190,14 @@ class secBootMem(fusecore.secBootFuse):
         except:
             pass
 
+    def readBootDeviceMemory( self ):
+        pass
 
+
+    def eraseBootDeviceMemory( self ):
+        pass
+
+
+    def writeBootDeviceMemory( self ):
+        pass
 

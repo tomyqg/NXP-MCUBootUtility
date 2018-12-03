@@ -1378,18 +1378,51 @@ class secBootWin ( wx.Frame ):
 
 		wSizer_memView = wx.WrapSizer( wx.HORIZONTAL, wx.WRAPSIZER_DEFAULT_FLAGS )
 
-		self.m_textCtrl_bootDeviceMem = wx.TextCtrl( self.m_panel_memView, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.Size( 740,370 ), wx.TE_MULTILINE|wx.TE_RICH2 )
+		self.m_staticText_memStart = wx.StaticText( self.m_panel_memView, wx.ID_ANY, u"Start Address:", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.m_staticText_memStart.Wrap( -1 )
+
+		wSizer_memView.Add( self.m_staticText_memStart, 0, wx.ALL, 5 )
+
+		self.m_textCtrl_memStart = wx.TextCtrl( self.m_panel_memView, wx.ID_ANY, u"0x0", wx.DefaultPosition, wx.Size( 80,-1 ), 0 )
+		wSizer_memView.Add( self.m_textCtrl_memStart, 0, wx.ALL, 5 )
+
+		self.m_staticText_memLength = wx.StaticText( self.m_panel_memView, wx.ID_ANY, u"Byte Length:", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.m_staticText_memLength.Wrap( -1 )
+
+		wSizer_memView.Add( self.m_staticText_memLength, 0, wx.ALL, 5 )
+
+		self.m_textCtrl_memLength = wx.TextCtrl( self.m_panel_memView, wx.ID_ANY, u"0x2000", wx.DefaultPosition, wx.Size( 80,-1 ), 0 )
+		wSizer_memView.Add( self.m_textCtrl_memLength, 0, wx.ALL, 5 )
+
+		self.m_staticText_memBinFile = wx.StaticText( self.m_panel_memView, wx.ID_ANY, u"Bin File:", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.m_staticText_memBinFile.Wrap( -1 )
+
+		wSizer_memView.Add( self.m_staticText_memBinFile, 0, wx.ALL, 5 )
+
+		self.m_filePicker_memBinFile = wx.FilePickerCtrl( self.m_panel_memView, wx.ID_ANY, wx.EmptyString, u"Select a file", u"*.*", wx.DefaultPosition, wx.Size( 170,-1 ), wx.FLP_DEFAULT_STYLE )
+		wSizer_memView.Add( self.m_filePicker_memBinFile, 0, wx.ALL, 5 )
+
+		self.m_button_readMem = wx.Button( self.m_panel_memView, wx.ID_ANY, u"Read", wx.DefaultPosition, wx.Size( 50,-1 ), 0 )
+		wSizer_memView.Add( self.m_button_readMem, 0, wx.ALL, 5 )
+
+		self.m_button_eraseMem = wx.Button( self.m_panel_memView, wx.ID_ANY, u"Erase", wx.DefaultPosition, wx.Size( 50,-1 ), 0 )
+		wSizer_memView.Add( self.m_button_eraseMem, 0, wx.ALL, 5 )
+
+		self.m_button_writeMem = wx.Button( self.m_panel_memView, wx.ID_ANY, u"Write", wx.DefaultPosition, wx.Size( 50,-1 ), 0 )
+		wSizer_memView.Add( self.m_button_writeMem, 0, wx.ALL, 5 )
+
+		self.m_textCtrl_bootDeviceMem = wx.TextCtrl( self.m_panel_memView, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.Size( 740,330 ), wx.TE_MULTILINE|wx.TE_RICH2 )
 		self.m_textCtrl_bootDeviceMem.SetFont( wx.Font( 10, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, wx.EmptyString ) )
 		self.m_textCtrl_bootDeviceMem.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
 
 		wSizer_memView.Add( self.m_textCtrl_bootDeviceMem, 0, wx.ALL, 5 )
 
-		self.m_staticText_null0MemView = wx.StaticText( self.m_panel_memView, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.Size( 240,-1 ), 0 )
+		self.m_staticText_null0MemView = wx.StaticText( self.m_panel_memView, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.Size( 200,-1 ), 0 )
 		self.m_staticText_null0MemView.Wrap( -1 )
 
 		wSizer_memView.Add( self.m_staticText_null0MemView, 0, wx.ALL, 5 )
 
-		self.m_button_viewMem = wx.Button( self.m_panel_memView, wx.ID_ANY, u"View", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.m_button_viewMem = wx.Button( self.m_panel_memView, wx.ID_ANY, u"View Bootable Image", wx.DefaultPosition, wx.DefaultSize, 0 )
 		wSizer_memView.Add( self.m_button_viewMem, 0, wx.ALL, 5 )
 
 		self.m_staticText_null1MemView = wx.StaticText( self.m_panel_memView, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.Size( 50,-1 ), 0 )
@@ -1397,8 +1430,13 @@ class secBootWin ( wx.Frame ):
 
 		wSizer_memView.Add( self.m_staticText_null1MemView, 0, wx.ALL, 5 )
 
-		self.m_button_clearMem = wx.Button( self.m_panel_memView, wx.ID_ANY, u"Clear", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.m_button_clearMem = wx.Button( self.m_panel_memView, wx.ID_ANY, u"Clear The Screen", wx.DefaultPosition, wx.DefaultSize, 0 )
 		wSizer_memView.Add( self.m_button_clearMem, 0, wx.ALL, 5 )
+
+		self.m_staticText_null2MemView = wx.StaticText( self.m_panel_memView, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.Size( 150,-1 ), 0 )
+		self.m_staticText_null2MemView.Wrap( -1 )
+
+		wSizer_memView.Add( self.m_staticText_null2MemView, 0, wx.ALL, 5 )
 
 
 		self.m_panel_memView.SetSizer( wSizer_memView )
@@ -1497,6 +1535,9 @@ class secBootWin ( wx.Frame ):
 		self.m_button_progDek.Bind( wx.EVT_BUTTON, self.callbackFlashHabDek )
 		self.m_button_scan.Bind( wx.EVT_BUTTON, self.callbackScanFuse )
 		self.m_button_burn.Bind( wx.EVT_BUTTON, self.callbackBurnFuse )
+		self.m_button_readMem.Bind( wx.EVT_BUTTON, self.callbackReadMem )
+		self.m_button_eraseMem.Bind( wx.EVT_BUTTON, self.callbackEraseMem )
+		self.m_button_writeMem.Bind( wx.EVT_BUTTON, self.callbackWriteMem )
 		self.m_button_viewMem.Bind( wx.EVT_BUTTON, self.callbackViewMem )
 		self.m_button_clearMem.Bind( wx.EVT_BUTTON, self.callbackClearMem )
 		self.m_button_clearLog.Bind( wx.EVT_BUTTON, self.callbackClearLog )
@@ -1591,6 +1632,15 @@ class secBootWin ( wx.Frame ):
 		event.Skip()
 
 	def callbackBurnFuse( self, event ):
+		event.Skip()
+
+	def callbackReadMem( self, event ):
+		event.Skip()
+
+	def callbackEraseMem( self, event ):
+		event.Skip()
+
+	def callbackWriteMem( self, event ):
 		event.Skip()
 
 	def callbackViewMem( self, event ):
