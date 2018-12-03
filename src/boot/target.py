@@ -52,6 +52,8 @@ class Target(object):
         self.romUsbPid = misc.get_dict_default(kwargs, 'romUsbPid', None)
         self.flashloaderUsbVid = misc.get_dict_default(kwargs, 'flashloaderUsbVid', None)
         self.flashloaderUsbPid = misc.get_dict_default(kwargs, 'flashloaderUsbPid', None)
+        self.flashloaderLoadAddr = misc.get_dict_default(kwargs, 'flashloaderLoadAddr', None)
+        self.flashloaderJumpAddr = misc.get_dict_default(kwargs, 'flashloaderJumpAddr', None)
         self.supportedPeripheralSpeed_uart = misc.get_dict_default(kwargs, 'supportedPeripheralSpeed_uart', None)
         
     ##

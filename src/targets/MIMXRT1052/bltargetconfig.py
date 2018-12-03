@@ -42,6 +42,8 @@ romUsbVid = '0x1FC9'
 romUsbPid = '0x0130'
 flashloaderUsbVid = '0x15A2'
 flashloaderUsbPid = '0x0073'
+flashloaderLoadAddr = 0x20000000
+flashloaderJumpAddr = 0x20000400
 availableCommands = 0x5EFDF
 supportedPeripheralSpeed_uart = [4800, 9600, 19200, 57600, 115200] # @todo Verify
 

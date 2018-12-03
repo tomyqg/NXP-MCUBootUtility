@@ -82,11 +82,9 @@ class secBootRun(gencore.secBootGen):
         return [tgt.romUsbVid, tgt.romUsbPid, tgt.flashloaderUsbVid, tgt.flashloaderUsbPid]
 
     def connectToDevice( self , connectStage):
-        # Create the target object.
-        if self.tgt == None or self.cpuDir == None:
-            self.tgt, self.cpuDir = createTarget(self.mcuDevice, self.exeBinRoot)
-
         if connectStage == uidef.kConnectStage_Rom:
+            # Create the target object.
+            self.tgt, self.cpuDir = createTarget(self.mcuDevice, self.exeBinRoot)
             if self.isUartPortSelected:
                 sdpPeripheral = 'sdp_uart'
                 uartComPort = self.uartComPort
@@ -183,20 +181,6 @@ class secBootRun(gencore.secBootGen):
                 pass
 
     def jumpToFlashloader( self ):
-        if self.mcuDevice == uidef.kMcuDevice_iMXRT102x:
-            cpu = "MIMXRT1021"
-            loadAddr = 0x20208000
-            jumpAddr = 0x20208400
-        elif self.mcuDevice == uidef.kMcuDevice_iMXRT105x:
-            cpu = "MIMXRT1052"
-            loadAddr = 0x20000000
-            jumpAddr = 0x20000400
-        elif self.mcuDevice == uidef.kMcuDevice_iMXRT106x:
-            cpu = "MIMXRT1062"
-            loadAddr = 0x20000000
-            jumpAddr = 0x20000400
-        else:
-            pass
         flashloaderBinFile = None
         if self.mcuDeviceHabStatus == fusedef.kHabStatus_Closed0 or self.mcuDeviceHabStatus == fusedef.kHabStatus_Closed1:
             flashloaderSrecFile = os.path.join(self.cpuDir, 'flashloader.srec')
@@ -207,11 +191,11 @@ class secBootRun(gencore.secBootGen):
             flashloaderBinFile = os.path.join(self.cpuDir, 'ivt_flashloader.bin')
         else:
             pass
-        status, results, cmdStr = self.sdphost.writeFile(loadAddr, flashloaderBinFile)
+        status, results, cmdStr = self.sdphost.writeFile(self.tgt.flashloaderLoadAddr, flashloaderBinFile)
         self.printLog(cmdStr)
         if status != boot.status.kSDP_Status_HabEnabled and status != boot.status.kSDP_Status_HabDisabled:
             return False
-        status, results, cmdStr = self.sdphost.jumpAddress(jumpAddr)
+        status, results, cmdStr = self.sdphost.jumpAddress(self.tgt.flashloaderJumpAddr)
         self.printLog(cmdStr)
         if status != boot.status.kSDP_Status_HabEnabled and status != boot.status.kSDP_Status_HabDisabled:
             return False
@@ -281,9 +265,9 @@ class secBootRun(gencore.secBootGen):
 
     def getMcuDeviceInfoViaFlashloader( self ):
         self.printDeviceStatus("--------MCU device eFusemap--------")
-        self._readMcuDeviceFuseTester()
+        #self._readMcuDeviceFuseTester()
         self._readMcuDeviceFuseBootCfg()
-        self._readMcuDeviceFuseOtpmkDek()
+        #self._readMcuDeviceFuseOtpmkDek()
         #self._readMcuDeviceFuseSrk()
         #self._readMcuDeviceFuseSwGp2()
 
