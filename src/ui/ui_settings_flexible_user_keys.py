@@ -52,6 +52,9 @@ class secBootUiSettingsFlexibleUserKeys(advSettingsWin_FlexibleUserKeys.advSetti
             elif mcuDevice == uidef.kMcuDevice_iMXRT106x:
                 keySource = uidef.kSupportedKeySource_iMXRT106x
                 engineSel = uidef.kSupportedEngineSel_iMXRT106x
+            elif mcuDevice == uidef.kMcuDevice_iMXRT1064:
+                keySource = uidef.kSupportedKeySource_iMXRT1064
+                engineSel = uidef.kSupportedEngineSel_iMXRT1064
             else:
                 pass
             self.m_choice_engineSel.Clear()

@@ -22,6 +22,7 @@ kMcuSeries_v0_9_x = [kMcuSeries_iMXRT]
 kMcuDevice_iMXRT102x = 'i.MXRT102x'
 kMcuDevice_iMXRT105x = 'i.MXRT105x'
 kMcuDevice_iMXRT106x = 'i.MXRT106x'
+kMcuDevice_iMXRT1064 = 'i.MXRT1064 SIP'
 
 kBootDevice_FlexspiNor     = 'FLEXSPI NOR'
 kBootDevice_FlexspiNand    = 'FLEXSPI NAND'
@@ -64,6 +65,7 @@ kUserEngineSel_BothEngines = 'Both Engines'
 kSupportedEngineSel_iMXRT102x = [kUserEngineSel_Engine0, kUserEngineSel_Engine1]
 kSupportedEngineSel_iMXRT105x = [kUserEngineSel_Engine0, kUserEngineSel_Engine1]
 kSupportedEngineSel_iMXRT106x = [kUserEngineSel_Engine0, kUserEngineSel_Engine1, kUserEngineSel_BothEngines]
+kSupportedEngineSel_iMXRT1064 = [kUserEngineSel_Engine0, kUserEngineSel_Engine1, kUserEngineSel_BothEngines]
 
 kUserKeySource_OTPMK  = 'Fuse OTPMK[255:128]'
 kUserKeySource_SW_GP2 = 'Fuse SW-GP2'
@@ -72,6 +74,7 @@ kUserKeySource_GP4    = 'Fuse GP4[127:0]'
 kSupportedKeySource_iMXRT102x = [kUserKeySource_SW_GP2]
 kSupportedKeySource_iMXRT105x = [kUserKeySource_SW_GP2]
 kSupportedKeySource_iMXRT106x = [kUserKeySource_SW_GP2, kUserKeySource_GP4]
+kSupportedKeySource_iMXRT1064 = [kUserKeySource_SW_GP2, kUserKeySource_GP4]
 
 kMaxFacRegionCount = 3
 

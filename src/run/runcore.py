@@ -22,6 +22,8 @@ def createTarget(device, exeBinRoot):
         cpu = "MIMXRT1052"
     elif device == uidef.kMcuDevice_iMXRT106x:
         cpu = "MIMXRT1062"
+    elif device == uidef.kMcuDevice_iMXRT1064:
+        cpu = "MIMXRT1064"
     else:
         pass
     targetBaseDir = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'targets', cpu)

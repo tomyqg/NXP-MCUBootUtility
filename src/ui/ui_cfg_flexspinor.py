@@ -8,7 +8,7 @@ import uivar
 sys.path.append(os.path.abspath(".."))
 from win import bootDeviceWin_FlexspiNor
 
-g_flexspiNorOpt0_ISSI_IS25LP064A   = 0xc0000006
+g_flexspiNorOpt0_ISSI_IS25LP064A   = 0xc0000007
 g_flexspiNorOpt0_MXIC_MX25UM51245G = 0xc0403037
 g_flexspiNorOpt0_MXIC_MX25UM51345G = 0xc0403007
 g_flexspiNorOpt0_Micron_MT35X      = 0xc0600006

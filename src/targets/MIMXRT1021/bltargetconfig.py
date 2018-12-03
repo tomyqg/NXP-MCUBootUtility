@@ -46,6 +46,7 @@ flashloaderLoadAddr = 0x20208000
 flashloaderJumpAddr = 0x20208400
 availableCommands = 0x5EFDF
 supportedPeripheralSpeed_uart = [4800, 9600, 19200, 57600, 115200] # @todo Verify
+hasRemappedFuse = False
 
 # memory map
 memoryRange = {

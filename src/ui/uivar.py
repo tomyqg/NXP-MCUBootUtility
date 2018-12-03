@@ -58,7 +58,7 @@ g_UserKeyCmdDict = {'base_addr':None,
 def initVar():
     global g_flexspiNorOpt0
     global g_flexspiNorOpt1
-    g_flexspiNorOpt0 = 0xc0000006
+    g_flexspiNorOpt0 = 0xc0000007
     g_flexspiNorOpt1 = 0x00000000
 
     global g_flexspiNandOpt

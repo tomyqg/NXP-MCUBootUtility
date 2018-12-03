@@ -55,6 +55,7 @@ class Target(object):
         self.flashloaderLoadAddr = misc.get_dict_default(kwargs, 'flashloaderLoadAddr', None)
         self.flashloaderJumpAddr = misc.get_dict_default(kwargs, 'flashloaderJumpAddr', None)
         self.supportedPeripheralSpeed_uart = misc.get_dict_default(kwargs, 'supportedPeripheralSpeed_uart', None)
+        self.hasRemappedFuse = misc.get_dict_default(kwargs, 'hasRemappedFuse', None)
         
     ##
     # @brief Check if a command is supported by the target.

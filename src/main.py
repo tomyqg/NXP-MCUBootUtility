@@ -55,9 +55,12 @@ class secBootMain(memcore.secBootMem):
 
     def callbackBootDeviceConfiguration( self, event ):
         if self.bootDevice == uidef.kBootDevice_FlexspiNor:
-            flexspiNorFrame = ui_cfg_flexspinor.secBootUiCfgFlexspiNor(None)
-            flexspiNorFrame.SetTitle(u"FlexSPI NOR Device Configuration")
-            flexspiNorFrame.Show(True)
+            if self.mcuDevice == uidef.kMcuDevice_iMXRT1064:
+                self.popupMsgBox('MCU has on-chip QSPI NOR Flash (4MB), so you don\'t need to configure this boot device!')
+            else:
+                flexspiNorFrame = ui_cfg_flexspinor.secBootUiCfgFlexspiNor(None)
+                flexspiNorFrame.SetTitle(u"FlexSPI NOR Device Configuration")
+                flexspiNorFrame.Show(True)
         elif self.bootDevice == uidef.kBootDevice_FlexspiNand:
             flexspiNandFrame = ui_cfg_flexspinand.secBootUiFlexspiNand(None)
             flexspiNandFrame.SetTitle(u"FlexSPI NAND Device Configuration")
