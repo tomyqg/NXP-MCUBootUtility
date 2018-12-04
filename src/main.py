@@ -95,6 +95,13 @@ class secBootMain(memcore.secBootMem):
         usbIdList = self.getUsbid()
         self.setPortSetupValue(self.connectStage, usbIdList)
 
+    def callbackSetOneStep( self, event ):
+        if not self.isToolRunAsEntryMode:
+            self.getOneStepConnectMode()
+        else:
+            self.initOneStepConnectMode()
+            self.popupMsgBox('One Step mode cannot be set under Entry Mode, Please switch to Master Mode and try again!')
+
     def _retryToPingBootloader( self, bootType ):
         pingStatus = False
         pingCnt = kRetryPingTimes

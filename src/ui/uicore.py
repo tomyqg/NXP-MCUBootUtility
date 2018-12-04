@@ -41,7 +41,7 @@ class secBootUi(secBootWin.secBootWin):
         self.usbhidPid = None
         self._initPortSetupValue()
         self.isOneStepConnectMode = None
-        self._initOneStepConnectMode()
+        self.initOneStepConnectMode()
 
         self.secureBootType = None
         self.keyStorageRegion = None
@@ -148,7 +148,7 @@ class secBootUi(secBootWin.secBootWin):
         else:
             pass
 
-    def _initOneStepConnectMode( self ):
+    def initOneStepConnectMode( self ):
         self.m_checkBox_oneStepConnect.SetValue(True)
         self.getOneStepConnectMode()
 
