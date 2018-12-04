@@ -56,6 +56,8 @@ class Target(object):
         self.flashloaderJumpAddr = misc.get_dict_default(kwargs, 'flashloaderJumpAddr', None)
         self.supportedPeripheralSpeed_uart = misc.get_dict_default(kwargs, 'supportedPeripheralSpeed_uart', None)
         self.hasRemappedFuse = misc.get_dict_default(kwargs, 'hasRemappedFuse', None)
+        self.flexspiNorMemBase = misc.get_dict_default(kwargs, 'flexspiNorMemBase', None)
+        self.isSipFlexspiNorDevice = misc.get_dict_default(kwargs, 'isSipFlexspiNorDevice', None)
         
     ##
     # @brief Check if a command is supported by the target.

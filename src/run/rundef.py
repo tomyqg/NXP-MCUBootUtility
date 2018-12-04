@@ -11,13 +11,14 @@ kBootDeviceMemId_LpspiNor     = 0x110
 kBootDeviceMemId_UsdhcSd      = 0x120
 kBootDeviceMemId_UsdhcMmc     = 0x121
 
-kBootDeviceMemBase_SemcNor      = 0x90000000
-kBootDeviceMemBase_FlexspiNor   = 0x60000000
-kBootDeviceMemBase_SemcNand     = 0x0
-kBootDeviceMemBase_FlexspiNand  = 0x0
-kBootDeviceMemBase_LpspiNor     = 0x0
-kBootDeviceMemBase_UsdhcSd      = 0x0
-kBootDeviceMemBase_UsdhcMmc     = 0x0
+kBootDeviceMemBase_SemcNor       = 0x90000000
+kBootDeviceMemBase_FlexspiNor    = 0x60000000
+kBootDeviceMemBase_FlexspiNorSip = 0x70000000
+kBootDeviceMemBase_SemcNand      = 0x0
+kBootDeviceMemBase_FlexspiNand   = 0x0
+kBootDeviceMemBase_LpspiNor      = 0x0
+kBootDeviceMemBase_UsdhcSd       = 0x0
+kBootDeviceMemBase_UsdhcMmc      = 0x0
 
 kBootDeviceMemXipSize_SemcNor      = 0x01000000 #16MB
 kBootDeviceMemXipSize_FlexspiNor   = 0x10000000 #256MB

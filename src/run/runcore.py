@@ -78,6 +78,8 @@ class secBootRun(gencore.secBootGen):
         self.mcuDeviceBeeKey0Sel = None
         self.mcuDeviceBeeKey1Sel = None
 
+        self.tgt, self.cpuDir = createTarget(self.mcuDevice, self.exeBinRoot)
+
     def getUsbid( self ):
         # Create the target object.
         tgt, cpuDir = createTarget(self.mcuDevice, self.exeBinRoot)
@@ -291,7 +293,7 @@ class secBootRun(gencore.secBootGen):
     def _prepareForBootDeviceOperation ( self ):
         if self.bootDevice == uidef.kBootDevice_FlexspiNor:
             self.bootDeviceMemId = rundef.kBootDeviceMemId_FlexspiNor
-            self.bootDeviceMemBase = rundef.kBootDeviceMemBase_FlexspiNor
+            self.bootDeviceMemBase = self.tgt.flexspiNorMemBase
         elif self.bootDevice == uidef.kBootDevice_FlexspiNand:
             self.bootDeviceMemId = rundef.kBootDeviceMemId_FlexspiNand
             self.bootDeviceMemBase = rundef.kBootDeviceMemBase_FlexspiNand
@@ -384,19 +386,25 @@ class secBootRun(gencore.secBootGen):
             pass
 
     def _eraseFlexspiNorForConfigBlockLoading( self ):
-        status, results, cmdStr = self.blhost.flashEraseRegion(rundef.kBootDeviceMemBase_FlexspiNor, rundef.kFlexspiNorCfgInfo_Length, rundef.kBootDeviceMemId_FlexspiNor)
+        status, results, cmdStr = self.blhost.flashEraseRegion(self.tgt.flexspiNorMemBase, rundef.kFlexspiNorCfgInfo_Length, rundef.kBootDeviceMemId_FlexspiNor)
         self.printLog(cmdStr)
         return (status == boot.status.kStatus_Success)
 
     def _programFlexspiNorConfigBlock ( self ):
-        # 0xf000000f is the tag to notify Flashloader to program FlexSPI NOR config block to the start of device
-        status, results, cmdStr = self.blhost.fillMemory(rundef.kRamFreeSpaceStart_LoadCfgBlock, 0x4, rundef.kFlexspiNorCfgInfo_Notify)
-        self.printLog(cmdStr)
-        if status != boot.status.kStatus_Success:
-            return False
-        status, results, cmdStr = self.blhost.configureMemory(self.bootDeviceMemId, rundef.kRamFreeSpaceStart_LoadCfgBlock)
-        self.printLog(cmdStr)
-        return (status == boot.status.kStatus_Success)
+        #if not self.tgt.isSipFlexspiNorDevice:
+        if True:
+            # 0xf000000f is the tag to notify Flashloader to program FlexSPI NOR config block to the start of device
+            status, results, cmdStr = self.blhost.fillMemory(rundef.kRamFreeSpaceStart_LoadCfgBlock, 0x4, rundef.kFlexspiNorCfgInfo_Notify)
+            self.printLog(cmdStr)
+            if status != boot.status.kStatus_Success:
+                return False
+            status, results, cmdStr = self.blhost.configureMemory(self.bootDeviceMemId, rundef.kRamFreeSpaceStart_LoadCfgBlock)
+            self.printLog(cmdStr)
+            return (status == boot.status.kStatus_Success)
+        else:
+            status, results, cmdStr = self.blhost.writeMemory(self.bootDeviceMemBase, os.path.join(self.cpuDir, 'sip_flash_config.bin'), self.bootDeviceMemId)
+            self.printLog(cmdStr)
+            return (status == boot.status.kStatus_Success)
 
     def configureBootDevice ( self ):
         self._prepareForBootDeviceOperation()
@@ -455,7 +463,7 @@ class secBootRun(gencore.secBootGen):
     def _eraseFlexspiNorForImageLoading( self ):
         imageLen = os.path.getsize(self.destAppFilename)
         memEraseLen = misc.align_up(imageLen, self.flexspiNorSectorSize)
-        status, results, cmdStr = self.blhost.flashEraseRegion(rundef.kBootDeviceMemBase_FlexspiNor, memEraseLen, rundef.kBootDeviceMemId_FlexspiNor)
+        status, results, cmdStr = self.blhost.flashEraseRegion(self.tgt.flexspiNorMemBase, memEraseLen, rundef.kBootDeviceMemId_FlexspiNor)
         self.printLog(cmdStr)
         if status != boot.status.kStatus_Success:
             return False
@@ -481,7 +489,7 @@ class secBootRun(gencore.secBootGen):
         if encryptedRegionCnt == 0:
             otpmkKeyOpt = (otpmkKeyOpt & 0xFFF0FFFF) | (0x1 << 16)
             encryptedRegionCnt = 1
-            otpmkEncryptedRegionStart[0] = rundef.kBootDeviceMemBase_FlexspiNor + gendef.kIvtOffset_NOR
+            otpmkEncryptedRegionStart[0] = self.tgt.flexspiNorMemBase + gendef.kIvtOffset_NOR
             otpmkEncryptedRegionLength[0] = misc.align_up(os.path.getsize(self.destAppFilename), gendef.kSecFacRegionAlignedUnit) - gendef.kIvtOffset_NOR
         else:
             pass

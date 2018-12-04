@@ -499,10 +499,10 @@ class secBootGen(uicore.secBootUi):
             return False
         self.destAppVectorAddress = imageStartAddr
         if self.bootDevice == uidef.kBootDevice_FlexspiNor:
-            if ((imageStartAddr >= rundef.kBootDeviceMemBase_FlexspiNor) and (imageStartAddr < rundef.kBootDeviceMemBase_FlexspiNor + rundef.kBootDeviceMemXipSize_FlexspiNor)):
-                if (imageStartAddr + imageLength <= rundef.kBootDeviceMemBase_FlexspiNor + rundef.kBootDeviceMemXipSize_FlexspiNor):
+            if ((imageStartAddr >= self.tgt.flexspiNorMemBase) and (imageStartAddr < self.tgt.flexspiNorMemBase + rundef.kBootDeviceMemXipSize_FlexspiNor)):
+                if (imageStartAddr + imageLength <= self.tgt.flexspiNorMemBase + rundef.kBootDeviceMemXipSize_FlexspiNor):
                     self.isXipApp = True
-                    self.destAppVectorOffset = imageStartAddr - rundef.kBootDeviceMemBase_FlexspiNor
+                    self.destAppVectorOffset = imageStartAddr - self.tgt.flexspiNorMemBase
                 else:
                     self.popupMsgBox('XIP Application is detected but the size exceeds maximum XIP size 0x%s !' %(rundef.kBootDeviceMemXipSize_FlexspiNor))
                     return False
