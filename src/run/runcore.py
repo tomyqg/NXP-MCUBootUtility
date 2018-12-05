@@ -78,6 +78,10 @@ class secBootRun(gencore.secBootGen):
         self.mcuDeviceBeeKey0Sel = None
         self.mcuDeviceBeeKey1Sel = None
 
+        self.comMemWriteUnit = 0
+        self.comMemEraseUnit = 0
+        self.comMemReadUnit = 0
+
         self.tgt, self.cpuDir = createTarget(self.mcuDevice, self.exeBinRoot)
 
     def getUsbid( self ):
@@ -336,6 +340,9 @@ class secBootRun(gencore.secBootGen):
             self.printDeviceStatus("Planes In Device  = " + str(hex(planesInDevice)))
             self.semcNandImageCopies = firmwareCopies
             self.semcNandBlockSize = pageByteSize * pagesInBlock
+            self.comMemWriteUnit = pageByteSize
+            self.comMemEraseUnit = self.semcNandBlockSize
+            self.comMemReadUnit = pageByteSize
         else:
             self.printDeviceStatus("Page Size (bytes) = --------")
             self.printDeviceStatus("Pages In Block    = --------")
@@ -364,6 +371,9 @@ class secBootRun(gencore.secBootGen):
             self.printDeviceStatus("Sector Size (bytes) = " + str(hex(sectorByteSize)))
             self.printDeviceStatus("Block Size (bytes)  = " + str(hex(blockByteSize)))
             self.flexspiNorSectorSize = sectorByteSize
+            self.comMemWriteUnit = pageByteSize
+            self.comMemEraseUnit = sectorByteSize
+            self.comMemReadUnit = pageByteSize
         else:
             self.printDeviceStatus("Page Size (bytes)   = --------")
             self.printDeviceStatus("Sector Size (bytes) = --------")

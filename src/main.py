@@ -164,7 +164,7 @@ class secBootMain(memcore.secBootMem):
                 else:
                     self.connectStage = uidef.kConnectStage_Rom
                     self.updateConnectStatus('red')
-                    self.popupMsgBox('MCU has entered Flashloader but failed to configure external memory, Please reset board and set properly boot device then try again!')
+                    self.popupMsgBox('MCU has entered Flashloader but failed to configure external memory, Please reset board and set proper boot device then try again!')
                     return
             elif self.connectStage == uidef.kConnectStage_Reset:
                 self.resetMcuDevice()
@@ -513,7 +513,6 @@ class secBootMain(memcore.secBootMem):
 
     def _doReadMem( self ):
         if self.connectStage == uidef.kConnectStage_Reset:
-            self.clearMem()
             self.readBootDeviceMemory()
         else:
             self.popupMsgBox('Please configure boot device via Flashloader first!')

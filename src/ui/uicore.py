@@ -429,6 +429,28 @@ class secBootUi(secBootWin.secBootWin):
     def clearSwGp2DekData( self ):
         self.m_textCtrl_swgp2Dek128bit.Clear()
 
+    def _getVal32FromHexText( self, hexText ):
+        status = False
+        val32 = None
+        if len(hexText) > 2 and hexText[0:2] == '0x':
+            try:
+                val32 = int(hexText[2:len(hexText)], 16)
+                status = True
+            except:
+                pass
+        if not status:
+            self.popupMsgBox('Illegal input detected! You should input like this format: 0x5000')
+        return status, val32
+
+    def getComMemStartAddress( self ):
+        return self._getVal32FromHexText(self.m_textCtrl_memStart.GetLineText(0))
+
+    def getComMemByteLength( self ):
+        return self._getVal32FromHexText(self.m_textCtrl_memLength.GetLineText(0))
+
+    def getComMemBinFile( self ):
+        return self.m_filePicker_memBinFile.GetPath()
+
     def printMem( self , memStr, strColor=uidef.kMemBlockColor_Padding ):
         self.m_textCtrl_bootDeviceMem.SetDefaultStyle(wx.TextAttr(strColor, uidef.kMemBlockColor_Background))
         self.m_textCtrl_bootDeviceMem.AppendText(memStr + "\n")

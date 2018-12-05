@@ -8,6 +8,7 @@ from fuse import fusecore
 from run import rundef
 from ui import uidef
 from ui import uivar
+from utils import misc
 
 s_visibleAsciiStart = ' '
 s_visibleAsciiEnd = '~'
@@ -49,6 +50,33 @@ class secBootMem(fusecore.secBootFuse):
     def _getInfoFromIvt( self ):
         self._getCsfBlockInfo()
 
+    def _getOneLineContentToShow( self, addr, memLeft, fileObj ):
+        memContent = ''
+        padBytesBefore= addr % 16
+        contentToShow = self.getFormattedHexValue(addr - padBytesBefore) + '    '
+        if (padBytesBefore + memLeft) > 16:
+            memContent = fileObj.read(16 - padBytesBefore)
+        else:
+            memContent = fileObj.read(memLeft)
+        visibleContent = ''
+        for i in range(16):
+            if i >= padBytesBefore and \
+               i < padBytesBefore + len(memContent):
+                halfbyteStr = str(hex((ord(memContent[i-padBytesBefore]) & 0xF0)>> 4))
+                contentToShow += halfbyteStr[2]
+                halfbyteStr = str(hex((ord(memContent[i-padBytesBefore]) & 0x0F)>> 0))
+                contentToShow += halfbyteStr[2] + ' '
+                if memContent[i-padBytesBefore] >= s_visibleAsciiStart and \
+                   memContent[i-padBytesBefore] <= s_visibleAsciiEnd:
+                    visibleContent += memContent[i-padBytesBefore]
+                else:
+                    visibleContent += '.'
+            else:
+                contentToShow += '-- '
+                visibleContent += '-'
+        contentToShow += '        ' + visibleContent
+        return contentToShow, memContent
+
     def readProgrammedMemoryAndShow( self ):
         if not os.path.isfile(self.destAppFilename):
             self.popupMsgBox('You should program your image first!')
@@ -83,30 +111,9 @@ class secBootMem(fusecore.secBootFuse):
         addr = self.bootDeviceMemBase
         with open(memFilepath, 'rb') as fileObj:
             while memLeft > 0:
-                memContent = ''
-                contentToShow = self.getFormattedHexValue(addr) + '    '
-                if memLeft > 16:
-                    memContent = fileObj.read(16)
-                else:
-                    memContent = fileObj.read(memLeft)
+                contentToShow, memContent = self._getOneLineContentToShow(addr, memLeft, fileObj)
                 memLeft -= len(memContent)
                 addr += len(memContent)
-                visibleContent = ''
-                for i in range(16):
-                    if i < len(memContent):
-                        halfbyteStr = str(hex((ord(memContent[i]) & 0xF0)>> 4))
-                        contentToShow += halfbyteStr[2]
-                        halfbyteStr = str(hex((ord(memContent[i]) & 0x0F)>> 0))
-                        contentToShow += halfbyteStr[2] + ' '
-                        if memContent[i] >= s_visibleAsciiStart and \
-                           memContent[i] <= s_visibleAsciiEnd:
-                            visibleContent += memContent[i]
-                        else:
-                            visibleContent += '.'
-                    else:
-                        contentToShow += '-- '
-                        visibleContent += '-'
-                contentToShow += '        ' + visibleContent
                 if not self.isNandDevice:
                     if addr <= self.bootDeviceMemBase + memdef.kMemBlockSize_CFG:
                         if self.needToShowCfgIntr:
@@ -190,14 +197,78 @@ class secBootMem(fusecore.secBootFuse):
         except:
             pass
 
-    def readBootDeviceMemory( self ):
-        pass
+    def _getUserComMemParameters( self, isMemWrite=False ):
+        status = False
+        memStart = 0
+        memLength = 0
+        memBinFile = None
+        memFlexibleArg = None
+        status, memStart = self.getComMemStartAddress()
+        if status:
+            if isMemWrite:
+                memBinFile = self.getComMemBinFile()
+                if not os.path.isfile(memBinFile):
+                    status = False
+                else:
+                    memFlexibleArg = memBinFile
+            else:
+                status, memLength = self.getComMemByteLength()
+                if status:
+                    memFlexibleArg = memLength
+        return status, memStart, memFlexibleArg
 
+    def _convertComMemStart( self, memStart ):
+        if memStart < self.bootDeviceMemBase:
+            memStart += self.bootDeviceMemBase
+        return memStart
+
+    def readBootDeviceMemory( self ):
+        status, memStart, memLength = self._getUserComMemParameters(False)
+        if status:
+            memStart = self._convertComMemStart(memStart)
+            alignedMemStart = misc.align_down(memStart, self.comMemReadUnit)
+            alignedMemLength = misc.align_up(memLength, self.comMemReadUnit) + self.comMemReadUnit
+            if memLength + memStart > alignedMemStart + self.comMemReadUnit:
+                alignedMemLength += self.comMemReadUnit
+            memFilename = 'comMemRead.dat'
+            memFilepath = os.path.join(self.blhostVectorsDir, memFilename)
+            status, results, cmdStr = self.blhost.readMemory(alignedMemStart, alignedMemLength, memFilename, self.bootDeviceMemId)
+            self.printLog(cmdStr)
+            if status == boot.status.kStatus_Success:
+                self.clearMem()
+                memLeft = memLength
+                addr = memStart
+                with open(memFilepath, 'rb') as fileObj:
+                    fileObj.seek(memStart - alignedMemStart)
+                    while memLeft > 0:
+                        contentToShow, memContent = self._getOneLineContentToShow(addr, memLeft, fileObj)
+                        memLeft -= len(memContent)
+                        addr += len(memContent)
+                        self.printMem(contentToShow)
+            else:
+                self.popupMsgBox('Failed to read boot device, error code is %d !' %(status))
 
     def eraseBootDeviceMemory( self ):
-        pass
-
+        status, memStart, memLength = self._getUserComMemParameters(False)
+        if status:
+            memStart = self._convertComMemStart(memStart)
+            alignedMemStart = misc.align_down(memStart, self.comMemEraseUnit)
+            alignedMemLength = misc.align_up(memLength, self.comMemEraseUnit)
+            if memLength + memStart > alignedMemStart + self.comMemEraseUnit:
+                alignedMemLength += self.comMemEraseUnit
+            status, results, cmdStr = self.blhost.flashEraseRegion(alignedMemStart, alignedMemLength, self.bootDeviceMemId)
+            self.printLog(cmdStr)
+            if status != boot.status.kStatus_Success:
+                self.popupMsgBox('Failed to erase boot device, error code is %d !' %(status))
 
     def writeBootDeviceMemory( self ):
-        pass
-
+        status, memStart, memBinFile = self._getUserComMemParameters(True)
+        if status:
+            memStart = self._convertComMemStart(memStart)
+            if memStart % self.comMemWriteUnit:
+                self.popupMsgBox('Start Address should be aligned with 0x%x !' %(self.comMemWriteUnit))
+                return
+            status, results, cmdStr = self.blhost.writeMemory(memStart, memBinFile, self.bootDeviceMemId)
+            self.printLog(cmdStr)
+            if status != boot.status.kStatus_Success:
+                self.popupMsgBox('Failed to write boot device, error code is %d, You may forget to erase boot device first!' %(status))
