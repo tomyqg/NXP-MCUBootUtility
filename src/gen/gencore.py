@@ -204,16 +204,16 @@ class secBootGen(uicore.secBootUi):
         self._getCrtSrkCaPemFilenames()
         self._getCrtCsfImgUsrPemFilenames()
         certSettingsDict = uivar.getAdvancedSettings(uidef.kAdvancedSettings_Cert)
-        batContent = self.srktoolPath
+        batContent = "\"" + self.srktoolPath + "\""
         batContent += " -h 4"
-        batContent += " -t " + self.srkTableFilename
-        batContent += " -e " + self.srkFuseFilename
+        batContent += " -t " + "\"" + self.srkTableFilename + "\""
+        batContent += " -e " + "\"" + self.srkFuseFilename + "\""
         batContent += " -d sha256"
         batContent += " -c "
         for i in range(certSettingsDict['SRKs']):
             if i != 0:
                 batContent += ','
-            batContent += self.crtSrkCaPemFileList[i]
+            batContent += "\"" + self.crtSrkCaPemFileList[i] + "\""
         batContent += " -f 1"
         with open(self.srkBatFilename, 'wb') as fileObj:
             fileObj.write(batContent)
@@ -522,7 +522,7 @@ class secBootGen(uicore.secBootUi):
             pass
         self.destAppBinaryBytes = imageLength
         if not self.isCertificateGenerated(self.secureBootType):
-            self.popupMsgBox('You should first generate certificates, or make sure you don\'t put the tool in path with blank space!')
+            self.popupMsgBox('You should first generate certificates!')
             return False
         return self._updateBdfileContent(self.secureBootType, self.bootDevice, imageStartAddr, imageEntryAddr)
 
@@ -549,8 +549,8 @@ class secBootGen(uicore.secBootUi):
 
     def _updateBdBatfileContent( self ):
         self._adjustDestAppFilenameForBd()
-        batContent = self.elftosbPath
-        batContent += " -f imx -V -c " + self.appBdFilename + ' -o ' + self.destAppFilename + ' ' + self.srcAppFilename
+        batContent = "\"" + self.elftosbPath + "\""
+        batContent += " -f imx -V -c " + "\"" + self.appBdFilename + "\"" + ' -o ' + "\"" + self.destAppFilename + "\"" + ' ' + "\"" + self.srcAppFilename + "\""
         with open(self.appBdBatFilename, 'wb') as fileObj:
             fileObj.write(batContent)
             fileObj.close()
@@ -578,7 +578,7 @@ class secBootGen(uicore.secBootUi):
             return True
         else:
             self.habDekDataOffset = None
-            self.popupMsgBox('Bootable image is not generated successfully! Make sure you don\'t put the tool/image file in path with blank space!')
+            self.popupMsgBox('Bootable image is not generated successfully!')
             return False
 
     def genBootableImage( self ):
@@ -656,9 +656,9 @@ class secBootGen(uicore.secBootUi):
                 pass
 
     def _updateEncBatfileContent( self, userKeyCtrlDict, userKeyCmdDict ):
-        batContent = self.imageEncPath
-        batContent += " ifile=" + self.destAppFilename
-        batContent += " ofile=" + self.destEncAppFilename
+        batContent =  "\"" + self.imageEncPath + "\""
+        batContent += " ifile=" + "\"" + self.destAppFilename + "\""
+        batContent += " ofile=" + "\"" + self.destEncAppFilename + "\""
         batContent += " base_addr=" + userKeyCmdDict['base_addr']
         if userKeyCtrlDict['region_sel'] == uidef.kUserRegionSel_Region0 or userKeyCtrlDict['region_sel'] == uidef.kUserRegionSel_BothRegions:
             batContent += " region0_key=" + userKeyCmdDict['region0_key']
@@ -704,8 +704,8 @@ class secBootGen(uicore.secBootUi):
         return self._updateBdfileContent(uidef.kSecureBootType_HabAuth, uidef.kBootDevice_RamFlashloader, imageStartAddr, imageEntryAddr)
 
     def _updateFlBdBatfileContent( self, srcFlFilename ):
-        batContent = self.elftosbPath
-        batContent += " -f imx -V -c " + self.flBdFilename + ' -o ' + self.destFlFilename + ' ' + srcFlFilename
+        batContent = "\"" + self.elftosbPath + "\""
+        batContent += " -f imx -V -c " + "\"" + self.flBdFilename + "\"" + ' -o ' + "\"" + self.destFlFilename + "\"" + ' ' + "\"" + srcFlFilename + "\""
         with open(self.flBdBatFilename, 'wb') as fileObj:
             fileObj.write(batContent)
             fileObj.close()
