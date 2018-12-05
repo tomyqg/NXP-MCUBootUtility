@@ -1,6 +1,7 @@
 #! /usr/bin/env python
 import sys
 import os
+import shutil
 import boot
 import memdef
 sys.path.append(os.path.abspath(".."))
@@ -17,6 +18,8 @@ class secBootMem(fusecore.secBootFuse):
 
     def __init__(self, parent):
         fusecore.secBootFuse.__init__(self, parent)
+
+        self.userFilename = os.path.join(self.exeTopRoot, 'gen', 'user_file', 'user.dat')
 
         self.needToShowCfgIntr = None
         self.needToShowEkib0Intr = None
@@ -268,7 +271,12 @@ class secBootMem(fusecore.secBootFuse):
             if memStart % self.comMemWriteUnit:
                 self.popupMsgBox('Start Address should be aligned with 0x%x !' %(self.comMemWriteUnit))
                 return
-            status, results, cmdStr = self.blhost.writeMemory(memStart, memBinFile, self.bootDeviceMemId)
+            shutil.copy(memBinFile, self.userFilename)
+            status, results, cmdStr = self.blhost.writeMemory(memStart, self.userFilename, self.bootDeviceMemId)
+            try:
+                os.remove(self.userFilename)
+            except:
+                pass
             self.printLog(cmdStr)
             if status != boot.status.kStatus_Success:
                 self.popupMsgBox('Failed to write boot device, error code is %d, You may forget to erase boot device first!' %(status))

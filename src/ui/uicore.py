@@ -1,6 +1,8 @@
 #! /usr/bin/env python
 import wx
 import sys
+reload(sys)
+sys.setdefaultencoding('utf-8')
 import os
 import serial.tools.list_ports
 import uidef
@@ -395,7 +397,8 @@ class secBootUi(secBootWin.secBootWin):
         self.m_textCtrl_bdPath.write(bdPath)
 
     def getUserAppFilePath( self ):
-        return self.m_filePicker_appPath.GetPath()
+        appPath = self.m_filePicker_appPath.GetPath()
+        return appPath.encode('utf-8').encode("gbk")
 
     def printSrkData( self, srkStr ):
         self.m_textCtrl_srk256bit.write(srkStr + "\n")
@@ -449,7 +452,8 @@ class secBootUi(secBootWin.secBootWin):
         return self._getVal32FromHexText(self.m_textCtrl_memLength.GetLineText(0))
 
     def getComMemBinFile( self ):
-        return self.m_filePicker_memBinFile.GetPath()
+        memBinFile = self.m_filePicker_memBinFile.GetPath()
+        return memBinFile.encode('utf-8').encode("gbk")
 
     def printMem( self , memStr, strColor=uidef.kMemBlockColor_Padding ):
         self.m_textCtrl_bootDeviceMem.SetDefaultStyle(wx.TextAttr(strColor, uidef.kMemBlockColor_Background))
