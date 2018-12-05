@@ -522,7 +522,7 @@ class secBootGen(uicore.secBootUi):
             pass
         self.destAppBinaryBytes = imageLength
         if not self.isCertificateGenerated(self.secureBootType):
-            self.popupMsgBox('You should first generate certificates!')
+            self.popupMsgBox('You should first generate certificates, or make sure you don\'t put the tool in path with blank space!')
             return False
         return self._updateBdfileContent(self.secureBootType, self.bootDevice, imageStartAddr, imageEntryAddr)
 
@@ -578,7 +578,7 @@ class secBootGen(uicore.secBootUi):
             return True
         else:
             self.habDekDataOffset = None
-            self.popupMsgBox('Bootable image is not generated successfully!')
+            self.popupMsgBox('Bootable image is not generated successfully! Make sure you don\'t put the tool in path with blank space!')
             return False
 
     def genBootableImage( self ):
@@ -611,11 +611,11 @@ class secBootGen(uicore.secBootUi):
         destAppName += '_bee_encrypted'
         self.destEncAppFilename = os.path.join(destAppPath, destAppName + destAppType)
 
-    def _genBeeDekFile( self, regionIndex, keyContent ):
-        if regionIndex == 0:
+    def _genBeeDekFile( self, engineIndex, keyContent ):
+        if engineIndex == 0:
             #print 'beeDek0Filename content: ' + keyContent
             self.fillDek128ContentIntoBinFile(self.beeDek0Filename, keyContent)
-        elif regionIndex == 1:
+        elif engineIndex == 1:
             #print 'beeDek1Filename content: ' + keyContent
             self.fillDek128ContentIntoBinFile(self.beeDek1Filename, keyContent)
         else:
@@ -638,36 +638,36 @@ class secBootGen(uicore.secBootUi):
                 self.printSwGp2DekData(self.getFormattedHexValue(val32))
 
     def _genBeeDekFilesAndShow( self, userKeyCtrlDict, userKeyCmdDict ):
-        if userKeyCtrlDict['region_sel'] == uidef.kUserRegionSel_Region0 or userKeyCtrlDict['region_sel'] == uidef.kUserRegionSel_BothRegions:
-            self._genBeeDekFile(0, userKeyCmdDict['region0_key'])
-            if userKeyCtrlDict['region0_key_src'] == uidef.kUserKeySource_SW_GP2:
+        if userKeyCtrlDict['engine_sel'] == uidef.kUserEngineSel_Engine0 or userKeyCtrlDict['engine_sel'] == uidef.kUserEngineSel_BothEngines:
+            self._genBeeDekFile(0, userKeyCmdDict['engine0_key'])
+            if userKeyCtrlDict['engine0_key_src'] == uidef.kUserKeySource_SW_GP2:
                 self._showBeeDekForSwGp2(self.beeDek0Filename)
-            elif userKeyCtrlDict['region0_key_src'] == uidef.kUserKeySource_GP4:
+            elif userKeyCtrlDict['engine0_key_src'] == uidef.kUserKeySource_GP4:
                 self._showBeeDekForGp4(self.beeDek0Filename)
             else:
                 pass
-        if userKeyCtrlDict['region_sel'] == uidef.kUserRegionSel_Region1 or userKeyCtrlDict['region_sel'] == uidef.kUserRegionSel_BothRegions:
-            self._genBeeDekFile(1, userKeyCmdDict['region1_key'])
-            if userKeyCtrlDict['region1_key_src'] == uidef.kUserKeySource_SW_GP2:
+        if userKeyCtrlDict['engine_sel'] == uidef.kUserEngineSel_Engine1 or userKeyCtrlDict['engine_sel'] == uidef.kUserEngineSel_BothEngines:
+            self._genBeeDekFile(1, userKeyCmdDict['engine1_key'])
+            if userKeyCtrlDict['engine1_key_src'] == uidef.kUserKeySource_SW_GP2:
                 self._showBeeDekForSwGp2(self.beeDek1Filename)
-            elif userKeyCtrlDict['region1_key_src'] == uidef.kUserKeySource_GP4:
+            elif userKeyCtrlDict['engine1_key_src'] == uidef.kUserKeySource_GP4:
                 self._showBeeDekForGp4(self.beeDek1Filename)
             else:
                 pass
 
     def _updateEncBatfileContent( self, userKeyCtrlDict, userKeyCmdDict ):
-        batContent =  "\"" + self.imageEncPath + "\""
+        batContent = "\"" + self.imageEncPath + "\""
         batContent += " ifile=" + "\"" + self.destAppFilename + "\""
         batContent += " ofile=" + "\"" + self.destEncAppFilename + "\""
         batContent += " base_addr=" + userKeyCmdDict['base_addr']
-        if userKeyCtrlDict['region_sel'] == uidef.kUserRegionSel_Region0 or userKeyCtrlDict['region_sel'] == uidef.kUserRegionSel_BothRegions:
-            batContent += " region0_key=" + userKeyCmdDict['region0_key']
-            batContent += " region0_arg=" + userKeyCmdDict['region0_arg']
-            batContent += " region0_lock=" + userKeyCmdDict['region0_lock']
-        if userKeyCtrlDict['region_sel'] == uidef.kUserRegionSel_Region1 or userKeyCtrlDict['region_sel'] == uidef.kUserRegionSel_BothRegions:
-            batContent += " region1_key=" + userKeyCmdDict['region1_key']
-            batContent += " region1_arg=" + userKeyCmdDict['region1_arg']
-            batContent += " region1_lock=" + userKeyCmdDict['region1_lock']
+        if userKeyCtrlDict['engine_sel'] == uidef.kUserEngineSel_Engine0 or userKeyCtrlDict['engine_sel'] == uidef.kUserEngineSel_BothEngines:
+            batContent += " region0_key=" + userKeyCmdDict['engine0_key']
+            batContent += " region0_arg=" + userKeyCmdDict['engine0_arg']
+            batContent += " region0_lock=" + userKeyCmdDict['engine0_lock']
+        if userKeyCtrlDict['engine_sel'] == uidef.kUserEngineSel_Engine1 or userKeyCtrlDict['engine_sel'] == uidef.kUserEngineSel_BothEngines:
+            batContent += " region1_key=" + userKeyCmdDict['engine1_key']
+            batContent += " region1_arg=" + userKeyCmdDict['engine1_arg']
+            batContent += " region1_lock=" + userKeyCmdDict['engine1_lock']
         batContent += " use_zero_key=" + userKeyCmdDict['use_zero_key']
         batContent += " is_boot_image=" + userKeyCmdDict['is_boot_image']
         with open(self.encBatFilename, 'wb') as fileObj:
