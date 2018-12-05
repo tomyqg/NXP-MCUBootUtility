@@ -271,6 +271,13 @@ class secBootMem(fusecore.secBootFuse):
             if memStart % self.comMemWriteUnit:
                 self.popupMsgBox('Start Address should be aligned with 0x%x !' %(self.comMemWriteUnit))
                 return
+            eraseMemStart = misc.align_down(memStart, self.comMemEraseUnit)
+            eraseMemEnd = misc.align_up(memStart + os.path.getsize(memBinFile), self.comMemEraseUnit)
+            status, results, cmdStr = self.blhost.flashEraseRegion(eraseMemStart, eraseMemEnd - eraseMemStart, self.bootDeviceMemId)
+            self.printLog(cmdStr)
+            if status != boot.status.kStatus_Success:
+                self.popupMsgBox('Failed to erase boot device, error code is %d !' %(status))
+                return
             shutil.copy(memBinFile, self.userFilename)
             status, results, cmdStr = self.blhost.writeMemory(memStart, self.userFilename, self.bootDeviceMemId)
             try:
