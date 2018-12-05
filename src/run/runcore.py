@@ -594,20 +594,20 @@ class secBootRun(gencore.secBootGen):
         swgp2DekFilename = None
         gp4DekFilename = None
         userKeyCtrlDict, userKeyCmdDict = uivar.getAdvancedSettings(uidef.kAdvancedSettings_UserKeys)
-        if userKeyCtrlDict['region_sel'] == uidef.kUserRegionSel_Region1 or userKeyCtrlDict['region_sel'] == uidef.kUserRegionSel_BothRegions:
-            if userKeyCtrlDict['region1_key_src'] == uidef.kUserKeySource_SW_GP2:
+        if userKeyCtrlDict['engine_sel'] == uidef.kUserEngineSel_Engine1 or userKeyCtrlDict['engine_sel'] == uidef.kUserEngineSel_BothEngines:
+            if userKeyCtrlDict['engine1_key_src'] == uidef.kUserKeySource_SW_GP2:
                 needToBurnSwGp2 = True
                 swgp2DekFilename = self.beeDek1Filename
-            elif userKeyCtrlDict['region1_key_src'] == uidef.kUserKeySource_GP4:
+            elif userKeyCtrlDict['engine1_key_src'] == uidef.kUserKeySource_GP4:
                 needToBurnGp4 = True
                 gp4DekFilename = self.beeDek1Filename
             else:
                 pass
-        if userKeyCtrlDict['region_sel'] == uidef.kUserRegionSel_Region0 or userKeyCtrlDict['region_sel'] == uidef.kUserRegionSel_BothRegions:
-            if userKeyCtrlDict['region0_key_src'] == uidef.kUserKeySource_SW_GP2:
+        if userKeyCtrlDict['engine_sel'] == uidef.kUserEngineSel_Engine0 or userKeyCtrlDict['engine_sel'] == uidef.kUserEngineSel_BothEngines:
+            if userKeyCtrlDict['engine0_key_src'] == uidef.kUserKeySource_SW_GP2:
                 needToBurnSwGp2 = True
                 swgp2DekFilename = self.beeDek0Filename
-            elif userKeyCtrlDict['region0_key_src'] == uidef.kUserKeySource_GP4:
+            elif userKeyCtrlDict['engine0_key_src'] == uidef.kUserKeySource_GP4:
                 needToBurnGp4 = True
                 gp4DekFilename = self.beeDek0Filename
             else:
@@ -719,21 +719,21 @@ class secBootRun(gencore.secBootGen):
             #    setBeeKey1Sel = fusedef.kBeeKeySel_FromOtpmk
         elif self.keyStorageRegion == uidef.kKeyStorageRegion_FlexibleUserKeys:
             userKeyCtrlDict, userKeyCmdDict = uivar.getAdvancedSettings(uidef.kAdvancedSettings_UserKeys)
-            if userKeyCtrlDict['region_sel'] == uidef.kUserRegionSel_Region0 or userKeyCtrlDict['region_sel'] == uidef.kUserRegionSel_BothRegions:
-                if userKeyCtrlDict['region0_key_src'] == uidef.kUserKeySource_OTPMK:
+            if userKeyCtrlDict['engine_sel'] == uidef.kUserEngineSel_Engine0 or userKeyCtrlDict['engine_sel'] == uidef.kUserEngineSel_BothEngines:
+                if userKeyCtrlDict['engine0_key_src'] == uidef.kUserKeySource_OTPMK:
                     setBeeKey0Sel = fusedef.kBeeKeySel_FromOtpmk
-                elif userKeyCtrlDict['region0_key_src'] == uidef.kUserKeySource_SW_GP2:
+                elif userKeyCtrlDict['engine0_key_src'] == uidef.kUserKeySource_SW_GP2:
                     setBeeKey0Sel = fusedef.kBeeKeySel_FromSwGp2
-                elif userKeyCtrlDict['region0_key_src'] == uidef.kUserKeySource_GP4:
+                elif userKeyCtrlDict['engine0_key_src'] == uidef.kUserKeySource_GP4:
                     setBeeKey0Sel = fusedef.kBeeKeySel_FromGp4
                 else:
                     pass
-            if userKeyCtrlDict['region_sel'] == uidef.kUserRegionSel_Region1 or userKeyCtrlDict['region_sel'] == uidef.kUserRegionSel_BothRegions:
-                if userKeyCtrlDict['region0_key_src'] == uidef.kUserKeySource_OTPMK:
+            if userKeyCtrlDict['engine_sel'] == uidef.kUserEngineSel_Engine1 or userKeyCtrlDict['engine_sel'] == uidef.kUserEngineSel_BothEngines:
+                if userKeyCtrlDict['engine0_key_src'] == uidef.kUserKeySource_OTPMK:
                     setBeeKey1Sel = fusedef.kBeeKeySel_FromOtpmk
-                elif userKeyCtrlDict['region1_key_src'] == uidef.kUserKeySource_SW_GP2:
+                elif userKeyCtrlDict['engine1_key_src'] == uidef.kUserKeySource_SW_GP2:
                     setBeeKey1Sel = fusedef.kBeeKeySel_FromSwGp2
-                elif userKeyCtrlDict['region1_key_src'] == uidef.kUserKeySource_GP4:
+                elif userKeyCtrlDict['engine1_key_src'] == uidef.kUserKeySource_GP4:
                     setBeeKey1Sel = fusedef.kBeeKeySel_FromGp4
                 else:
                     pass
