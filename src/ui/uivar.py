@@ -93,8 +93,8 @@ def initVar():
 
     global g_lpspiNorOpt0
     global g_lpspiNorOpt1
-    g_lpspiNorOpt0 = 0xD0010101
-    g_lpspiNorOpt1 = 0xD0010101
+    g_lpspiNorOpt0 = 0xc1100500
+    g_lpspiNorOpt1 = 0x00000000
 
     global g_certSettingsDict
     g_certSettingsDict['cstVersion'] = uidef.kCstVersion_v3_0_1

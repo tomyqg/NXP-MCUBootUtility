@@ -82,7 +82,7 @@ class secBootMain(memcore.secBootMem):
             usdhcMmcFrame.SetTitle(u"uSDHC MMC Device Configuration")
             usdhcMmcFrame.Show(True)
         elif self.bootDevice == uidef.kBootDevice_LpspiNor:
-            lpspiNorFrame = ui_cfg_lpspinor.secBootUiLpspiNor(None)
+            lpspiNorFrame = ui_cfg_lpspinor.secBootUiCfgLpspiNor(None)
             lpspiNorFrame.SetTitle(u"LPSPI NOR,EEPROM Device Configuration")
             lpspiNorFrame.Show(True)
         else:
@@ -586,7 +586,7 @@ if __name__ == '__main__':
     app = wx.App()
 
     main_win = secBootMain(None)
-    main_win.SetTitle(u"nxpSecBoot v0.10.4")
+    main_win.SetTitle(u"nxpSecBoot v0.11.0")
     main_win.Show()
 
     app.MainLoop()

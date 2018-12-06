@@ -17,7 +17,7 @@ kMcuSeries_iMXRT   = 'i.MXRT'
 kMcuSeries_LPC     = 'LPC'
 kMcuSeries_Kinetis = 'Kinetis'
 
-kMcuSeries_v0_9_x = [kMcuSeries_iMXRT]
+kMcuSeries_v0_11_x = [kMcuSeries_iMXRT]
 
 kMcuDevice_iMXRT102x = 'i.MXRT102x'
 kMcuDevice_iMXRT105x = 'i.MXRT105x'
@@ -33,7 +33,7 @@ kBootDevice_UsdhcMmc       = 'uSDHC MMC/eMMC'
 kBootDevice_LpspiNor       = 'LPSPI NOR,EEPROM'
 kBootDevice_RamFlashloader = 'RAM FLASHLOADER'
 
-kBootDevice_v0_9_x = [kBootDevice_FlexspiNor, kBootDevice_SemcNand]
+kBootDevice_v0_11_x = [kBootDevice_FlexspiNor, kBootDevice_SemcNand, kBootDevice_LpspiNor]
 
 kSecureBootType_Development = 'Unsigned (XIP) Image Boot'
 kSecureBootType_HabAuth     = 'HAB Signed (XIP) Image Boot'

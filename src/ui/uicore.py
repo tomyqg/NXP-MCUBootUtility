@@ -56,8 +56,8 @@ class secBootUi(secBootWin.secBootWin):
     def _initTargetSetupValue( self ):
         self.m_choice_mcuSeries.Clear()
         self.m_choice_bootDevice.Clear()
-        self.m_choice_mcuSeries.SetItems(uidef.kMcuSeries_v0_9_x)
-        self.m_choice_bootDevice.SetItems(uidef.kBootDevice_v0_9_x)
+        self.m_choice_mcuSeries.SetItems(uidef.kMcuSeries_v0_11_x)
+        self.m_choice_bootDevice.SetItems(uidef.kBootDevice_v0_11_x)
         self.m_choice_mcuSeries.SetSelection(0)
         self.m_choice_bootDevice.SetSelection(0)
 
