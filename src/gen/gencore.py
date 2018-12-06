@@ -491,12 +491,36 @@ class secBootGen(uicore.secBootUi):
         else:
             pass
 
+    def _isValidNonXipAppImage( self, imageStartAddr ):
+        if ((imageStartAddr >= self.tgt.memoryRange['itcm'].start) and (imageStartAddr < self.tgt.memoryRange['itcm'].start + self.tgt.memoryRange['itcm'].length)) or \
+           ((imageStartAddr >= self.tgt.memoryRange['dtcm'].start) and (imageStartAddr < self.tgt.memoryRange['dtcm'].start + self.tgt.memoryRange['dtcm'].length)) or \
+           ((imageStartAddr >= self.tgt.memoryRange['ocram'].start) and (imageStartAddr < self.tgt.memoryRange['ocram'].start + self.tgt.memoryRange['ocram'].length)):
+            return True
+        else:
+            self.popupMsgBox('Non-XIP Application is detected but it is not in the range of ITCM/DTCM/OCRAM!')
+            return False
+
+    def _isValidAppImage( self, imageStartAddr ):
+        if self.isXipApp:
+            if self.secureBootType == uidef.kSecureBootType_HabCrypto:
+                self.popupMsgBox('XIP Application is detected but it is not appliable for HAB Encrypted image boot!')
+                return False
+            else:
+                return True
+        else:
+            if self.secureBootType == uidef.kSecureBootType_BeeCrypto:
+                self.popupMsgBox('Non-XIP Application is detected but it is not appliable for BEE Encrypted image boot!')
+                return False
+            else:
+                return self._isValidNonXipAppImage(imageStartAddr)
+
     def createMatchedAppBdfile( self ):
         self.srcAppFilename = self.getUserAppFilePath()
         imageStartAddr, imageEntryAddr, imageLength = self._getImageInfo(self.srcAppFilename)
         if imageStartAddr == None or imageEntryAddr == None:
             self.popupMsgBox('You should first specify a source image file (.elf/.srec)!')
             return False
+        self.isXipApp = False
         self.destAppVectorAddress = imageStartAddr
         if self.bootDevice == uidef.kBootDevice_FlexspiNor:
             if ((imageStartAddr >= self.tgt.flexspiNorMemBase) and (imageStartAddr < self.tgt.flexspiNorMemBase + rundef.kBootDeviceMemXipSize_FlexspiNor)):
@@ -520,6 +544,8 @@ class secBootGen(uicore.secBootUi):
                 self.destAppVectorOffset = gendef.kInitialLoadSize_NOR
         else:
             pass
+        if not self._isValidAppImage(imageStartAddr):
+            return False
         self.destAppBinaryBytes = imageLength
         if not self.isCertificateGenerated(self.secureBootType):
             self.popupMsgBox('You should first generate certificates, or make sure you don\'t put the tool in path with blank space!')

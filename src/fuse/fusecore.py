@@ -40,22 +40,18 @@ class secBootFuse(runcore.secBootRun):
 
     def _updateRemappedEntryModeFuseFlagList( self ):
         self.remappedEntryModeFuseFlagList = self.entryModeFuseFlagList
-        if self.mcuDevice == uidef.kMcuDevice_iMXRT106x or self.mcuDevice == uidef.kMcuDevice_iMXRT1064:
+        if self.tgt.hasRemappedFuse:
             for i in range(fusedef.kEfuseRemapLen):
                 self.remappedEntryModeFuseFlagList[fusedef.kEfuseRemapIndex_Src + i] = self.entryModeFuseFlagList[fusedef.kEfuseRemapIndex_Dest + i]
                 self.remappedEntryModeFuseFlagList[fusedef.kEfuseRemapIndex_Dest + i] = self.entryModeFuseFlagList[fusedef.kEfuseRemapIndex_Src + i]
-        elif self.mcuDevice == uidef.kMcuDevice_iMXRT105x and self.mcuDevice == uidef.kMcuDevice_iMXRT102x:
-            pass
         else:
             pass
 
     def _swapRemappedScannedFuseIfAppliable( self ):
-        if self.mcuDevice == uidef.kMcuDevice_iMXRT106x or self.mcuDevice == uidef.kMcuDevice_iMXRT1064:
+        if self.tgt.hasRemappedFuse:
             for i in range(fusedef.kEfuseRemapLen):
                 self.scannedFuseList[fusedef.kEfuseRemapIndex_Src + i], self.scannedFuseList[fusedef.kEfuseRemapIndex_Dest + i] = \
                 self.scannedFuseList[fusedef.kEfuseRemapIndex_Dest + i], self.scannedFuseList[fusedef.kEfuseRemapIndex_Src + i]
-        elif self.mcuDevice == uidef.kMcuDevice_iMXRT105x and self.mcuDevice == uidef.kMcuDevice_iMXRT102x:
-            pass
         else:
             pass
 
@@ -70,12 +66,10 @@ class secBootFuse(runcore.secBootRun):
         self.showScannedFuses(self.scannedFuseList)
 
     def _swapRemappedToBeBurnFuseIfAppliable( self ):
-        if self.mcuDevice == uidef.kMcuDevice_iMXRT106x or self.mcuDevice == uidef.kMcuDevice_iMXRT1064:
+        if self.tgt.hasRemappedFuse:
             for i in range(fusedef.kEfuseRemapLen):
                 self.toBeBurnnedFuseList[fusedef.kEfuseRemapIndex_Src + i], self.toBeBurnnedFuseList[fusedef.kEfuseRemapIndex_Dest + i] = \
                 self.toBeBurnnedFuseList[fusedef.kEfuseRemapIndex_Dest + i], self.toBeBurnnedFuseList[fusedef.kEfuseRemapIndex_Src + i]
-        elif self.mcuDevice == uidef.kMcuDevice_iMXRT105x and self.mcuDevice == uidef.kMcuDevice_iMXRT102x:
-            pass
         else:
             pass
 

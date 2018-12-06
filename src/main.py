@@ -55,7 +55,7 @@ class secBootMain(memcore.secBootMem):
 
     def callbackBootDeviceConfiguration( self, event ):
         if self.bootDevice == uidef.kBootDevice_FlexspiNor:
-            if self.mcuDevice == uidef.kMcuDevice_iMXRT1064:
+            if self.tgt.isSipFlexspiNorDevice:
                 self.popupMsgBox('MCU has on-chip QSPI NOR Flash (4MB, 133MHz), so you don\'t need to configure this boot device!')
             else:
                 flexspiNorFrame = ui_cfg_flexspinor.secBootUiCfgFlexspiNor(None)
@@ -587,7 +587,7 @@ if __name__ == '__main__':
     app = wx.App()
 
     main_win = secBootMain(None)
-    main_win.SetTitle(u"nxpSecBoot v0.11.0")
+    main_win.SetTitle(u"nxpSecBoot v0.11.1")
     main_win.Show()
 
     app.MainLoop()

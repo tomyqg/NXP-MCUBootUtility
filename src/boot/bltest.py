@@ -217,7 +217,7 @@ class Bootloader(object):
         peripheral, peripheralSpeed = self._getPeripheralAndSpeed(args)
         fileLength = self.fileLength
         # The max file length should be less than max length of all actual memory
-        maxLength = self.target.memoryRange['ram'].length;
+        maxLength = self.target.memoryRange['ocram'].length;
         if self.target.memoryRange.has_key('flash'):
             maxLength = max(maxLength, self.target.memoryRange['flash'].length)
         if self.target.memoryRange.has_key('spiFlash'):

@@ -53,12 +53,12 @@ isEccTypeSetInFuseMiscConf = True
 
 # memory map
 memoryRange = {
-    # ITCM, 256KByte
-    'itcm' : MemoryRange(0x00000000, 0x40000, 'state_mem0.dat'),
-    # DTCM, 256KByte
-    'dtcm' : MemoryRange(0x20000000, 0x40000, 'state_mem1.dat'),
+    # ITCM, 512KByte
+    'itcm' : MemoryRange(0x00000000, 0x80000, 'state_mem0.dat'),
+    # DTCM, 512KByte
+    'dtcm' : MemoryRange(0x20000000, 0x80000, 'state_mem1.dat'),
     # OCRAM, 1MByte
-    'ram' : MemoryRange(0x20200000, 0x100000, 'state_mem2.dat'),
+    'ocram' : MemoryRange(0x20200000, 0x100000, 'state_mem2.dat'),
 
     # FLASH, 64KByte / 512MByte
     'flash': MemoryRange(0x00000000, 0x20000000, 'state_flash_mem.dat', True, 0x10000)
