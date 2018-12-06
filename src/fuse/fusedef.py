@@ -75,6 +75,14 @@ kEfuseMask_LpspiSpeed     = 0x30000000
 kEfuseShift_LpspiSpeed    = 28
 kEfuseLocation_LpspiCfg   = kEfuseIndex_MISC_CONF0
 
+kEfuseMask_RawNandPortSize   = 0x00000008
+kEfuseShift_RawNandPortSize  = 3
+kEfuseMask_RawNandEccEdoSet  = 0x00000010
+kEfuseShift_RawNandEccEdoSet = 4
+kEfuseMask_RawNandEccStatus  = 0x01000000
+kEfuseShift_RawNandEccStatus = 24
+kEfuseLocation_SemcNandCfg   = kEfuseIndex_MISC_CONF1
+
 ##################################################
 
 kHabStatus_FAB     = 0x0

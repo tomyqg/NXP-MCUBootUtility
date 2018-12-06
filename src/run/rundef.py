@@ -56,14 +56,15 @@ kSemcNandFcbTag_Semc        = 0x434D4553  # 'SEMC'
 kSemcNandFcbInfo_StartAddr = 0x0
 kSemcNandFcbInfo_Length    = 0x400
 
-kSemcNandFcbOffset_Fingerprint    = 0x004
-kSemcNandFcbOffset_FirmwareCopies = 0x014
-kSemcNandFcbOffset_NandCfgBlock   = 0x100
-kSemcNandFcbOffset_SemcTag        = 0x100
-kSemcNandFcbOffset_PageByteSize   = 0x1a0
-kSemcNandFcbOffset_PagesInBlock   = 0x1a8
-kSemcNandFcbOffset_BlocksInPlane  = 0x1ac
-kSemcNandFcbOffset_PlanesInDevice = 0x1b0
+kSemcNandFcbOffset_Fingerprint             = 0x004
+kSemcNandFcbOffset_DBBTSerachAreaStartPage = 0x00c
+kSemcNandFcbOffset_FirmwareCopies          = 0x014
+kSemcNandFcbOffset_NandCfgBlock            = 0x100
+kSemcNandFcbOffset_SemcTag                 = 0x100
+kSemcNandFcbOffset_PageByteSize            = 0x1a0
+kSemcNandFcbOffset_PagesInBlock            = 0x1a8
+kSemcNandFcbOffset_BlocksInPlane           = 0x1ac
+kSemcNandFcbOffset_PlanesInDevice          = 0x1b0
 
 #----------------FlexSPI NOR---------------------
 kFlexspiNorCfgTag_Flexspi = 0x42464346  # 'FCFB'

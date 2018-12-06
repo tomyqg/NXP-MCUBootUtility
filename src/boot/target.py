@@ -58,6 +58,7 @@ class Target(object):
         self.hasRemappedFuse = misc.get_dict_default(kwargs, 'hasRemappedFuse', None)
         self.flexspiNorMemBase = misc.get_dict_default(kwargs, 'flexspiNorMemBase', None)
         self.isSipFlexspiNorDevice = misc.get_dict_default(kwargs, 'isSipFlexspiNorDevice', None)
+        self.isEccTypeSetInFuseMiscConf = misc.get_dict_default(kwargs, 'isEccTypeSetInFuseMiscConf', None)
         
     ##
     # @brief Check if a command is supported by the target.

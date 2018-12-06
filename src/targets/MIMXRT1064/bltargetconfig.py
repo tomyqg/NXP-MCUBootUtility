@@ -49,6 +49,7 @@ supportedPeripheralSpeed_uart = [4800, 9600, 19200, 57600, 115200] # @todo Verif
 hasRemappedFuse = True
 flexspiNorMemBase = 0x70000000
 isSipFlexspiNorDevice = True
+isEccTypeSetInFuseMiscConf = True
 
 # memory map
 memoryRange = {

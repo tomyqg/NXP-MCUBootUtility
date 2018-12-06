@@ -70,6 +70,7 @@ class secBootRun(gencore.secBootGen):
         self.bootDeviceMemId = None
         self.bootDeviceMemBase = None
         self.semcNandImageCopies = None
+        self.semcNandBlockSize = None
         self.isFlexspiNorErasedForImage = False
 
         self.mcuDeviceHabStatus = None
@@ -338,6 +339,7 @@ class secBootRun(gencore.secBootGen):
             self.printDeviceStatus("Blocks In Plane   = " + str(hex(blocksInPlane)))
             self.printDeviceStatus("Planes In Device  = " + str(hex(planesInDevice)))
             self.semcNandImageCopies = firmwareCopies
+            self.semcNandBlockSize = pageByteSize * pagesInBlock
             self.comMemWriteUnit = pageByteSize
             self.comMemEraseUnit = pageByteSize * pagesInBlock
             self.comMemReadUnit = pageByteSize
@@ -703,7 +705,7 @@ class secBootRun(gencore.secBootGen):
         imageLen = os.path.getsize(self.destAppFilename)
         if self.bootDevice == uidef.kBootDevice_SemcNand:
             semcNandOpt, semcNandFcbOpt, imageInfo = uivar.getBootDeviceConfiguration(self.bootDevice)
-            memEraseLen = misc.align_up(imageLen, self.semcNandBlockSize)
+            memEraseLen = misc.align_up(imageLen, self.comMemEraseUnit)
             for i in range(self.semcNandImageCopies):
                 imageLoadAddr = self.bootDeviceMemBase + (imageInfo[i] >> 16) * self.semcNandBlockSize
                 status, results, cmdStr = self.blhost.flashEraseRegion(imageLoadAddr, memEraseLen, self.bootDeviceMemId)
@@ -752,13 +754,45 @@ class secBootRun(gencore.secBootGen):
         self.invalidateStepButtonColor(uidef.kSecureBootSeqStep_FlashImage)
         return True
 
+    def _getMcuDeviceSemcNandCfg( self ):
+        semcNandCfg = self.readMcuDeviceFuseByBlhost(fusedef.kEfuseLocation_SemcNandCfg, '', False)
+        return semcNandCfg
+
     def _getMcuDeviceLpspiCfg( self ):
         lpspiCfg = self.readMcuDeviceFuseByBlhost(fusedef.kEfuseLocation_LpspiCfg, '', False)
         return lpspiCfg
 
     def burnBootDeviceFuses( self ):
         if self.bootDevice == uidef.kBootDevice_SemcNand:
-            pass
+            setSemcNandCfg = 0
+            semcNandOpt, semcNandFcbOpt, imageInfo = uivar.getBootDeviceConfiguration(self.bootDevice)
+            # Set Device Ecc Status
+            eccStatus = (semcNandOpt & 0x00020000) >> 17
+            setSemcNandCfg = (setSemcNandCfg & (~fusedef.kEfuseMask_RawNandEccStatus) | (eccStatus << fusedef.kEfuseShift_RawNandEccStatus))
+            # Set I/O Port Size
+            portSize = (semcNandOpt & 0x00000300) >> 8
+            if portSize <= 1:
+                portSize = 0
+            else:
+                portSize = 1
+            setSemcNandCfg = (setSemcNandCfg & (~fusedef.kEfuseMask_RawNandPortSize) | (portSize << fusedef.kEfuseShift_RawNandPortSize))
+            if self.tgt.isEccTypeSetInFuseMiscConf:
+                # Set ECC Check Type
+                eccType = (semcNandOpt & 0x00010000) >> 16
+                eccType = (eccType + 1) % 2
+                setSemcNandCfg = (setSemcNandCfg & (~fusedef.kEfuseMask_RawNandEccEdoSet) | (eccType << fusedef.kEfuseShift_RawNandEccEdoSet))
+            else:
+                # Set EDO mode
+                edoMode = (semcNandOpt & 0x00000008) >> 3
+                setSemcNandCfg = (setSemcNandCfg & (~fusedef.kEfuseMask_RawNandEccEdoSet) | (edoMode << fusedef.kEfuseShift_RawNandEccEdoSet))
+            getSemcNandCfg = self._getMcuDeviceSemcNandCfg()
+            if getSemcNandCfg != None:
+                getSemcNandCfg = getSemcNandCfg | setSemcNandCfg
+                if (getSemcNandCfg & (fusedef.kEfuseMask_RawNandEccStatus | fusedef.kEfuseMask_RawNandPortSize | fusedef.kEfuseMask_RawNandEccEdoSet)) != setSemcNandCfg:
+                    self.popupMsgBox('Fuse MISC_CONF1[31:0] has been burned, it is program-once!')
+                    return False
+                else:
+                    self.burnMcuDeviceFuseByBlhost(fusedef.kEfuseLocation_SemcNandCfg, getSemcNandCfg)
         elif self.bootDevice == uidef.kBootDevice_FlexspiNor:
             pass
         elif self.bootDevice == uidef.kBootDevice_LpspiNor:
