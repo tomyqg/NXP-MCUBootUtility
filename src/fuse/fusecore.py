@@ -14,8 +14,8 @@ class secBootFuse(runcore.secBootRun):
 
         self.scannedFuseList = [None] * fusedef.kMaxEfuseWords
         self.toBeBurnnedFuseList = [None] * fusedef.kMaxEfuseWords
-        self.entryModeFuseFlagList = [None] * fusedef.kMaxEfuseWords
-        self.remappedEntryModeFuseFlagList = [None] * fusedef.kMaxEfuseWords
+        self.runModeFuseFlagList = [None] * fusedef.kMaxEfuseWords
+        self.isRunModeFuseFlagRemapped = False
 
         self.applyFuseOperToRunMode()
 
@@ -26,24 +26,26 @@ class secBootFuse(runcore.secBootRun):
                    (i >= fusedef.kEfuseEntryModeRegion1IndexStart and i <= fusedef.kEfuseEntryModeRegion1IndexEnd) or \
                    (i >= fusedef.kEfuseEntryModeRegion2IndexStart and i <= fusedef.kEfuseEntryModeRegion2IndexEnd) or \
                    (i >= fusedef.kEfuseEntryModeRegion3IndexStart and i <= fusedef.kEfuseEntryModeRegion3IndexEnd):
-                    self.entryModeFuseFlagList[i] = True
+                    self.runModeFuseFlagList[i] = True
                 else:
-                    self.entryModeFuseFlagList[i] = False
+                    self.runModeFuseFlagList[i] = False
         else:
             for i in range(fusedef.kEfuseRemapLen):
-                self.entryModeFuseFlagList[i] = True
+                self.runModeFuseFlagList[i] = True
 
     def applyFuseOperToRunMode( self ):
         self._initEntryModeFuseFlag()
-        self._updateRemappedEntryModeFuseFlagList()
         self.updateFuseRegionField()
+        self.isRunModeFuseFlagRemapped = False
 
-    def _updateRemappedEntryModeFuseFlagList( self ):
-        self.remappedEntryModeFuseFlagList = self.entryModeFuseFlagList
+    def _remapRunModeFuseFlagList( self ):
+        if self.isRunModeFuseFlagRemapped:
+            return
         if self.tgt.hasRemappedFuse:
             for i in range(fusedef.kEfuseRemapLen):
-                self.remappedEntryModeFuseFlagList[fusedef.kEfuseRemapIndex_Src + i] = self.entryModeFuseFlagList[fusedef.kEfuseRemapIndex_Dest + i]
-                self.remappedEntryModeFuseFlagList[fusedef.kEfuseRemapIndex_Dest + i] = self.entryModeFuseFlagList[fusedef.kEfuseRemapIndex_Src + i]
+                self.runModeFuseFlagList[fusedef.kEfuseRemapIndex_Src + i], self.runModeFuseFlagList[fusedef.kEfuseRemapIndex_Dest + i] = \
+                self.runModeFuseFlagList[fusedef.kEfuseRemapIndex_Dest + i], self.runModeFuseFlagList[fusedef.kEfuseRemapIndex_Src + i]
+            self.isRunModeFuseFlagRemapped = True
         else:
             pass
 
@@ -55,15 +57,16 @@ class secBootFuse(runcore.secBootRun):
         else:
             pass
 
-    def scanAllFuseRegions( self ):
-        self._updateRemappedEntryModeFuseFlagList()
+    def scanAllFuseRegions( self, needSwapAndShow=True ):
+        self._remapRunModeFuseFlagList()
         for i in range(fusedef.kMaxEfuseWords):
-            if self.remappedEntryModeFuseFlagList[i]:
+            if self.runModeFuseFlagList[i]:
                 self.scannedFuseList[i] = self.readMcuDeviceFuseByBlhost(fusedef.kEfuseIndex_START + i, '', False)
             else:
                 self.scannedFuseList[i] = None
-        self._swapRemappedScannedFuseIfAppliable()
-        self.showScannedFuses(self.scannedFuseList)
+        if needSwapAndShow:
+            self._swapRemappedScannedFuseIfAppliable()
+            self.showScannedFuses(self.scannedFuseList)
 
     def _swapRemappedToBeBurnFuseIfAppliable( self ):
         if self.tgt.hasRemappedFuse:
@@ -76,9 +79,10 @@ class secBootFuse(runcore.secBootRun):
     def burnAllFuseRegions( self ):
         self.toBeBurnnedFuseList = self.getUserFuses()
         self._swapRemappedToBeBurnFuseIfAppliable()
-        self._updateRemappedEntryModeFuseFlagList()
+        self._remapRunModeFuseFlagList()
+        self.scanAllFuseRegions(False)
         for i in range(fusedef.kMaxEfuseWords):
-            if self.remappedEntryModeFuseFlagList[i]:
+            if self.runModeFuseFlagList[i]:
                 if self.toBeBurnnedFuseList[i] != self.scannedFuseList[i] and \
                    self.toBeBurnnedFuseList[i] != None and \
                    self.scannedFuseList[i] != None:

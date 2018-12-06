@@ -48,6 +48,7 @@ class secBootMain(memcore.secBootMem):
         self.setTargetSetupValue()
         usbIdList = self.getUsbid()
         self.adjustPortSetupValue(self.connectStage, usbIdList)
+        self.applyFuseOperToRunMode()
 
     def callbackSetBootDevice( self, event ):
         self.setTargetSetupValue()
@@ -587,7 +588,7 @@ if __name__ == '__main__':
     app = wx.App()
 
     main_win = secBootMain(None)
-    main_win.SetTitle(u"nxpSecBoot v0.11.1")
+    main_win.SetTitle(u"nxpSecBoot v0.11.2")
     main_win.Show()
 
     app.MainLoop()
