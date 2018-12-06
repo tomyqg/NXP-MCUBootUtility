@@ -30,7 +30,7 @@ kBootDevice_SemcNor        = 'SEMC NOR'
 kBootDevice_SemcNand       = 'SEMC NAND'
 kBootDevice_UsdhcSd        = 'uSDHC SD'
 kBootDevice_UsdhcMmc       = 'uSDHC MMC/eMMC'
-kBootDevice_LpspiNor       = 'LPSPI NOR,EEPROM'
+kBootDevice_LpspiNor       = 'LPSPI NOR/EEPROM'
 kBootDevice_RamFlashloader = 'RAM FLASHLOADER'
 
 kBootDevice_v0_11_x = [kBootDevice_FlexspiNor, kBootDevice_SemcNand, kBootDevice_LpspiNor]

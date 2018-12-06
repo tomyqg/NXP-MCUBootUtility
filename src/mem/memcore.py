@@ -92,7 +92,7 @@ class secBootMem(fusecore.secBootFuse):
         if self.bootDevice == uidef.kBootDevice_SemcNand:
             semcNandOpt, semcNandFcbOpt, imageInfo = uivar.getBootDeviceConfiguration(self.bootDevice)
             memLen += (imageInfo[self.semcNandImageCopies - 1] >> 16) * self.semcNandBlockSize
-        elif self.bootDevice == uidef.kBootDevice_FlexspiNor:
+        elif self.bootDevice == uidef.kBootDevice_FlexspiNor or self.bootDevice == uidef.kBootDevice_LpspiNor:
             pass
         else:
             pass

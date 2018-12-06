@@ -1,6 +1,7 @@
 #! /usr/bin/env python
 import sys
 import os
+import math
 import rundef
 import boot
 sys.path.append(os.path.abspath(".."))
@@ -69,8 +70,6 @@ class secBootRun(gencore.secBootGen):
         self.bootDeviceMemId = None
         self.bootDeviceMemBase = None
         self.semcNandImageCopies = None
-        self.semcNandBlockSize = None
-        self.flexspiNorSectorSize = None
         self.isFlexspiNorErasedForImage = False
 
         self.mcuDeviceHabStatus = None
@@ -311,10 +310,10 @@ class secBootRun(gencore.secBootGen):
             self.bootDeviceMemId = rundef.kBootDeviceMemId_UsdhcSd
             self.bootDeviceMemBase = rundef.kBootDeviceMemBase_UsdhcSd
         elif self.bootDevice == uidef.kBootDevice_UsdhcMmc:
-            self.bootDeviceMemId = rundef.kBootDevice_UsdhcMmc
+            self.bootDeviceMemId = rundef.kBootDeviceMemId_UsdhcMmc
             self.bootDeviceMemBase = rundef.kBootDeviceMemBase_UsdhcMmc
         elif self.bootDevice == uidef.kBootDevice_LpspiNor:
-            self.bootDeviceMemId = rundef.kBootDevice_LpspiNor
+            self.bootDeviceMemId = rundef.kBootDeviceMemId_LpspiNor
             self.bootDeviceMemBase = rundef.kBootDeviceMemBase_LpspiNor
         else:
             pass
@@ -339,9 +338,8 @@ class secBootRun(gencore.secBootGen):
             self.printDeviceStatus("Blocks In Plane   = " + str(hex(blocksInPlane)))
             self.printDeviceStatus("Planes In Device  = " + str(hex(planesInDevice)))
             self.semcNandImageCopies = firmwareCopies
-            self.semcNandBlockSize = pageByteSize * pagesInBlock
             self.comMemWriteUnit = pageByteSize
-            self.comMemEraseUnit = self.semcNandBlockSize
+            self.comMemEraseUnit = pageByteSize * pagesInBlock
             self.comMemReadUnit = pageByteSize
         else:
             self.printDeviceStatus("Page Size (bytes) = --------")
@@ -370,7 +368,6 @@ class secBootRun(gencore.secBootGen):
             self.printDeviceStatus("Page Size (bytes)   = " + str(hex(pageByteSize)))
             self.printDeviceStatus("Sector Size (bytes) = " + str(hex(sectorByteSize)))
             self.printDeviceStatus("Block Size (bytes)  = " + str(hex(blockByteSize)))
-            self.flexspiNorSectorSize = sectorByteSize
             self.comMemWriteUnit = pageByteSize
             self.comMemEraseUnit = sectorByteSize
             self.comMemReadUnit = pageByteSize
@@ -385,13 +382,44 @@ class secBootRun(gencore.secBootGen):
             pass
         return True
 
+    def _getLpspiNorDeviceInfo ( self ):
+        pageByteSize = 0
+        sectorByteSize = 0
+        totalByteSize = 0
+        lpspiNorOpt0, lpspiNorOpt1 = uivar.getBootDeviceConfiguration(self.bootDevice)
+        val = (lpspiNorOpt0 & 0x0000000F) >> 0
+        if val <= 2:
+            pageByteSize = int(math.pow(2, val + 8))
+        else:
+            pageByteSize = int(math.pow(2, val + 2))
+        val = (lpspiNorOpt0 & 0x000000F0) >> 4
+        if val <= 1:
+            sectorByteSize = int(math.pow(2, val + 12))
+        else:
+            sectorByteSize = int(math.pow(2, val + 13))
+        val = (lpspiNorOpt0 & 0x00000F00) >> 8
+        if val <= 11:
+            totalByteSize = int(math.pow(2, val + 19))
+        else:
+            totalByteSize = int(math.pow(2, val + 3))
+        self.printDeviceStatus("Page Size (bytes)   = " + str(hex(pageByteSize)))
+        self.printDeviceStatus("Sector Size (bytes) = " + str(hex(sectorByteSize)))
+        self.printDeviceStatus("Total Size (bytes)  = " + str(hex(totalByteSize)))
+        self.comMemWriteUnit = pageByteSize
+        self.comMemEraseUnit = sectorByteSize
+        self.comMemReadUnit = pageByteSize
+        return True
+
     def getBootDeviceInfoViaFlashloader ( self ):
         if self.bootDevice == uidef.kBootDevice_SemcNand:
-            self.printDeviceStatus("--------SEMC NAND memory--------")
+            self.printDeviceStatus("--------SEMC NAND memory----------")
             self._getSemcNandDeviceInfo()
         elif self.bootDevice == uidef.kBootDevice_FlexspiNor:
             self.printDeviceStatus("--------FlexSPI NOR memory--------")
             self._getFlexspiNorDeviceInfo()
+        elif self.bootDevice == uidef.kBootDevice_LpspiNor:
+            self.printDeviceStatus("--------LPSPI NOR/EEPROM memory---")
+            self._getLpspiNorDeviceInfo()
         else:
             pass
 
@@ -458,6 +486,20 @@ class secBootRun(gencore.secBootGen):
                 return False
             if not self._programFlexspiNorConfigBlock():
                 return False
+        elif self.bootDevice == uidef.kBootDevice_LpspiNor:
+            lpspiNorOpt0, lpspiNorOpt1 = uivar.getBootDeviceConfiguration(self.bootDevice)
+            status, results, cmdStr = self.blhost.fillMemory(rundef.kRamFreeSpaceStart_LoadCommOpt, 0x4, lpspiNorOpt0)
+            self.printLog(cmdStr)
+            if status != boot.status.kStatus_Success:
+                return False
+            status, results, cmdStr = self.blhost.fillMemory(rundef.kRamFreeSpaceStart_LoadCommOpt + 4, 0x4, lpspiNorOpt1)
+            self.printLog(cmdStr)
+            if status != boot.status.kStatus_Success:
+                return False
+            status, results, cmdStr = self.blhost.configureMemory(self.bootDeviceMemId, rundef.kRamFreeSpaceStart_LoadCommOpt)
+            self.printLog(cmdStr)
+            if status != boot.status.kStatus_Success:
+                return False
         else:
             pass
         return True
@@ -472,7 +514,7 @@ class secBootRun(gencore.secBootGen):
 
     def _eraseFlexspiNorForImageLoading( self ):
         imageLen = os.path.getsize(self.destAppFilename)
-        memEraseLen = misc.align_up(imageLen, self.flexspiNorSectorSize)
+        memEraseLen = misc.align_up(imageLen, self.comMemEraseUnit)
         status, results, cmdStr = self.blhost.flashEraseRegion(self.tgt.flexspiNorMemBase, memEraseLen, rundef.kBootDeviceMemId_FlexspiNor)
         self.printLog(cmdStr)
         if status != boot.status.kStatus_Success:
@@ -694,6 +736,17 @@ class secBootRun(gencore.secBootGen):
             self.isFlexspiNorErasedForImage = False
             if status != boot.status.kStatus_Success:
                 return False
+        elif self.bootDevice == uidef.kBootDevice_LpspiNor:
+            memEraseLen = misc.align_up(imageLen, self.comMemEraseUnit)
+            imageLoadAddr = self.bootDeviceMemBase
+            status, results, cmdStr = self.blhost.flashEraseRegion(imageLoadAddr, memEraseLen, self.bootDeviceMemId)
+            self.printLog(cmdStr)
+            if status != boot.status.kStatus_Success:
+                return False
+            status, results, cmdStr = self.blhost.writeMemory(imageLoadAddr, self.destAppFilename, self.bootDeviceMemId)
+            self.printLog(cmdStr)
+            if status != boot.status.kStatus_Success:
+                return False
         else:
             pass
         self.invalidateStepButtonColor(uidef.kSecureBootSeqStep_FlashImage)
@@ -759,12 +812,8 @@ class secBootRun(gencore.secBootGen):
             self._prepareForBootDeviceOperation()
             imageLen = os.path.getsize(self.destAppFilename)
             imageCopies = 0x1
-            eraseUnit = 0x0
             if self.bootDevice == uidef.kBootDevice_SemcNand:
                 imageCopies = self.semcNandImageCopies
-                eraseUnit = self.semcNandBlockSize
-            elif self.bootDevice == uidef.kBootDevice_FlexspiNor:
-                eraseUnit = self.flexspiNorSectorSize
             else:
                 pass
             # Construct KeyBlob Option
@@ -813,12 +862,12 @@ class secBootRun(gencore.secBootGen):
                 if self.bootDevice == uidef.kBootDevice_SemcNand:
                     semcNandOpt, semcNandFcbOpt, imageInfo = uivar.getBootDeviceConfiguration(self.bootDevice)
                     imageLoadAddr = self.bootDeviceMemBase + (imageInfo[i] >> 16) * self.semcNandBlockSize
-                elif self.bootDevice == uidef.kBootDevice_FlexspiNor:
+                elif self.bootDevice == uidef.kBootDevice_FlexspiNor or self.bootDevice == uidef.kBootDevice_LpspiNor:
                     imageLoadAddr = self.bootDeviceMemBase
                 else:
                     pass
-                alignedErasedSize = misc.align_up(imageLen, eraseUnit)
-                needToBeErasedSize = misc.align_up(self.habDekDataOffset + memdef.kMemBlockSize_KeyBlob, eraseUnit)
+                alignedErasedSize = misc.align_up(imageLen, self.comMemEraseUnit)
+                needToBeErasedSize = misc.align_up(self.habDekDataOffset + memdef.kMemBlockSize_KeyBlob, self.comMemEraseUnit)
                 if alignedErasedSize < needToBeErasedSize:
                     memEraseLen = needToBeErasedSize - alignedErasedSize
                     alignedMemEraseAddr = imageLoadAddr + alignedErasedSize

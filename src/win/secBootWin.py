@@ -132,7 +132,7 @@ class secBootWin ( wx.Frame ):
 
 		wSizer_targetSetup.Add( self.m_staticText_bootDevice, 0, wx.ALL, 5 )
 
-		m_choice_bootDeviceChoices = [ u"FLEXSPI NOR", u"FLEXSPI NAND", u"SEMC NOR", u"SEMC NAND", u"uSDHC SD", u"uSDHC MMC/eMMC", u"LPSPI NOR,EEPROM" ]
+		m_choice_bootDeviceChoices = [ u"FLEXSPI NOR", u"FLEXSPI NAND", u"SEMC NOR", u"SEMC NAND", u"uSDHC SD", u"uSDHC MMC/eMMC", u"LPSPI NOR/EEPROM" ]
 		self.m_choice_bootDevice = wx.Choice( self.m_panel_targetSetup, wx.ID_ANY, wx.DefaultPosition, wx.Size( 150,-1 ), m_choice_bootDeviceChoices, 0 )
 		self.m_choice_bootDevice.SetSelection( 0 )
 		wSizer_targetSetup.Add( self.m_choice_bootDevice, 0, wx.ALL, 5 )

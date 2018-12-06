@@ -83,7 +83,7 @@ class secBootMain(memcore.secBootMem):
             usdhcMmcFrame.Show(True)
         elif self.bootDevice == uidef.kBootDevice_LpspiNor:
             lpspiNorFrame = ui_cfg_lpspinor.secBootUiCfgLpspiNor(None)
-            lpspiNorFrame.SetTitle(u"LPSPI NOR,EEPROM Device Configuration")
+            lpspiNorFrame.SetTitle(u"LPSPI NOR/EEPROM Device Configuration")
             lpspiNorFrame.Show(True)
         else:
             pass
