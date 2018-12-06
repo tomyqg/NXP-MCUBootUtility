@@ -752,6 +752,51 @@ class secBootRun(gencore.secBootGen):
         self.invalidateStepButtonColor(uidef.kSecureBootSeqStep_FlashImage)
         return True
 
+    def _getMcuDeviceLpspiCfg( self ):
+        lpspiCfg = self.readMcuDeviceFuseByBlhost(fusedef.kEfuseLocation_LpspiCfg, '', False)
+        return lpspiCfg
+
+    def burnBootDeviceFuses( self ):
+        if self.bootDevice == uidef.kBootDevice_SemcNand:
+            pass
+        elif self.bootDevice == uidef.kBootDevice_FlexspiNor:
+            pass
+        elif self.bootDevice == uidef.kBootDevice_LpspiNor:
+            setLpspiCfg = 0
+            # Set EEPROM enable
+            setLpspiCfg = setLpspiCfg | fusedef.kEfuseMask_EepromEnable
+            lpspiNorOpt0, lpspiNorOpt1 = uivar.getBootDeviceConfiguration(self.bootDevice)
+            # Set Spi Index
+            spiIndex = ((lpspiNorOpt0 & 0x00F00000) >> 20) - 1
+            setLpspiCfg = (setLpspiCfg & (~fusedef.kEfuseMask_LpspiIndex) | (spiIndex << fusedef.kEfuseShift_LpspiIndex))
+            # Set Spi Speed
+            spiSpeed = (lpspiNorOpt1 & 0x0000000F) >> 0
+            setLpspiCfg = (setLpspiCfg & (~fusedef.kEfuseMask_LpspiSpeed) | (spiSpeed << fusedef.kEfuseShift_LpspiSpeed))
+            # Set Spi Addressing
+            spiAddressing = 0
+            val = (lpspiNorOpt0 & 0x00000F00) >> 8
+            totalByteSize = 0
+            if val <= 11:
+                totalByteSize = int(math.pow(2, val + 19))
+            else:
+                totalByteSize = int(math.pow(2, val + 3))
+            if totalByteSize > (64 * 1024):
+                spiAddressing = fusedef.kSpiAddressing_3Bytes
+            else:
+                spiAddressing = fusedef.kSpiAddressing_2Bytes
+            setLpspiCfg = (setLpspiCfg & (~fusedef.kEfuseMask_SpiAddressing) | (spiAddressing << fusedef.kEfuseShift_SpiAddressing))
+            getLpspiCfg = self._getMcuDeviceLpspiCfg()
+            if getLpspiCfg != None:
+                getLpspiCfg = getLpspiCfg | setLpspiCfg
+                if (getLpspiCfg & (fusedef.kEfuseMask_EepromEnable | fusedef.kEfuseMask_LpspiIndex | fusedef.kEfuseMask_SpiAddressing | fusedef.kEfuseMask_LpspiSpeed)) != setLpspiCfg:
+                    self.popupMsgBox('Fuse MISC_CONF0[28:24] has been burned, it is program-once!')
+                    return False
+                else:
+                    self.burnMcuDeviceFuseByBlhost(fusedef.kEfuseLocation_LpspiCfg, getLpspiCfg)
+        else:
+            pass
+        return True
+
     def _getMcuDeviceBeeKeySel( self ):
         beeKeySel = self.readMcuDeviceFuseByBlhost(fusedef.kEfuseLocation_BeeKeySel, '', False)
         if beeKeySel != None:

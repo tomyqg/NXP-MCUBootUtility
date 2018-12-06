@@ -434,16 +434,17 @@ class secBootMain(memcore.secBootMem):
                 if not self.flashBootableImage():
                     self.popupMsgBox('Failed to flash bootable image into external memory, Please reset board and try again!')
                 else:
-                    if (self.secureBootType == uidef.kSecureBootType_HabAuth) or \
-                       (self.secureBootType == uidef.kSecureBootType_BeeCrypto and self.isCertEnabledForBee):
-                        if self.mcuDeviceHabStatus != fusedef.kHabStatus_Closed0 and \
-                           self.mcuDeviceHabStatus != fusedef.kHabStatus_Closed1:
-                            self.enableHab()
-                    if self.secureBootType == uidef.kSecureBootType_BeeCrypto and self.bootDevice == uidef.kBootDevice_FlexspiNor:
-                        if self.burnBeeKeySel():
+                    if self.burnBootDeviceFuses():
+                        if (self.secureBootType == uidef.kSecureBootType_HabAuth) or \
+                           (self.secureBootType == uidef.kSecureBootType_BeeCrypto and self.isCertEnabledForBee):
+                            if self.mcuDeviceHabStatus != fusedef.kHabStatus_Closed0 and \
+                               self.mcuDeviceHabStatus != fusedef.kHabStatus_Closed1:
+                                self.enableHab()
+                        if self.secureBootType == uidef.kSecureBootType_BeeCrypto and self.bootDevice == uidef.kBootDevice_FlexspiNor:
+                            if self.burnBeeKeySel():
+                                status = True
+                        else:
                             status = True
-                    else:
-                        status = True
                 self._stopGaugeTimer()
             else:
                 self.popupMsgBox('Please configure boot device via Flashloader first!')

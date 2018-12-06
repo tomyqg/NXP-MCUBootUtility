@@ -38,6 +38,9 @@ kEfuseIndex_SW_GP2_1 = 0x2A
 kEfuseIndex_SW_GP2_2 = 0x2B
 kEfuseIndex_SW_GP2_3 = 0x2C
 
+kEfuseIndex_MISC_CONF0 = 0x2D
+kEfuseIndex_MISC_CONF1 = 0x2E
+
 kEfuseIndex_GP4_0 = 0x3C
 kEfuseIndex_GP4_1 = 0x3D
 kEfuseIndex_GP4_2 = 0x3E
@@ -62,6 +65,16 @@ kEfuseShift_BeeKey0Sel = 12
 kEfuseShift_BeeKey1Sel = 14
 kEfuseLocation_BeeKeySel = kEfuseIndex_BOOT_CFG1
 
+kEfuseMask_EepromEnable   = 0x01000000
+kEfuseShift_EepromEnable  = 24
+kEfuseMask_LpspiIndex     = 0x06000000
+kEfuseShift_LpspiIndex    = 25
+kEfuseMask_SpiAddressing  = 0x08000000
+kEfuseShift_SpiAddressing = 27
+kEfuseMask_LpspiSpeed     = 0x30000000
+kEfuseShift_LpspiSpeed    = 28
+kEfuseLocation_LpspiCfg   = kEfuseIndex_MISC_CONF0
+
 ##################################################
 
 kHabStatus_FAB     = 0x0
@@ -73,6 +86,9 @@ kBeeKeySel_FromReg   = 0x0
 kBeeKeySel_FromGp4   = 0x1
 kBeeKeySel_FromOtpmk = 0x2
 kBeeKeySel_FromSwGp2 = 0x3
+
+kSpiAddressing_3Bytes = 0x0
+kSpiAddressing_2Bytes = 0x1
 
 ##################################################
 kEfuseRemapIndex_Src  = 0x30
