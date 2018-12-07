@@ -549,7 +549,7 @@ class secBootWin ( wx.Frame ):
 		self.m_panel_operBee2_showGp4Dek = wx.Panel( self.m_panel_operBee, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
 		sbSizer_showGp4Dek = wx.StaticBoxSizer( wx.StaticBox( self.m_panel_operBee2_showGp4Dek, wx.ID_ANY, u"Fuse GP4 Region:" ), wx.VERTICAL )
 
-		self.m_textCtrl_gp4Dek128bit = wx.TextCtrl( sbSizer_showGp4Dek.GetStaticBox(), wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.Size( 110,90 ), wx.TE_MULTILINE|wx.TE_NO_VSCROLL|wx.TE_RICH2 )
+		self.m_textCtrl_gp4Dek128bit = wx.TextCtrl( sbSizer_showGp4Dek.GetStaticBox(), wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.Size( 110,100 ), wx.TE_MULTILINE|wx.TE_NO_VSCROLL|wx.TE_RICH2 )
 		self.m_textCtrl_gp4Dek128bit.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_GRAYTEXT ) )
 
 		sbSizer_showGp4Dek.Add( self.m_textCtrl_gp4Dek128bit, 0, wx.ALIGN_CENTER|wx.ALL, 5 )
@@ -563,7 +563,7 @@ class secBootWin ( wx.Frame ):
 		self.m_panel_operBee3_showSwgp2Dek = wx.Panel( self.m_panel_operBee, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
 		sbSizer_showSwgp2Dek = wx.StaticBoxSizer( wx.StaticBox( self.m_panel_operBee3_showSwgp2Dek, wx.ID_ANY, u"Fuse SW_GP2 Region:" ), wx.VERTICAL )
 
-		self.m_textCtrl_swgp2Dek128bit = wx.TextCtrl( sbSizer_showSwgp2Dek.GetStaticBox(), wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.Size( 110,90 ), wx.TE_MULTILINE|wx.TE_NO_VSCROLL|wx.TE_RICH2 )
+		self.m_textCtrl_swgp2Dek128bit = wx.TextCtrl( sbSizer_showSwgp2Dek.GetStaticBox(), wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.Size( 110,100 ), wx.TE_MULTILINE|wx.TE_NO_VSCROLL|wx.TE_RICH2 )
 		self.m_textCtrl_swgp2Dek128bit.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_GRAYTEXT ) )
 
 		sbSizer_showSwgp2Dek.Add( self.m_textCtrl_swgp2Dek128bit, 0, wx.ALIGN_CENTER|wx.ALL, 5 )
