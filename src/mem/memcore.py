@@ -108,7 +108,7 @@ class secBootMem(fusecore.secBootFuse):
         semcTag = self.getVal32FromBinFile(memFilepath, rundef.kSemcNandFcbOffset_SemcTag)
         if fingerprint == rundef.kSemcNandFcbTag_Fingerprint and semcTag == rundef.kSemcNandFcbTag_Semc:
             dbbtStartPage = self.getVal32FromBinFile(memFilepath, rundef.kSemcNandFcbOffset_DBBTSerachAreaStartPage)
-            dbbtAddr = nfcbAddr + dbbtStartPage * self.comMemReadUnit
+            dbbtAddr = self.bootDeviceMemBase + dbbtStartPage * self.comMemReadUnit
         else:
             return False, 0
         try:
