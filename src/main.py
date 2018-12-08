@@ -46,6 +46,7 @@ class secBootMain(memcore.secBootMem):
 
     def callbackSetMcuDevice( self, event ):
         self.setTargetSetupValue()
+        self.createMcuTarget()
         usbIdList = self.getUsbid()
         self.adjustPortSetupValue(self.connectStage, usbIdList)
         self.applyFuseOperToRunMode()
@@ -338,7 +339,7 @@ class secBootMain(memcore.secBootMem):
             elif self.keyStorageRegion == uidef.kKeyStorageRegion_FlexibleUserKeys:
                 userKeySettingsFrame = ui_settings_flexible_user_keys.secBootUiSettingsFlexibleUserKeys(None)
                 userKeySettingsFrame.SetTitle(u"Advanced Key Settings - Flexible User")
-                userKeySettingsFrame.setNecessaryInfo(self.mcuDevice)
+                userKeySettingsFrame.setNecessaryInfo(self.mcuDevice, self.tgt.flexspiNorMemBase)
                 userKeySettingsFrame.Show(True)
             else:
                 pass

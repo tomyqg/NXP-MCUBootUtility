@@ -39,7 +39,7 @@ class secBootUiSettingsFlexibleUserKeys(advSettingsWin_FlexibleUserKeys.advSetti
         else:
             return None
 
-    def setNecessaryInfo( self, mcuDevice ):
+    def setNecessaryInfo( self, mcuDevice, xipBaseAddr ):
         if self.userKeyCtrlDict['mcu_device'] != mcuDevice:
             keySource = None
             engineSel = None
@@ -61,6 +61,10 @@ class secBootUiSettingsFlexibleUserKeys(advSettingsWin_FlexibleUserKeys.advSetti
             self.m_choice_engineSel.SetItems(engineSel)
             self.m_choice_engineSel.SetSelection(0)
             self._changeEngineSelection()
+            self.m_choice_xipBaseAddr.Clear()
+            xipBaseAddr = [str(hex(xipBaseAddr))]
+            self.m_choice_xipBaseAddr.SetItems(xipBaseAddr)
+            self.m_choice_xipBaseAddr.SetSelection(0)
             self.m_choice_engine0keySource.Clear()
             self.m_choice_engine1keySource.Clear()
             self.m_choice_engine0keySource.SetItems(keySource)

@@ -82,17 +82,19 @@ class secBootRun(gencore.secBootGen):
         self.comMemEraseUnit = 0
         self.comMemReadUnit = 0
 
+        self.createMcuTarget()
+
+    def createMcuTarget( self ):
         self.tgt, self.cpuDir = createTarget(self.mcuDevice, self.exeBinRoot)
 
     def getUsbid( self ):
-        # Create the target object.
-        tgt, cpuDir = createTarget(self.mcuDevice, self.exeBinRoot)
-        return [tgt.romUsbVid, tgt.romUsbPid, tgt.flashloaderUsbVid, tgt.flashloaderUsbPid]
+        self.createMcuTarget()
+        return [self.tgt.romUsbVid, self.tgt.romUsbPid, self.tgt.flashloaderUsbVid, self.tgt.flashloaderUsbPid]
 
     def connectToDevice( self , connectStage):
         if connectStage == uidef.kConnectStage_Rom:
             # Create the target object.
-            self.tgt, self.cpuDir = createTarget(self.mcuDevice, self.exeBinRoot)
+            self.tgt, self.cpuDir = self.createMcuTarget()
             if self.isUartPortSelected:
                 sdpPeripheral = 'sdp_uart'
                 uartComPort = self.uartComPort
