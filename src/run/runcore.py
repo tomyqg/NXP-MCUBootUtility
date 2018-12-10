@@ -94,7 +94,7 @@ class secBootRun(gencore.secBootGen):
     def connectToDevice( self , connectStage):
         if connectStage == uidef.kConnectStage_Rom:
             # Create the target object.
-            self.tgt, self.cpuDir = self.createMcuTarget()
+            self.createMcuTarget()
             if self.isUartPortSelected:
                 sdpPeripheral = 'sdp_uart'
                 uartComPort = self.uartComPort
