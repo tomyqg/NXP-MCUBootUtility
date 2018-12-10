@@ -63,6 +63,9 @@ class secBootGen(uicore.secBootUi):
         self.flBdBatFilename = os.path.join(self.exeTopRoot, 'gen', 'bd_file', 'imx_flashloader_gen.bat')
         self.destFlFilename = os.path.join(self.exeTopRoot, 'gen', 'bootable_image', 'ivt_flashloader_signed.bin')
 
+        self.userFileFolder = os.path.join(self.exeTopRoot, 'gen', 'user_file')
+        self.isConvertedAppUsed = False
+
         self.destAppIvtOffset = None
         self.destAppInitialLoadSize = 0
         self.destAppVectorAddress = 0
@@ -231,6 +234,29 @@ class secBootGen(uicore.secBootUi):
             val32 = self.getVal32FromBinFile(self.srkFuseFilename, (i * 4))
             self.printSrkData(self.getFormattedHexValue(val32))
 
+    def _convertImageFormatToSrec( self, appFilename, appName, appType):
+        if appType == '.hex' or appType == '.bin':
+            status = True
+            fmtObj = None
+            if appType == '.hex':
+                fmtObj = bincopy.BinFile(str(appFilename))
+            elif appType == '.bin':
+                fmtObj = bincopy.BinFile()
+                status, baseAddr = self.getUserBinaryBaseAddress()
+                if status:
+                    fmtObj.add_binary_file(str(appFilename), baseAddr)
+                else:
+                    appType = None
+            if status:
+                self.srcAppFilename = os.path.join(self.userFileFolder, appName + '.srec')
+                with open(self.srcAppFilename, 'wb') as fileObj:
+                    fileObj.write(fmtObj.as_srec())
+                    fileObj.close()
+                appFilename = self.srcAppFilename
+                appType = '.srec'
+                self.isConvertedAppUsed = True
+        return appFilename, appType
+
     def _getImageInfo( self, srcAppFilename ):
         startAddress = None
         entryPointAddress = None
@@ -238,6 +264,7 @@ class secBootGen(uicore.secBootUi):
         if os.path.isfile(srcAppFilename):
             appPath, appFilename = os.path.split(srcAppFilename)
             appName, appType = os.path.splitext(appFilename)
+            srcAppFilename, appType = self._convertImageFormatToSrec(srcAppFilename, appName, appType)
             if appType == '.elf' or appType == '.out':
                 elfObj = None
                 with open(srcAppFilename, 'rb') as f:
@@ -272,7 +299,7 @@ class secBootGen(uicore.secBootUi):
                 entryPointAddress = self.getVal32FromByteArray(srecObj.as_binary(startAddress + 0x4, startAddress  + 0x8))
                 lengthInByte = len(srecObj.as_binary())
             else:
-                self.popupMsgBox('Cannot recognise the format of image file: ' + srcAppFilename)
+                self.popupMsgBox('Cannot recognise/convert the format of image file: ' + srcAppFilename)
         #print ('Image Vector address is 0x%x' %(startAddress))
         #print ('Image Entry address is 0x%x' %(entryPointAddress))
         #print ('Image length is 0x%x' %(lengthInByte))

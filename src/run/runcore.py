@@ -754,6 +754,12 @@ class secBootRun(gencore.secBootGen):
         else:
             pass
         self.invalidateStepButtonColor(uidef.kSecureBootSeqStep_FlashImage)
+        if self.isConvertedAppUsed:
+            try:
+                os.remove(self.srcAppFilename)
+            except:
+                pass
+            self.isConvertedAppUsed = False
         return True
 
     def _getMcuDeviceSemcNandCfg( self ):
