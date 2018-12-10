@@ -266,7 +266,7 @@ class secBootUi(secBootWin.secBootWin):
             self.m_panel_progSrk1_showSrk.SetBackgroundColour( uidef.kBootSeqColor_Active )
             self.m_panel_flashImage1_showImage.SetBackgroundColour( uidef.kBootSeqColor_Active )
             self.showImageLayout(u"../img/image_signed.png")
-            self.m_button_flashImage.SetLabel('Load Signed Image, Enable HAB')
+            self.m_button_flashImage.SetLabel('Load Signed Image')
         elif self.secureBootType == uidef.kSecureBootType_HabCrypto:
             self.m_panel_doAuth1_certInput.SetBackgroundColour( uidef.kBootSeqColor_Active )
             self.m_panel_doAuth2_certFmt.SetBackgroundColour( uidef.kBootSeqColor_Active )
@@ -276,7 +276,7 @@ class secBootUi(secBootWin.secBootWin):
             self.m_panel_progSrk1_showSrk.SetBackgroundColour( uidef.kBootSeqColor_Active )
             self.m_panel_flashImage1_showImage.SetBackgroundColour( uidef.kBootSeqColor_Active )
             self.showImageLayout(u"../img/image_signed_hab_encrypted_nodek.png")
-            self.m_button_flashImage.SetLabel('Load HAB Encrypted Image')
+            self.m_button_flashImage.SetLabel('Load Encrypted Image')
             self.m_panel_progDek1_showHabDek.SetBackgroundColour( uidef.kBootSeqColor_Active )
         elif self.secureBootType == uidef.kSecureBootType_BeeCrypto:
             if self.bootDevice == uidef.kBootDevice_FlexspiNor:
@@ -288,11 +288,10 @@ class secBootUi(secBootWin.secBootWin):
                 if self.isCertEnabledForBee:
                     self.m_button_genImage.SetLabel('Generate Signed Bootable Image')
                     self.showImageLayout(u"../img/image_signed_bee_encrypted.png")
-                    self.m_button_flashImage.SetLabel('Load Signed Image, Burn Fuse')
                 else:
                     self.m_button_genImage.SetLabel('Generate Unsigned Bootable Image')
                     self.showImageLayout(u"../img/image_unsigned_bee_encrypted.png")
-                    self.m_button_flashImage.SetLabel('Load Unsigned Image, Burn Fuse')
+                self.m_button_flashImage.SetLabel('Load Encrypted Image')
             else:
                 self._resetSecureBootSeqColor()
         else:
@@ -311,14 +310,13 @@ class secBootUi(secBootWin.secBootWin):
             self.isCertEnabledForBee = False
             self.m_button_genImage.SetLabel('Generate Unsigned Bootable Image')
             self.showImageLayout(u"../img/image_unsigned_bee_encrypted.png")
-            self.m_button_flashImage.SetLabel('Load Unsigned Image, Burn Fuse')
         elif txt == 'Yes':
             self.isCertEnabledForBee = True
             self.m_button_genImage.SetLabel('Generate Signed Bootable Image')
             self.showImageLayout(u"../img/image_signed_bee_encrypted.png")
-            self.m_button_flashImage.SetLabel('Load Signed Image, Burn Fuse')
         else:
             pass
+        self.m_button_flashImage.SetLabel('Load Encrypted Image')
         self._resetCertificateColor()
         if self.isCertEnabledForBee:
             self.m_panel_doAuth1_certInput.SetBackgroundColour( uidef.kBootSeqColor_Optional )

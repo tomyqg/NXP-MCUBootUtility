@@ -17,7 +17,7 @@ import wx.xrc
 class advSettingsWin_Cert ( wx.Frame ):
 
 	def __init__( self, parent ):
-		wx.Frame.__init__ ( self, parent, id = wx.ID_ANY, title = wx.EmptyString, pos = wx.DefaultPosition, size = wx.Size( 352,347 ), style = wx.DEFAULT_FRAME_STYLE|wx.TAB_TRAVERSAL )
+		wx.Frame.__init__ ( self, parent, id = wx.ID_ANY, title = wx.EmptyString, pos = wx.DefaultPosition, size = wx.Size( 403,363 ), style = wx.DEFAULT_FRAME_STYLE|wx.TAB_TRAVERSAL )
 
 		self.SetSizeHints( wx.DefaultSize, wx.DefaultSize )
 		self.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
@@ -34,7 +34,7 @@ class advSettingsWin_Cert ( wx.Frame ):
 		gSizer_certOpt.Add( self.m_staticText_cstVersion, 0, wx.ALL, 5 )
 
 		m_choice_cstVersionChoices = [ u"2.3.3", u"3.0.1", u"3.1.0" ]
-		self.m_choice_cstVersion = wx.Choice( self.m_panel_certOpt, wx.ID_ANY, wx.DefaultPosition, wx.Size( 150,-1 ), m_choice_cstVersionChoices, 0 )
+		self.m_choice_cstVersion = wx.Choice( self.m_panel_certOpt, wx.ID_ANY, wx.DefaultPosition, wx.Size( 170,-1 ), m_choice_cstVersionChoices, 0 )
 		self.m_choice_cstVersion.SetSelection( 1 )
 		gSizer_certOpt.Add( self.m_choice_cstVersion, 0, wx.ALL, 5 )
 
@@ -44,7 +44,7 @@ class advSettingsWin_Cert ( wx.Frame ):
 		gSizer_certOpt.Add( self.m_staticText_useExistingCaKey, 0, wx.ALL, 5 )
 
 		m_choice_useExistingCaKeyChoices = [ u"No" ]
-		self.m_choice_useExistingCaKey = wx.Choice( self.m_panel_certOpt, wx.ID_ANY, wx.DefaultPosition, wx.Size( 150,-1 ), m_choice_useExistingCaKeyChoices, 0 )
+		self.m_choice_useExistingCaKey = wx.Choice( self.m_panel_certOpt, wx.ID_ANY, wx.DefaultPosition, wx.Size( 170,-1 ), m_choice_useExistingCaKeyChoices, 0 )
 		self.m_choice_useExistingCaKey.SetSelection( 0 )
 		gSizer_certOpt.Add( self.m_choice_useExistingCaKey, 0, wx.ALL, 5 )
 
@@ -54,7 +54,7 @@ class advSettingsWin_Cert ( wx.Frame ):
 		gSizer_certOpt.Add( self.m_staticText_useEcc, 0, wx.ALL, 5 )
 
 		m_choice_useEccChoices = [ u"No", u"Yes" ]
-		self.m_choice_useEcc = wx.Choice( self.m_panel_certOpt, wx.ID_ANY, wx.DefaultPosition, wx.Size( 150,-1 ), m_choice_useEccChoices, 0 )
+		self.m_choice_useEcc = wx.Choice( self.m_panel_certOpt, wx.ID_ANY, wx.DefaultPosition, wx.Size( 170,-1 ), m_choice_useEccChoices, 0 )
 		self.m_choice_useEcc.SetSelection( 0 )
 		gSizer_certOpt.Add( self.m_choice_useEcc, 0, wx.ALL, 5 )
 
@@ -64,7 +64,7 @@ class advSettingsWin_Cert ( wx.Frame ):
 		gSizer_certOpt.Add( self.m_staticText_pkiTreeKeyLen, 0, wx.ALL, 5 )
 
 		m_choice_pkiTreeKeyLenChoices = [ u"1024", u"2048", u"3072", u"4096" ]
-		self.m_choice_pkiTreeKeyLen = wx.Choice( self.m_panel_certOpt, wx.ID_ANY, wx.DefaultPosition, wx.Size( 150,-1 ), m_choice_pkiTreeKeyLenChoices, 0 )
+		self.m_choice_pkiTreeKeyLen = wx.Choice( self.m_panel_certOpt, wx.ID_ANY, wx.DefaultPosition, wx.Size( 170,-1 ), m_choice_pkiTreeKeyLenChoices, 0 )
 		self.m_choice_pkiTreeKeyLen.SetSelection( 1 )
 		gSizer_certOpt.Add( self.m_choice_pkiTreeKeyLen, 0, wx.ALL, 5 )
 
@@ -73,7 +73,7 @@ class advSettingsWin_Cert ( wx.Frame ):
 
 		gSizer_certOpt.Add( self.m_staticText_pkiTreeDuration, 0, wx.ALL, 5 )
 
-		self.m_textCtrl_pkiTreeDuration = wx.TextCtrl( self.m_panel_certOpt, wx.ID_ANY, u"10", wx.DefaultPosition, wx.Size( 150,-1 ), 0 )
+		self.m_textCtrl_pkiTreeDuration = wx.TextCtrl( self.m_panel_certOpt, wx.ID_ANY, u"10", wx.DefaultPosition, wx.Size( 170,-1 ), 0 )
 		gSizer_certOpt.Add( self.m_textCtrl_pkiTreeDuration, 0, wx.ALL, 5 )
 
 		self.m_staticText_SRKs = wx.StaticText( self.m_panel_certOpt, wx.ID_ANY, u"Super Root Keys:", wx.DefaultPosition, wx.DefaultSize, 0 )
@@ -82,7 +82,7 @@ class advSettingsWin_Cert ( wx.Frame ):
 		gSizer_certOpt.Add( self.m_staticText_SRKs, 0, wx.ALL, 5 )
 
 		m_choice_SRKsChoices = [ u"1", u"2", u"3", u"4" ]
-		self.m_choice_SRKs = wx.Choice( self.m_panel_certOpt, wx.ID_ANY, wx.DefaultPosition, wx.Size( 150,-1 ), m_choice_SRKsChoices, 0 )
+		self.m_choice_SRKs = wx.Choice( self.m_panel_certOpt, wx.ID_ANY, wx.DefaultPosition, wx.Size( 170,-1 ), m_choice_SRKsChoices, 0 )
 		self.m_choice_SRKs.SetSelection( 3 )
 		gSizer_certOpt.Add( self.m_choice_SRKs, 0, wx.ALL, 5 )
 
@@ -92,7 +92,7 @@ class advSettingsWin_Cert ( wx.Frame ):
 		gSizer_certOpt.Add( self.m_staticText_caFlagSet, 0, wx.ALL, 5 )
 
 		m_choice_caFlagSetChoices = [ u"Yes - Standard PKI Tree", u"No - Fast Auth Tree" ]
-		self.m_choice_caFlagSet = wx.Choice( self.m_panel_certOpt, wx.ID_ANY, wx.DefaultPosition, wx.Size( 150,-1 ), m_choice_caFlagSetChoices, 0 )
+		self.m_choice_caFlagSet = wx.Choice( self.m_panel_certOpt, wx.ID_ANY, wx.DefaultPosition, wx.Size( 170,-1 ), m_choice_caFlagSetChoices, 0 )
 		self.m_choice_caFlagSet.SetSelection( 0 )
 		gSizer_certOpt.Add( self.m_choice_caFlagSet, 0, wx.ALL, 5 )
 
@@ -104,7 +104,7 @@ class advSettingsWin_Cert ( wx.Frame ):
 
 		wSizer_win.Add( self.m_notebook_certOpt, 1, wx.EXPAND |wx.ALL, 5 )
 
-		self.m_staticText_winNull0 = wx.StaticText( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.Size( 49,-1 ), 0 )
+		self.m_staticText_winNull0 = wx.StaticText( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.Size( 68,-1 ), 0 )
 		self.m_staticText_winNull0.Wrap( -1 )
 
 		wSizer_win.Add( self.m_staticText_winNull0, 0, wx.ALL, 5 )
