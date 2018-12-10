@@ -462,7 +462,6 @@ class secBootGen(uicore.secBootUi):
             with open(self.appBdFilename, 'wb') as fileObj:
                 fileObj.write(bdContent)
                 fileObj.close()
-            self.showMatchBdFilePath(self.appBdFilename)
 
         return True
 

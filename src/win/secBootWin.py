@@ -142,13 +142,21 @@ class secBootWin ( wx.Frame ):
 
 		wSizer_targetSetup.Add( self.m_staticText_null1TargetSetup, 0, wx.ALL, 5 )
 
-		self.m_staticText_null2TargetSetup = wx.StaticText( self.m_panel_targetSetup, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.Size( 30,-1 ), 0 )
+		self.m_staticText_null2TargetSetup = wx.StaticText( self.m_panel_targetSetup, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.Size( 25,-1 ), 0 )
 		self.m_staticText_null2TargetSetup.Wrap( -1 )
 
 		wSizer_targetSetup.Add( self.m_staticText_null2TargetSetup, 0, wx.ALL, 5 )
 
-		self.m_button_BootDeviceConfiguration = wx.Button( self.m_panel_targetSetup, wx.ID_ANY, u"Boot Device Configuration", wx.DefaultPosition, wx.Size( 180,-1 ), 0 )
-		wSizer_targetSetup.Add( self.m_button_BootDeviceConfiguration, 0, wx.ALL, 5 )
+		self.m_button_bootDeviceConfiguration = wx.Button( self.m_panel_targetSetup, wx.ID_ANY, u"Boot Device Configuration", wx.DefaultPosition, wx.Size( 190,-1 ), 0 )
+		wSizer_targetSetup.Add( self.m_button_bootDeviceConfiguration, 0, wx.ALL, 5 )
+
+		self.m_staticText_null3TargetSetup = wx.StaticText( self.m_panel_targetSetup, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.Size( 25,-1 ), 0 )
+		self.m_staticText_null3TargetSetup.Wrap( -1 )
+
+		wSizer_targetSetup.Add( self.m_staticText_null3TargetSetup, 0, wx.ALL, 5 )
+
+		self.m_button_deviceConfigurationData = wx.Button( self.m_panel_targetSetup, wx.ID_ANY, u"Device Configuration Data (DCD)", wx.DefaultPosition, wx.Size( 190,-1 ), 0 )
+		wSizer_targetSetup.Add( self.m_button_deviceConfigurationData, 0, wx.ALL, 5 )
 
 
 		self.m_panel_targetSetup.SetSizer( wSizer_targetSetup )
@@ -295,7 +303,7 @@ class secBootWin ( wx.Frame ):
 
 		sbSizer_certInput.Add( self.m_staticText_serial, 0, wx.ALL, 5 )
 
-		self.m_textCtrl_serial = wx.TextCtrl( sbSizer_certInput.GetStaticBox(), wx.ID_ANY, u"12345678", wx.DefaultPosition, wx.Size( 60,-1 ), 0 )
+		self.m_textCtrl_serial = wx.TextCtrl( sbSizer_certInput.GetStaticBox(), wx.ID_ANY, u"12345678", wx.DefaultPosition, wx.Size( 150,-1 ), 0 )
 		sbSizer_certInput.Add( self.m_textCtrl_serial, 0, wx.ALIGN_CENTER|wx.ALL, 5 )
 
 		self.m_staticText_keyPass = wx.StaticText( sbSizer_certInput.GetStaticBox(), wx.ID_ANY, u"key_pass (text):", wx.DefaultPosition, wx.DefaultSize, 0 )
@@ -303,10 +311,10 @@ class secBootWin ( wx.Frame ):
 
 		sbSizer_certInput.Add( self.m_staticText_keyPass, 0, wx.ALL, 5 )
 
-		self.m_textCtrl_keyPass = wx.TextCtrl( sbSizer_certInput.GetStaticBox(), wx.ID_ANY, u"test", wx.DefaultPosition, wx.Size( 100,-1 ), 0 )
+		self.m_textCtrl_keyPass = wx.TextCtrl( sbSizer_certInput.GetStaticBox(), wx.ID_ANY, u"test", wx.DefaultPosition, wx.Size( 150,-1 ), 0 )
 		sbSizer_certInput.Add( self.m_textCtrl_keyPass, 0, wx.ALIGN_CENTER|wx.ALL, 5 )
 
-		self.m_button_advCertSettings = wx.Button( sbSizer_certInput.GetStaticBox(), wx.ID_ANY, u"Advanced Cert Settings", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.m_button_advCertSettings = wx.Button( sbSizer_certInput.GetStaticBox(), wx.ID_ANY, u"Advanced Cert Settings", wx.DefaultPosition, wx.Size( 150,-1 ), 0 )
 		sbSizer_certInput.Add( self.m_button_advCertSettings, 0, wx.ALIGN_CENTER|wx.ALL, 5 )
 
 
@@ -319,7 +327,7 @@ class secBootWin ( wx.Frame ):
 		sbSizer_certFmt = wx.StaticBoxSizer( wx.StaticBox( self.m_panel_doAuth2_certFmt, wx.ID_ANY, u"Certificate Format:" ), wx.VERTICAL )
 
 		m_choice_certFmtChoices = [ u"X.509v3" ]
-		self.m_choice_certFmt = wx.Choice( sbSizer_certFmt.GetStaticBox(), wx.ID_ANY, wx.DefaultPosition, wx.Size( 80,-1 ), m_choice_certFmtChoices, 0 )
+		self.m_choice_certFmt = wx.Choice( sbSizer_certFmt.GetStaticBox(), wx.ID_ANY, wx.DefaultPosition, wx.Size( 90,-1 ), m_choice_certFmtChoices, 0 )
 		self.m_choice_certFmt.SetSelection( 0 )
 		sbSizer_certFmt.Add( self.m_choice_certFmt, 0, wx.ALIGN_CENTER|wx.ALL, 5 )
 
@@ -329,7 +337,7 @@ class secBootWin ( wx.Frame ):
 		sbSizer_certFmt.Add( self.m_staticText_hashAlgo, 0, wx.ALL, 5 )
 
 		m_choice_hashAlgoChoices = [ u"SHA-256" ]
-		self.m_choice_hashAlgo = wx.Choice( sbSizer_certFmt.GetStaticBox(), wx.ID_ANY, wx.DefaultPosition, wx.Size( 80,-1 ), m_choice_hashAlgoChoices, 0 )
+		self.m_choice_hashAlgo = wx.Choice( sbSizer_certFmt.GetStaticBox(), wx.ID_ANY, wx.DefaultPosition, wx.Size( 90,-1 ), m_choice_hashAlgoChoices, 0 )
 		self.m_choice_hashAlgo.SetSelection( 0 )
 		sbSizer_certFmt.Add( self.m_choice_hashAlgo, 0, wx.ALIGN_CENTER|wx.ALL, 5 )
 
@@ -356,7 +364,7 @@ class secBootWin ( wx.Frame ):
 		self.m_panel_genImage1_browseApp = wx.Panel( self.m_panel_genImage, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
 		sbSizer_browseApp = wx.StaticBoxSizer( wx.StaticBox( self.m_panel_genImage1_browseApp, wx.ID_ANY, u"Image Setting:" ), wx.VERTICAL )
 
-		self.m_staticText_appPath = wx.StaticText( sbSizer_browseApp.GetStaticBox(), wx.ID_ANY, u"Application Image File (.elf/.srec):", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.m_staticText_appPath = wx.StaticText( sbSizer_browseApp.GetStaticBox(), wx.ID_ANY, u"Application Image File:", wx.DefaultPosition, wx.Size( -1,-1 ), 0 )
 		self.m_staticText_appPath.Wrap( -1 )
 
 		sbSizer_browseApp.Add( self.m_staticText_appPath, 0, wx.ALL, 5 )
@@ -364,17 +372,22 @@ class secBootWin ( wx.Frame ):
 		self.m_filePicker_appPath = wx.FilePickerCtrl( sbSizer_browseApp.GetStaticBox(), wx.ID_ANY, wx.EmptyString, u"Select a file", u"*.*", wx.DefaultPosition, wx.Size( 280,23 ), wx.FLP_DEFAULT_STYLE )
 		sbSizer_browseApp.Add( self.m_filePicker_appPath, 0, wx.ALIGN_CENTER|wx.ALL, 5 )
 
-		self.m_staticText_bdPath = wx.StaticText( sbSizer_browseApp.GetStaticBox(), wx.ID_ANY, u"Matched BD File:", wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.m_staticText_bdPath.Wrap( -1 )
+		m_choice_appFormatChoices = [ u"Auto-detect image format", u".out(axf) from Keil MDK", u".out(elf) from IAR EWARM", u".out(axf) from MCUXpresso", u".out(elf) from GCC ARM", u"Motorola S-Records (.srec/.s19)", u"Intel Extended Hex (.hex)", u"Raw Binary (.bin)" ]
+		self.m_choice_appFormat = wx.Choice( sbSizer_browseApp.GetStaticBox(), wx.ID_ANY, wx.DefaultPosition, wx.Size( 180,-1 ), m_choice_appFormatChoices, 0 )
+		self.m_choice_appFormat.SetSelection( 0 )
+		sbSizer_browseApp.Add( self.m_choice_appFormat, 0, wx.ALIGN_CENTER|wx.ALL, 5 )
 
-		sbSizer_browseApp.Add( self.m_staticText_bdPath, 0, wx.ALL, 5 )
+		self.m_staticText_appBaseAddr = wx.StaticText( sbSizer_browseApp.GetStaticBox(), wx.ID_ANY, u"Base Address for Raw Binary Image:", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.m_staticText_appBaseAddr.Wrap( -1 )
 
-		self.m_textCtrl_bdPath = wx.TextCtrl( sbSizer_browseApp.GetStaticBox(), wx.ID_ANY, u"example.bd", wx.DefaultPosition, wx.Size( 280,-1 ), 0 )
-		self.m_textCtrl_bdPath.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_GRAYTEXT ) )
+		sbSizer_browseApp.Add( self.m_staticText_appBaseAddr, 0, wx.ALL, 5 )
 
-		sbSizer_browseApp.Add( self.m_textCtrl_bdPath, 0, wx.ALIGN_CENTER|wx.ALL, 5 )
+		self.m_textCtrl_appBaseAddr = wx.TextCtrl( sbSizer_browseApp.GetStaticBox(), wx.ID_ANY, u"0x00003000", wx.DefaultPosition, wx.Size( 180,-1 ), 0 )
+		self.m_textCtrl_appBaseAddr.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
 
-		self.m_button_advBdSettings = wx.Button( sbSizer_browseApp.GetStaticBox(), wx.ID_ANY, u"Advanced BD Settings", wx.DefaultPosition, wx.DefaultSize, 0 )
+		sbSizer_browseApp.Add( self.m_textCtrl_appBaseAddr, 0, wx.ALIGN_CENTER|wx.ALL, 5 )
+
+		self.m_button_advBdSettings = wx.Button( sbSizer_browseApp.GetStaticBox(), wx.ID_ANY, u"Advanced BD Settings", wx.DefaultPosition, wx.Size( 180,-1 ), 0 )
 		sbSizer_browseApp.Add( self.m_button_advBdSettings, 0, wx.ALIGN_CENTER|wx.ALL, 5 )
 
 
@@ -387,7 +400,7 @@ class secBootWin ( wx.Frame ):
 		sbSizer_habCryptoAlgo = wx.StaticBoxSizer( wx.StaticBox( self.m_panel_genImage2_habCryptoAlgo, wx.ID_ANY, u"HAB Encryption Algorithm:" ), wx.VERTICAL )
 
 		m_choice_habCryptoAlgoChoices = [ u"AES-128" ]
-		self.m_choice_habCryptoAlgo = wx.Choice( sbSizer_habCryptoAlgo.GetStaticBox(), wx.ID_ANY, wx.DefaultPosition, wx.Size( 80,-1 ), m_choice_habCryptoAlgoChoices, 0 )
+		self.m_choice_habCryptoAlgo = wx.Choice( sbSizer_habCryptoAlgo.GetStaticBox(), wx.ID_ANY, wx.DefaultPosition, wx.Size( 90,-1 ), m_choice_habCryptoAlgoChoices, 0 )
 		self.m_choice_habCryptoAlgo.SetSelection( 0 )
 		sbSizer_habCryptoAlgo.Add( self.m_choice_habCryptoAlgo, 0, wx.ALIGN_CENTER|wx.ALL, 5 )
 
@@ -401,7 +414,7 @@ class secBootWin ( wx.Frame ):
 		sbSizer_enableCertForBee = wx.StaticBoxSizer( wx.StaticBox( self.m_panel_genImage3_enableCertForBee, wx.ID_ANY, u"Enable Certificate for BEE Encryption" ), wx.VERTICAL )
 
 		m_choice_enableCertForBeeChoices = [ u"No", u"Yes" ]
-		self.m_choice_enableCertForBee = wx.Choice( sbSizer_enableCertForBee.GetStaticBox(), wx.ID_ANY, wx.DefaultPosition, wx.Size( 80,-1 ), m_choice_enableCertForBeeChoices, 0 )
+		self.m_choice_enableCertForBee = wx.Choice( sbSizer_enableCertForBee.GetStaticBox(), wx.ID_ANY, wx.DefaultPosition, wx.Size( 90,-1 ), m_choice_enableCertForBeeChoices, 0 )
 		self.m_choice_enableCertForBee.SetSelection( 0 )
 		sbSizer_enableCertForBee.Add( self.m_choice_enableCertForBee, 0, wx.ALIGN_CENTER|wx.ALL, 5 )
 
@@ -432,7 +445,7 @@ class secBootWin ( wx.Frame ):
 		sbSizer_keyStorageRegion.Add( self.m_staticText_keyStorageRegion, 0, wx.ALL, 5 )
 
 		m_choice_keyStorageRegionChoices = [ u"Fixed SNVS Key", u"Flexible User Keys" ]
-		self.m_choice_keyStorageRegion = wx.Choice( sbSizer_keyStorageRegion.GetStaticBox(), wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, m_choice_keyStorageRegionChoices, 0 )
+		self.m_choice_keyStorageRegion = wx.Choice( sbSizer_keyStorageRegion.GetStaticBox(), wx.ID_ANY, wx.DefaultPosition, wx.Size( 150,-1 ), m_choice_keyStorageRegionChoices, 0 )
 		self.m_choice_keyStorageRegion.SetSelection( 0 )
 		sbSizer_keyStorageRegion.Add( self.m_choice_keyStorageRegion, 0, wx.ALIGN_CENTER|wx.ALL, 5 )
 
@@ -442,11 +455,11 @@ class secBootWin ( wx.Frame ):
 		sbSizer_keyStorageRegion.Add( self.m_staticText_availBeeEngines, 0, wx.ALL, 5 )
 
 		m_choice_availBeeEnginesChoices = [ u"1", u"2" ]
-		self.m_choice_availBeeEngines = wx.Choice( sbSizer_keyStorageRegion.GetStaticBox(), wx.ID_ANY, wx.DefaultPosition, wx.Size( 80,-1 ), m_choice_availBeeEnginesChoices, 0 )
+		self.m_choice_availBeeEngines = wx.Choice( sbSizer_keyStorageRegion.GetStaticBox(), wx.ID_ANY, wx.DefaultPosition, wx.Size( 90,-1 ), m_choice_availBeeEnginesChoices, 0 )
 		self.m_choice_availBeeEngines.SetSelection( 0 )
 		sbSizer_keyStorageRegion.Add( self.m_choice_availBeeEngines, 0, wx.ALIGN_CENTER|wx.ALL, 5 )
 
-		self.m_button_advKeySettings = wx.Button( sbSizer_keyStorageRegion.GetStaticBox(), wx.ID_ANY, u"Advanced Key Settings", wx.DefaultPosition, wx.Size( -1,-1 ), 0 )
+		self.m_button_advKeySettings = wx.Button( sbSizer_keyStorageRegion.GetStaticBox(), wx.ID_ANY, u"Advanced Key Settings", wx.DefaultPosition, wx.Size( 150,-1 ), 0 )
 		sbSizer_keyStorageRegion.Add( self.m_button_advKeySettings, 0, wx.ALIGN_CENTER|wx.ALL, 5 )
 
 
@@ -459,7 +472,7 @@ class secBootWin ( wx.Frame ):
 		sbSizer_beeCryptoAlgo = wx.StaticBoxSizer( wx.StaticBox( self.m_panel_prepBee2_beeCryptoAlgo, wx.ID_ANY, u"BEE Encryption Algorithm:" ), wx.VERTICAL )
 
 		m_choice_beeCryptoAlgoChoices = [ u"AES-128" ]
-		self.m_choice_beeCryptoAlgo = wx.Choice( sbSizer_beeCryptoAlgo.GetStaticBox(), wx.ID_ANY, wx.DefaultPosition, wx.Size( 80,-1 ), m_choice_beeCryptoAlgoChoices, 0 )
+		self.m_choice_beeCryptoAlgo = wx.Choice( sbSizer_beeCryptoAlgo.GetStaticBox(), wx.ID_ANY, wx.DefaultPosition, wx.Size( 90,-1 ), m_choice_beeCryptoAlgoChoices, 0 )
 		self.m_choice_beeCryptoAlgo.SetSelection( 0 )
 		sbSizer_beeCryptoAlgo.Add( self.m_choice_beeCryptoAlgo, 0, wx.ALIGN_CENTER|wx.ALL, 5 )
 
@@ -469,7 +482,7 @@ class secBootWin ( wx.Frame ):
 		sbSizer_beeCryptoAlgo.Add( self.m_staticText_maxFacCnt, 0, wx.ALL, 5 )
 
 		m_choice_maxFacCntChoices = [ u"3" ]
-		self.m_choice_maxFacCnt = wx.Choice( sbSizer_beeCryptoAlgo.GetStaticBox(), wx.ID_ANY, wx.DefaultPosition, wx.Size( 80,-1 ), m_choice_maxFacCntChoices, 0 )
+		self.m_choice_maxFacCnt = wx.Choice( sbSizer_beeCryptoAlgo.GetStaticBox(), wx.ID_ANY, wx.DefaultPosition, wx.Size( 90,-1 ), m_choice_maxFacCntChoices, 0 )
 		self.m_choice_maxFacCnt.SetSelection( 0 )
 		sbSizer_beeCryptoAlgo.Add( self.m_choice_maxFacCnt, 0, wx.ALIGN_CENTER|wx.ALL, 5 )
 
@@ -622,7 +635,7 @@ class secBootWin ( wx.Frame ):
 		self.m_panel_progDek1_showHabDek = wx.Panel( self.m_panel_progDek, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
 		sbSizer_showHabDek = wx.StaticBoxSizer( wx.StaticBox( self.m_panel_progDek1_showHabDek, wx.ID_ANY, u"Load DEK KeyBlob:" ), wx.VERTICAL )
 
-		self.m_staticText_habDek128bit = wx.StaticText( sbSizer_showHabDek.GetStaticBox(), wx.ID_ANY, u"Use below DEK data (128bits) to generate keyblob and program it to flash for HAB:", wx.DefaultPosition, wx.Size( 120,80 ), 0 )
+		self.m_staticText_habDek128bit = wx.StaticText( sbSizer_showHabDek.GetStaticBox(), wx.ID_ANY, u"Use below DEK data (128bits) to generate keyblob and program it to flash for HAB:", wx.DefaultPosition, wx.Size( 160,60 ), 0 )
 		self.m_staticText_habDek128bit.Wrap( -1 )
 
 		sbSizer_showHabDek.Add( self.m_staticText_habDek128bit, 0, wx.ALL, 5 )
@@ -1577,7 +1590,7 @@ class secBootWin ( wx.Frame ):
 		self.m_choice_mcuSeries.Bind( wx.EVT_CHOICE, self.callbackSetMcuSeries )
 		self.m_choice_mcuDevice.Bind( wx.EVT_CHOICE, self.callbackSetMcuDevice )
 		self.m_choice_bootDevice.Bind( wx.EVT_CHOICE, self.callbackSetBootDevice )
-		self.m_button_BootDeviceConfiguration.Bind( wx.EVT_BUTTON, self.callbackBootDeviceConfiguration )
+		self.m_button_bootDeviceConfiguration.Bind( wx.EVT_BUTTON, self.callbackBootDeviceConfiguration )
 		self.m_radioBtn_uart.Bind( wx.EVT_RADIOBUTTON, self.callbackSetUartPort )
 		self.m_radioBtn_usbhid.Bind( wx.EVT_RADIOBUTTON, self.callbackSetUsbhidPort )
 		self.m_checkBox_oneStepConnect.Bind( wx.EVT_CHECKBOX, self.callbackSetOneStep )

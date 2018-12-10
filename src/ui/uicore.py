@@ -392,10 +392,6 @@ class secBootUi(secBootWin.secBootWin):
     def clearDeviceStatus( self ):
         self.m_textCtrl_deviceStatus.Clear()
 
-    def showMatchBdFilePath( self, bdPath ):
-        self.m_textCtrl_bdPath.Clear()
-        self.m_textCtrl_bdPath.write(bdPath)
-
     def getUserAppFilePath( self ):
         appPath = self.m_filePicker_appPath.GetPath()
         return appPath.encode('utf-8').encode("gbk")
