@@ -64,6 +64,10 @@ class secBootGen(uicore.secBootUi):
         self.destFlFilename = os.path.join(self.exeTopRoot, 'gen', 'bootable_image', 'ivt_flashloader_signed.bin')
 
         self.userFileFolder = os.path.join(self.exeTopRoot, 'gen', 'user_file')
+        self.mdkAxfConvToolPath = os.path.join(self.exeTopRoot, 'tools', 'ide_utils', 'keil_mdk', 'fromelf.exe')
+        self.iarElfConvToolPath = os.path.join(self.exeTopRoot, 'tools', 'ide_utils', 'iar_ewarm', 'ielftool.exe')
+        self.mcuxAxfConvToolPath = os.path.join(self.exeTopRoot, 'tools', 'ide_utils', 'mcuxpresso', 'arm-none-eabi-objcopy.exe')
+        self.appFmtBatFilename = os.path.join(self.exeTopRoot, 'gen', 'user_file', 'imx_format_conv.bat')
         self.isConvertedAppUsed = False
 
         self.destAppIvtOffset = None
@@ -234,28 +238,94 @@ class secBootGen(uicore.secBootUi):
             val32 = self.getVal32FromBinFile(self.srkFuseFilename, (i * 4))
             self.printSrkData(self.getFormattedHexValue(val32))
 
-    def _convertImageFormatToSrec( self, appFilename, appName, appType):
-        if appType == '.hex' or appType == '.bin':
-            status = True
-            fmtObj = None
-            if appType == '.hex':
-                fmtObj = bincopy.BinFile(str(appFilename))
-            elif appType == '.bin':
-                fmtObj = bincopy.BinFile()
-                status, baseAddr = self.getUserBinaryBaseAddress()
-                if status:
-                    fmtObj.add_binary_file(str(appFilename), baseAddr)
-                else:
-                    appType = None
+    def _convertElfOrAxfToSrec( self, appFilename, destSrecAppFilename, appFormat):
+        batContent = ''
+        # below are conv results:
+        # ----------------------------------------------------------------
+        # |                       |    IAR     |    MDK     |    MCUX    |
+        # ----------------------------------------------------------------
+        # |      ielftool         |    Yes     |    Yes     |    No      |   // Start address is always 0x0000_0000
+        # ----------------------------------------------------------------
+        # | arm-none-eabi-objcopy |    Yes     |    No      |    Yes     |   // Error content in last three lines
+        # ----------------------------------------------------------------
+        # |      fromelf          |    No      |    Yes     |    No      |   // A folder will be generated for IAR, All contents are error for MCUX
+        # ----------------------------------------------------------------
+        if appFormat == uidef.kAppImageFormat_ElfFromIar or appFormat == uidef.kAppImageFormat_AxfFromMdk:
+            batContent = "\"" + self.iarElfConvToolPath + "\" --srec-s3only \"" + appFilename +"\" \"" + destSrecAppFilename + "\""
+        elif appFormat == uidef.kAppImageFormat_AxfFromMcux or appFormat == uidef.kAppImageFormat_ElfFromGcc:
+            batContent = "\"" + self.mcuxAxfConvToolPath + "\" -O srec \"" + appFilename +"\" \"" + destSrecAppFilename + "\""
+        #elif appFormat == uidef.kAppImageFormat_AxfFromMdk:
+        #    batContent = "\"" + self.mdkAxfConvToolPath + "\" --m32 \"" + appFilename +"\" --output \"" + destSrecAppFilename + "\""
+        else:
+            pass
+        with open(self.appFmtBatFilename, 'wb') as fileObj:
+            fileObj.write(batContent)
+            fileObj.close()
+        try:
+            os.system(self.appFmtBatFilename)
+        except:
+            pass
+        if os.path.isfile(destSrecAppFilename):
+            self.srcAppFilename = destSrecAppFilename
+            appType = gendef.kAppImageFileExtensionList_S19[0]
+            self.isConvertedAppUsed = True
+            self.printLog('User image file has been converted to S-Records successfully')
+            return self.srcAppFilename, appType
+        else:
+            appType = gendef.kAppImageFileExtensionList_Elf[0]
+            return appFilename, appType
+
+    def _convertHexOrBinToSrec( self, appFilename, destSrecAppFilename, appType):
+        status = True
+        fmtObj = None
+        if appType.lower() in gendef.kAppImageFileExtensionList_Hex:
+            fmtObj = bincopy.BinFile(str(appFilename))
+        elif appType.lower() in gendef.kAppImageFileExtensionList_Bin:
+            fmtObj = bincopy.BinFile()
+            status, baseAddr = self.getUserBinaryBaseAddress()
             if status:
-                self.srcAppFilename = os.path.join(self.userFileFolder, appName + '.srec')
-                with open(self.srcAppFilename, 'wb') as fileObj:
-                    fileObj.write(fmtObj.as_srec())
-                    fileObj.close()
-                appFilename = self.srcAppFilename
-                appType = '.srec'
-                self.isConvertedAppUsed = True
+                fmtObj.add_binary_file(str(appFilename), baseAddr)
+            else:
+                appType = None
+        if status:
+            self.srcAppFilename = destSrecAppFilename
+            with open(self.srcAppFilename, 'wb') as fileObj:
+                fileObj.write(fmtObj.as_srec())
+                fileObj.close()
+            appFilename = self.srcAppFilename
+            appType = gendef.kAppImageFileExtensionList_S19[0]
+            self.isConvertedAppUsed = True
         return appFilename, appType
+
+    def _convertImageFormatToSrec( self, appFilename, appName, appType):
+        appFormat = self.getUserAppFileFormat()
+        destSrecAppFilename = os.path.join(self.userFileFolder, appName + gendef.kAppImageFileExtensionList_S19[0])
+        if appFormat == uidef.kAppImageFormat_AutoDetect:
+            if appType.lower() in gendef.kAppImageFileExtensionList_S19:
+                return appFilename, appType
+            elif (appType.lower() in gendef.kAppImageFileExtensionList_Hex) or (appType.lower() in gendef.kAppImageFileExtensionList_Bin):
+                return self._convertHexOrBinToSrec(appFilename, destSrecAppFilename, appType)
+            else:
+                appFilename, appType = self._convertElfOrAxfToSrec(appFilename, destSrecAppFilename, uidef.kAppImageFormat_ElfFromIar)
+                if appType.lower() in gendef.kAppImageFileExtensionList_S19:
+                    return appFilename, appType
+                appFilename, appType = self._convertElfOrAxfToSrec(appFilename, destSrecAppFilename, uidef.kAppImageFormat_AxfFromMcux)
+                if appType.lower() in gendef.kAppImageFileExtensionList_S19:
+                    return appFilename, appType
+                return self._convertElfOrAxfToSrec(appFilename, destSrecAppFilename, uidef.kAppImageFormat_AxfFromMdk)
+        elif appFormat == uidef.kAppImageFormat_AxfFromMdk or \
+             appFormat == uidef.kAppImageFormat_ElfFromIar or \
+             appFormat == uidef.kAppImageFormat_AxfFromMcux or \
+             appFormat == uidef.kAppImageFormat_ElfFromGcc:
+            return self._convertElfOrAxfToSrec(appFilename, destSrecAppFilename, appFormat)
+        elif appFormat == uidef.kAppImageFormat_IntelHex:
+            return self._convertHexOrBinToSrec(appFilename, destSrecAppFilename, gendef.kAppImageFileExtensionList_Hex[0])
+        elif appFormat == uidef.kAppImageFormat_RawBinary:
+            return self._convertHexOrBinToSrec(appFilename, destSrecAppFilename, gendef.kAppImageFileExtensionList_Bin[0])
+        elif appFormat == uidef.kAppImageFormat_MotoSrec:
+            return appFilename, gendef.kAppImageFileExtensionList_S19[0]
+        else:
+            pass
 
     def _getImageInfo( self, srcAppFilename ):
         startAddress = None
@@ -265,40 +335,54 @@ class secBootGen(uicore.secBootUi):
             appPath, appFilename = os.path.split(srcAppFilename)
             appName, appType = os.path.splitext(appFilename)
             srcAppFilename, appType = self._convertImageFormatToSrec(srcAppFilename, appName, appType)
-            if appType == '.elf' or appType == '.out':
-                elfObj = None
-                with open(srcAppFilename, 'rb') as f:
-                    e = elf.ELFObject()
-                    e.fromFile(f)
-                    elfObj = e
-                #for symbol in gendef.kToolchainSymbolList_VectorAddr:
-                #    try:
-                #        startAddress = elfObj.getSymbol(symbol).st_value
-                #        break
-                #    except:
-                #        startAddress = None
-                #if startAddress == None:
-                #    self.popupMsgBox('Cannot get vectorAddr symbol from image file: ' + srcAppFilename)
-                #entryPointAddress = elfObj.e_entry
-                #for symbol in gendef.kToolchainSymbolList_EntryAddr:
-                #    try:
-                #        entryPointAddress = elfObj.getSymbol(symbol).st_value
-                #        break
-                #    except:
-                #        entryPointAddress = None
-                #if entryPointAddress == None:
-                #    self.popupMsgBox('Cannot get entryAddr symbol from image file: ' + srcAppFilename)
-                startAddress = elfObj.programmheaders[0].p_paddr
-                entryPointAddress = self.getVal32FromBinFile(srcAppFilename, elfObj.programmheaders[0].p_offset + 4)
-                for i in range(elfObj.e_phnum):
-                    lengthInByte += elfObj.programmheaders[i].p_memsz
-            elif appType == '.s19' or appType == '.srec':
-                srecObj = bincopy.BinFile(str(srcAppFilename))
-                startAddress = srecObj.minimum_address
-                #entryPointAddress = srecObj.execution_start_address
-                entryPointAddress = self.getVal32FromByteArray(srecObj.as_binary(startAddress + 0x4, startAddress  + 0x8))
-                lengthInByte = len(srecObj.as_binary())
+            isConvSuccessed = False
+            if appType.lower() in gendef.kAppImageFileExtensionList_Elf:
+                try:
+                    elfObj = None
+                    with open(srcAppFilename, 'rb') as f:
+                        e = elf.ELFObject()
+                        e.fromFile(f)
+                        elfObj = e
+                    #for symbol in gendef.kToolchainSymbolList_VectorAddr:
+                    #    try:
+                    #        startAddress = elfObj.getSymbol(symbol).st_value
+                    #        break
+                    #    except:
+                    #        startAddress = None
+                    #if startAddress == None:
+                    #    self.popupMsgBox('Cannot get vectorAddr symbol from image file: ' + srcAppFilename)
+                    #entryPointAddress = elfObj.e_entry
+                    #for symbol in gendef.kToolchainSymbolList_EntryAddr:
+                    #    try:
+                    #        entryPointAddress = elfObj.getSymbol(symbol).st_value
+                    #        break
+                    #    except:
+                    #        entryPointAddress = None
+                    #if entryPointAddress == None:
+                    #    self.popupMsgBox('Cannot get entryAddr symbol from image file: ' + srcAppFilename)
+                    startAddress = elfObj.programmheaders[0].p_paddr
+                    entryPointAddress = self.getVal32FromBinFile(srcAppFilename, elfObj.programmheaders[0].p_offset + 4)
+                    for i in range(elfObj.e_phnum):
+                        lengthInByte += elfObj.programmheaders[i].p_memsz
+                    isConvSuccessed = True
+                except:
+                    pass
+            elif appType.lower() in gendef.kAppImageFileExtensionList_S19:
+                try:
+                    srecObj = bincopy.BinFile(str(srcAppFilename))
+                    startAddress = srecObj.minimum_address
+                    #entryPointAddress = srecObj.execution_start_address
+                    entryPointAddress = self.getVal32FromByteArray(srecObj.as_binary(startAddress + 0x4, startAddress  + 0x8))
+                    lengthInByte = len(srecObj.as_binary())
+                    isConvSuccessed = True
+                except:
+                    pass
             else:
+                pass
+            if not isConvSuccessed:
+                startAddress = None
+                entryPointAddress = None
+                lengthInByte = 0
                 self.popupMsgBox('Cannot recognise/convert the format of image file: ' + srcAppFilename)
         #print ('Image Vector address is 0x%x' %(startAddress))
         #print ('Image Entry address is 0x%x' %(entryPointAddress))

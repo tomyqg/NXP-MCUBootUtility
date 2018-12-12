@@ -394,6 +394,9 @@ class secBootUi(secBootWin.secBootWin):
         appPath = self.m_filePicker_appPath.GetPath()
         return appPath.encode('utf-8').encode("gbk")
 
+    def getUserAppFileFormat( self ):
+        return self.m_choice_appFormat.GetString(self.m_choice_appFormat.GetSelection())
+
     def getUserBinaryBaseAddress( self ):
         return self._getVal32FromHexText(self.m_textCtrl_appBaseAddr.GetLineText(0))
 
