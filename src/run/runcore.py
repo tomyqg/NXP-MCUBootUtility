@@ -473,7 +473,7 @@ class secBootRun(gencore.secBootGen):
             if status != boot.status.kStatus_Success:
                 return False
         elif self.bootDevice == uidef.kBootDevice_FlexspiNor:
-            flexspiNorOpt0, flexspiNorOpt1 = uivar.getBootDeviceConfiguration(self.bootDevice)
+            flexspiNorOpt0, flexspiNorOpt1, flexspiNorDeviceModel = uivar.getBootDeviceConfiguration(self.bootDevice)
             status, results, cmdStr = self.blhost.fillMemory(rundef.kRamFreeSpaceStart_LoadCommOpt, 0x4, flexspiNorOpt0)
             self.printLog(cmdStr)
             if status != boot.status.kStatus_Success:
@@ -568,7 +568,6 @@ class secBootRun(gencore.secBootGen):
             return False
         if not self._programFlexspiNorConfigBlock():
             return False
-        self.invalidateStepButtonColor(uidef.kSecureBootSeqStep_PrepBee)
         return True
 
     def _isDeviceFuseSrkRegionReadyForBurn( self, srkFuseFilename ):
@@ -598,7 +597,6 @@ class secBootRun(gencore.secBootGen):
                     for i in range(keyWords):
                         val32 = self.getVal32FromBinFile(self.srkFuseFilename, (i * 4))
                         self.burnMcuDeviceFuseByBlhost(fusedef.kEfuseIndex_SRK0 + i, val32)
-                self.invalidateStepButtonColor(uidef.kSecureBootSeqStep_ProgSrk)
                 return True
             else:
                 self.popupMsgBox('Fuse SRK Region has been burned, it is program-once!')
@@ -683,7 +681,6 @@ class secBootRun(gencore.secBootGen):
                 return False
         else:
             pass
-        self.invalidateStepButtonColor(uidef.kSecureBootSeqStep_OperBee)
         return True
 
     def _genDestEncAppFileWithoutCfgBlock( self ):
@@ -753,7 +750,6 @@ class secBootRun(gencore.secBootGen):
                 return False
         else:
             pass
-        self.invalidateStepButtonColor(uidef.kSecureBootSeqStep_FlashImage)
         if self.isConvertedAppUsed:
             try:
                 os.remove(self.srcAppFilename)
@@ -971,7 +967,6 @@ class secBootRun(gencore.secBootGen):
                 if not self._programFlexspiNorConfigBlock():
                     return False
             self.showImageLayout(u"../img/image_signed_hab_encrypted.png")
-            self.invalidateStepButtonColor(uidef.kSecureBootSeqStep_ProgDek)
             return True
         else:
             self.popupMsgBox('Dek file hasn\'t been generated!')

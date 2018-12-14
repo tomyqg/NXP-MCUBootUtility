@@ -8,17 +8,18 @@ import uivar
 sys.path.append(os.path.abspath(".."))
 from win import bootDeviceWin_FlexspiNor
 
-g_flexspiNorOpt0_ISSI_IS25LP064A   = 0xc0000007
-g_flexspiNorOpt0_MXIC_MX25UM51245G = 0xc0403037
-g_flexspiNorOpt0_MXIC_MX25UM51345G = 0xc0403007
-g_flexspiNorOpt0_Micron_MT35X      = 0xc0600006
-g_flexspiNorOpt0_Adesto_ATXP032    = 0xc0803007
+g_flexspiNorOpt0_ISSI_IS25LP064A           = 0xc0000007
+g_flexspiNorOpt0_MXIC_MX25UM51245G         = 0xc0403037
+g_flexspiNorOpt0_MXIC_MX25UM51345G         = 0xc0403007
+g_flexspiNorOpt0_Micron_MT35X              = 0xc0600006
+g_flexspiNorOpt0_Adesto_ATXP032            = 0xc0803007
+g_flexspiNorOpt0_Cypress_S26KS512SDPBHI020 = 0xc0233007
 
 class secBootUiCfgFlexspiNor(bootDeviceWin_FlexspiNor.bootDeviceWin_FlexspiNor):
 
     def __init__(self, parent):
         bootDeviceWin_FlexspiNor.bootDeviceWin_FlexspiNor.__init__(self, parent)
-        flexspiNorOpt0, flexspiNorOpt1 = uivar.getBootDeviceConfiguration(uidef.kBootDevice_FlexspiNor)
+        flexspiNorOpt0, flexspiNorOpt1, flexspiDeviceModel = uivar.getBootDeviceConfiguration(uidef.kBootDevice_FlexspiNor)
         #1. Prepare Flash option
         # 0xc0000006 is the tag for Serial NOR parameter selection
         # bit [31:28] Tag fixed to 0x0C
@@ -44,6 +45,7 @@ class secBootUiCfgFlexspiNor(bootDeviceWin_FlexspiNor.bootDeviceWin_FlexspiNor):
         # bit [03: 00] Flash Frequency, device specific
         self.flexspiNorOpt0 = flexspiNorOpt0
         self.flexspiNorOpt1 = flexspiNorOpt1
+        self.flexspiDeviceModel = flexspiDeviceModel
         self._recoverLastSettings()
 
     def _updateOpt1Field ( self, isEnabled ):
@@ -78,6 +80,8 @@ class secBootUiCfgFlexspiNor(bootDeviceWin_FlexspiNor.bootDeviceWin_FlexspiNor):
         self.Refresh()
 
     def _recoverLastSettings ( self ):
+        self.m_choice_deviceMode.SetSelection(self.flexspiDeviceModel)
+
         deviceType = (self.flexspiNorOpt0 & 0x00F00000) >> 20
         self.m_choice_deviceType.SetSelection(deviceType)
 
@@ -208,7 +212,8 @@ class secBootUiCfgFlexspiNor(bootDeviceWin_FlexspiNor.bootDeviceWin_FlexspiNor):
         self.flexspiNorOpt0 = (self.flexspiNorOpt0 & 0xF0FFFFFF) | (val << 24)
 
     def callbackUseTypicalDeviceModel( self, event ):
-        txt = self.m_choice_deviceMode.GetString(self.m_choice_deviceMode.GetSelection())
+        self.flexspiDeviceModel = self.m_choice_deviceMode.GetSelection()
+        txt = self.m_choice_deviceMode.GetString(self.flexspiDeviceModel)
         if txt == 'ISSI - IS25LP064A':
             self.flexspiNorOpt0 = g_flexspiNorOpt0_ISSI_IS25LP064A
         elif txt == 'MXIC - MX25UM51245G/MX66UM51245G/MX25LM51245G':
@@ -219,6 +224,8 @@ class secBootUiCfgFlexspiNor(bootDeviceWin_FlexspiNor.bootDeviceWin_FlexspiNor):
             self.flexspiNorOpt0 = g_flexspiNorOpt0_Micron_MT35X
         elif txt == 'Adesto - ATXP032':
             self.flexspiNorOpt0 = g_flexspiNorOpt0_Adesto_ATXP032
+        elif txt == 'Cypress - S26KS512SDPBHI020':
+            self.flexspiNorOpt0 = g_flexspiNorOpt0_Cypress_S26KS512SDPBHI020
         else:
             pass
         if txt != 'No':
@@ -241,7 +248,7 @@ class secBootUiCfgFlexspiNor(bootDeviceWin_FlexspiNor.bootDeviceWin_FlexspiNor):
         self._getMiscMode()
         self._getMaxFrequency()
         self._getHasOpt1()
-        uivar.setBootDeviceConfiguration(uidef.kBootDevice_FlexspiNor, self.flexspiNorOpt0, self.flexspiNorOpt1)
+        uivar.setBootDeviceConfiguration(uidef.kBootDevice_FlexspiNor, self.flexspiNorOpt0, self.flexspiNorOpt1, self.flexspiDeviceModel)
         self.Show(False)
 
     def callbackCancel( self, event ):

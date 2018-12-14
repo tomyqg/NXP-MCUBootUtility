@@ -160,7 +160,6 @@ class secBootGen(uicore.secBootUi):
         os.system(self.hab4PkiTreeName + batArg)
         os.chdir(curdir)
         self.printLog('Certificates are generated into these folders: ' + self.cstKeysFolder + ' , ' + self.cstCrtsFolder)
-        self.invalidateStepButtonColor(uidef.kSecureBootSeqStep_GenCert)
 
     def _setSrkFilenames( self ):
         certSettingsDict = uivar.getAdvancedSettings(uidef.kAdvancedSettings_Cert)
@@ -727,7 +726,6 @@ class secBootGen(uicore.secBootUi):
         commandOutput = process.communicate()[0]
         print commandOutput
         if self._parseBootableImageGenerationResult(commandOutput):
-            self.invalidateStepButtonColor(uidef.kSecureBootSeqStep_GenImage)
             return True
         else:
             return False
@@ -825,7 +823,6 @@ class secBootGen(uicore.secBootUi):
             self._updateEncBatfileContent(userKeyCtrlDict, userKeyCmdDict)
             self._encrypteBootableImage()
             self._genBeeDekFilesAndShow(userKeyCtrlDict, userKeyCmdDict)
-            self.invalidateStepButtonColor(uidef.kSecureBootSeqStep_PrepBee)
         elif userKeyCmdDict['is_boot_image'] == '0':
             pass
 

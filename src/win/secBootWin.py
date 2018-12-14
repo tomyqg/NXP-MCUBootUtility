@@ -246,7 +246,7 @@ class secBootWin ( wx.Frame ):
 
 		wSizer_bootType.Add( self.m_staticText_secureBootType, 0, wx.ALL, 5 )
 
-		m_choice_secureBootTypeChoices = [ u"Unsigned (XIP) Image Boot", u"HAB Signed (XIP) Image Boot", u"HAB Signed Encrypted Image Boot", u"BEE (Signed) Encrypted XIP Image Boot" ]
+		m_choice_secureBootTypeChoices = [ u"DEV Unsigned Image Boot", u"HAB Signed Image Boot", u"HAB Encrypted Image Boot", u"BEE Encrypted Image Boot" ]
 		self.m_choice_secureBootType = wx.Choice( self, wx.ID_ANY, wx.DefaultPosition, wx.Size( 299,-1 ), m_choice_secureBootTypeChoices, 0 )
 		self.m_choice_secureBootType.SetSelection( 0 )
 		wSizer_bootType.Add( self.m_choice_secureBootType, 0, wx.ALL, 5 )
@@ -429,7 +429,7 @@ class secBootWin ( wx.Frame ):
 
 		m_choice_keyStorageRegionChoices = [ u"Fixed SNVS Key", u"Flexible User Keys" ]
 		self.m_choice_keyStorageRegion = wx.Choice( sbSizer_keyStorageRegion.GetStaticBox(), wx.ID_ANY, wx.DefaultPosition, wx.Size( 150,-1 ), m_choice_keyStorageRegionChoices, 0 )
-		self.m_choice_keyStorageRegion.SetSelection( 0 )
+		self.m_choice_keyStorageRegion.SetSelection( 1 )
 		sbSizer_keyStorageRegion.Add( self.m_choice_keyStorageRegion, 0, wx.ALIGN_CENTER|wx.ALL, 5 )
 
 		self.m_staticText_availBeeEngines = wx.StaticText( sbSizer_keyStorageRegion.GetStaticBox(), wx.ID_ANY, u"Available BEE Engines:", wx.DefaultPosition, wx.DefaultSize, 0 )

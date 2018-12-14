@@ -109,7 +109,7 @@ class advSettingsWin_FlexibleUserKeys ( wx.Frame ):
 
 		m_choice_engine0keySourceChoices = [ u"Fuse SW-GP2", u"Fuse GP4[127:0]" ]
 		self.m_choice_engine0keySource = wx.Choice( self.m_panel_engine0Info, wx.ID_ANY, wx.DefaultPosition, wx.Size( 210,-1 ), m_choice_engine0keySourceChoices, 0 )
-		self.m_choice_engine0keySource.SetSelection( 1 )
+		self.m_choice_engine0keySource.SetSelection( 0 )
 		gSizer_engine0Info.Add( self.m_choice_engine0keySource, 0, wx.ALL, 5 )
 
 		self.m_staticText_engine0UserKeyData = wx.StaticText( self.m_panel_engine0Info, wx.ID_ANY, u"User Key Data:", wx.DefaultPosition, wx.Size( 210,-1 ), 0 )

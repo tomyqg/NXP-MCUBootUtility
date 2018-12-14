@@ -29,7 +29,7 @@ class bootDeviceWin_FlexspiNor ( wx.Frame ):
 
 		wSizer_win.Add( self.m_staticText_deviceModel, 0, wx.ALL, 5 )
 
-		m_choice_deviceModeChoices = [ u"No", u"ISSI - IS25LP064A", u"MXIC - MX25UM51245G/MX66UM51245G/MX25LM51245G", u"MXIC - MX25UM51345G", u"Micron - MT35X", u"Adesto - ATXP032" ]
+		m_choice_deviceModeChoices = [ u"No", u"ISSI - IS25LP064A", u"MXIC - MX25UM51245G/MX66UM51245G/MX25LM51245G", u"MXIC - MX25UM51345G", u"Micron - MT35X", u"Adesto - ATXP032", u"Cypress - S26KS512SDPBHI020" ]
 		self.m_choice_deviceMode = wx.Choice( self, wx.ID_ANY, wx.DefaultPosition, wx.Size( 340,-1 ), m_choice_deviceModeChoices, 0 )
 		self.m_choice_deviceMode.SetSelection( 0 )
 		wSizer_win.Add( self.m_choice_deviceMode, 0, wx.ALL, 5 )

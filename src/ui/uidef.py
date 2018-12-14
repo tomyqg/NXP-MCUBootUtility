@@ -12,6 +12,7 @@ kConnectStep_Normal = 1
 kBootSeqColor_Invalid  = wx.Colour( 64, 64, 64 )
 kBootSeqColor_Optional = wx.Colour( 166, 255, 255 )
 kBootSeqColor_Active   = wx.Colour( 147, 255, 174 )
+kBootSeqColor_Failed   = wx.Colour( 255, 0, 0 )
 
 kMcuSeries_iMXRT   = 'i.MXRT'
 kMcuSeries_LPC     = 'LPC'
@@ -35,10 +36,10 @@ kBootDevice_RamFlashloader = 'RAM FLASHLOADER'
 
 kBootDevice_v0_11_x = [kBootDevice_FlexspiNor, kBootDevice_SemcNand, kBootDevice_LpspiNor]
 
-kSecureBootType_Development = 'Unsigned (XIP) Image Boot'
-kSecureBootType_HabAuth     = 'HAB Signed (XIP) Image Boot'
-kSecureBootType_HabCrypto   = 'HAB Signed Encrypted Image Boot'
-kSecureBootType_BeeCrypto   = 'BEE (Signed) Encrypted XIP Image Boot'
+kSecureBootType_Development = 'DEV Unsigned Image Boot'
+kSecureBootType_HabAuth     = 'HAB Signed Image Boot'
+kSecureBootType_HabCrypto   = 'HAB Encrypted Image Boot'
+kSecureBootType_BeeCrypto   = 'BEE Encrypted Image Boot'
 
 kKeyStorageRegion_FixedOtpmkKey    = 'Fixed SNVS Key'
 kKeyStorageRegion_FlexibleUserKeys = 'Flexible User Keys'

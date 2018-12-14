@@ -191,28 +191,28 @@ class secBootMain(memcore.secBootMem):
     def callbackAllInOneAction( self, event ):
         allInOneSeqCnt = 1
         directReuseCert = False
+        status = False
         while allInOneSeqCnt:
-            status = False
             if self.secureBootType == uidef.kSecureBootType_HabAuth or \
                self.secureBootType == uidef.kSecureBootType_HabCrypto or \
                (self.secureBootType == uidef.kSecureBootType_BeeCrypto and self.bootDevice == uidef.kBootDevice_FlexspiNor and self.isCertEnabledForBee):
                 status = self._doGenCert(directReuseCert)
                 if not status:
-                    return
+                    break
                 status = self._doProgramSrk()
                 if not status:
-                    return
+                    break
             status = self._doGenImage()
             if not status:
-                return
+                break
             if self.secureBootType == uidef.kSecureBootType_BeeCrypto and self.bootDevice == uidef.kBootDevice_FlexspiNor:
                 status = self._doBeeEncryption()
                 if not status:
-                    return
+                    break
                 if self.keyStorageRegion == uidef.kKeyStorageRegion_FlexibleUserKeys:
                     status = self._doProgramBeeDek()
                     if not status:
-                        return
+                        break
                 elif self.keyStorageRegion == uidef.kKeyStorageRegion_FixedOtpmkKey:
                     if self.isCertEnabledForBee:
                         # If HAB is not closed here, we need to close HAB and re-do All-In-One Action
@@ -228,13 +228,13 @@ class secBootMain(memcore.secBootMem):
                     pass
             status = self._doFlashImage()
             if not status:
-                return
+                break
             if self.secureBootType == uidef.kSecureBootType_HabCrypto:
                 status = self._doFlashHabDek()
                 if not status:
-                    return
+                    break
             allInOneSeqCnt -= 1
-        self.invalidateStepButtonColor(uidef.kSecureBootSeqStep_AllInOne)
+        self.invalidateStepButtonColor(uidef.kSecureBootSeqStep_AllInOne, status)
 
     def callbackAdvCertSettings( self, event ):
         if self.secureBootType == uidef.kSecureBootType_BeeCrypto and self.bootDevice != uidef.kBootDevice_FlexspiNor:
@@ -290,6 +290,7 @@ class secBootMain(memcore.secBootMem):
                 self._stopGaugeTimer()
         else:
             self.popupMsgBox('No need to generate certificate when booting unsigned image!')
+        self.invalidateStepButtonColor(uidef.kSecureBootSeqStep_GenCert, status)
         return status
 
     def callbackGenCert( self, event ):
@@ -314,6 +315,7 @@ class secBootMain(memcore.secBootMem):
                     self.showHabDekIfApplicable()
                     status = True
             self._stopGaugeTimer()
+        self.invalidateStepButtonColor(uidef.kSecureBootSeqStep_GenImage, status)
         return status
 
     def callbackGenImage( self, event ):
@@ -366,6 +368,7 @@ class secBootMain(memcore.secBootMem):
             self._stopGaugeTimer()
         else:
             self.popupMsgBox('BEE encryption is only available when booting BEE encrypted image in FlexSPI NOR device!')
+        self.invalidateStepButtonColor(uidef.kSecureBootSeqStep_PrepBee, status)
         return status
 
     def callbackDoBeeEncryption( self, event ):
@@ -393,6 +396,7 @@ class secBootMain(memcore.secBootMem):
                     self.popupMsgBox('Please connect to Flashloader first!')
         else:
             self.popupMsgBox('No need to burn SRK data when booting unsigned image!')
+        self.invalidateStepButtonColor(uidef.kSecureBootSeqStep_ProgSrk, status)
         return status
 
     def callbackProgramSrk( self, event ):
@@ -417,6 +421,7 @@ class secBootMain(memcore.secBootMem):
                 self.popupMsgBox('No need to burn BEE DEK data as OTPMK key is selected!')
         else:
             self.popupMsgBox('BEE DEK Burning is only available when booting BEE encrypted image in FlexSPI NOR device!')
+        self.invalidateStepButtonColor(uidef.kSecureBootSeqStep_OperBee, status)
         return status
 
     def callbackProgramBeeDek( self, event ):
@@ -450,6 +455,7 @@ class secBootMain(memcore.secBootMem):
                 self._stopGaugeTimer()
             else:
                 self.popupMsgBox('Please configure boot device via Flashloader first!')
+        self.invalidateStepButtonColor(uidef.kSecureBootSeqStep_FlashImage, status)
         return status
 
     def callbackFlashImage( self, event ):
@@ -479,6 +485,7 @@ class secBootMain(memcore.secBootMem):
                 self.popupMsgBox('Please configure boot device via Flashloader first!')
         else:
             self.popupMsgBox('KeyBlob loading is only available when booting HAB encrypted image!')
+        self.invalidateStepButtonColor(uidef.kSecureBootSeqStep_ProgDek, status)
         return status
 
     def callbackFlashHabDek( self, event ):
@@ -558,6 +565,7 @@ class secBootMain(memcore.secBootMem):
 
     def _switchToolRunMode( self ):
         self.applyFuseOperToRunMode()
+        self.setSecureBootButtonColor()
 
     def callbackSetEntryMode( self, event ):
         self.setToolRunMode()

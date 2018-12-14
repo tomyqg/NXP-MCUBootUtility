@@ -5,6 +5,7 @@ import uidef
 
 g_flexspiNorOpt0 = None
 g_flexspiNorOpt1 = None
+g_flexspiNorDeviceModel = 0
 
 g_flexspiNandOpt = None
 g_flexspiNandFcbOpt = None
@@ -114,10 +115,10 @@ def initVar():
 
     global g_UserKeyCtrlDict
     global g_UserKeyCmdDict
-    g_UserKeyCtrlDict['engine_sel'] = uidef.kUserEngineSel_BothEngines
-    g_UserKeyCtrlDict['engine0_key_src'] = uidef.kUserKeySource_OTPMK
+    g_UserKeyCtrlDict['engine_sel'] = uidef.kUserEngineSel_Engine0
+    g_UserKeyCtrlDict['engine0_key_src'] = uidef.kUserKeySource_SW_GP2
     g_UserKeyCtrlDict['engine0_fac_cnt'] = 1
-    g_UserKeyCtrlDict['engine1_key_src'] = uidef.kUserKeySource_OTPMK
+    g_UserKeyCtrlDict['engine1_key_src'] = uidef.kUserKeySource_SW_GP2
     g_UserKeyCtrlDict['engine1_fac_cnt'] = 1
     g_UserKeyCmdDict['base_addr'] = '0x60000000'
     g_UserKeyCmdDict['engine0_key'] = '0123456789abcdeffedcba9876543210'
@@ -133,7 +134,8 @@ def getBootDeviceConfiguration( group ):
     if group == uidef.kBootDevice_FlexspiNor:
         global g_flexspiNorOpt0
         global g_flexspiNorOpt1
-        return g_flexspiNorOpt0, g_flexspiNorOpt1
+        global g_flexspiNorDeviceModel
+        return g_flexspiNorOpt0, g_flexspiNorOpt1, g_flexspiNorDeviceModel
     elif group == uidef.kBootDevice_FlexspiNand:
         global g_flexspiNandOpt
         global g_flexspiNandFcbOpt
@@ -167,8 +169,10 @@ def setBootDeviceConfiguration( group, *args ):
     if group == uidef.kBootDevice_FlexspiNor:
         global g_flexspiNorOpt0
         global g_flexspiNorOpt1
+        global g_flexspiNorDeviceModel
         g_flexspiNorOpt0 = args[0]
         g_flexspiNorOpt1 = args[1]
+        g_flexspiNorDeviceModel = args[2]
     elif group == uidef.kBootDevice_FlexspiNand:
         global g_flexspiNandOpt
         global g_flexspiNandFcbOpt
