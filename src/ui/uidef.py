@@ -44,6 +44,7 @@ kSecureBootType_BeeCrypto   = 'BEE Encrypted Image Boot'
 kKeyStorageRegion_FixedOtpmkKey    = 'Fixed SNVS Key'
 kKeyStorageRegion_FlexibleUserKeys = 'Flexible User Keys'
 
+kAdvancedSettings_Tool      = 0
 kAdvancedSettings_Cert      = 1
 kAdvancedSettings_BD        = 2
 kAdvancedSettings_OtpmkKey  = 3

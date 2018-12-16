@@ -8,6 +8,7 @@ import os
 import time
 from mem import memcore
 from ui import uidef
+from ui import uivar
 from fuse import fusedef
 from ui import ui_cfg_flexspinor
 from ui import ui_cfg_flexspinand
@@ -560,8 +561,16 @@ class secBootMain(memcore.secBootMem):
     def callbackClearLog( self, event ):
         self.clearLog()
 
-    def callbackExit( self, event ):
+    def _deinitToolToExit( self ):
+        uivar.setAdvancedSettings(uidef.kAdvancedSettings_Tool, self.toolCommDict)
+        uivar.deinitVar()
         exit(0)
+
+    def callbackExit( self, event ):
+        self._deinitToolToExit()
+
+    def callbackClose( self, event ):
+        self._deinitToolToExit()
 
     def _switchToolRunMode( self ):
         self.applyFuseOperToRunMode()

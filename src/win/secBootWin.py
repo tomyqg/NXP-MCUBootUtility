@@ -1692,6 +1692,7 @@ class secBootWin ( wx.Frame ):
 		self.Centre( wx.BOTH )
 
 		# Connect Events
+		self.Bind( wx.EVT_CLOSE, self.callbackClose )
 		self.Bind( wx.EVT_MENU, self.callbackExit, id = self.m_menuItem_exit.GetId() )
 		self.Bind( wx.EVT_MENU, self.callbackSetEntryMode, id = self.m_menuItem_entryMode.GetId() )
 		self.Bind( wx.EVT_MENU, self.callbackSetMasterMode, id = self.m_menuItem_masterMode.GetId() )
@@ -1734,6 +1735,9 @@ class secBootWin ( wx.Frame ):
 
 
 	# Virtual event handlers, overide them in your derived class
+	def callbackClose( self, event ):
+		event.Skip()
+
 	def callbackExit( self, event ):
 		event.Skip()
 

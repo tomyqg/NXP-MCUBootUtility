@@ -20,8 +20,15 @@ class secBootUi(secBootWin.secBootWin):
 
     def __init__(self, parent):
         secBootWin.secBootWin.__init__(self, parent)
-        self.exeBinRoot = os.getcwd()
         self.m_bitmap_nxp.SetBitmap(wx.Bitmap( u"../img/logo_nxp.png", wx.BITMAP_TYPE_ANY ))
+
+        self.exeBinRoot = os.getcwd()
+        self.exeTopRoot = os.path.dirname(self.exeBinRoot)
+        exeMainFile = os.path.join(self.exeTopRoot, 'src', 'main.py')
+        if not os.path.isfile(exeMainFile):
+            self.exeTopRoot = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
+        uivar.initVar(os.path.join(self.exeTopRoot, 'bin', 'nxpSecBoot.json'))
+        self.toolCommDict = uivar.getAdvancedSettings(uidef.kAdvancedSettings_Tool)
 
         self.isToolRunAsEntryMode = None
         self.setToolRunMode()
@@ -33,7 +40,6 @@ class secBootUi(secBootWin.secBootWin):
         self.bootDevice = None
         self._initTargetSetupValue()
         self.setTargetSetupValue()
-        uivar.initVar()
 
         self.isUartPortSelected = None
         self.isUsbhidPortSelected = None
@@ -48,27 +54,45 @@ class secBootUi(secBootWin.secBootWin):
         self.secureBootType = None
         self.keyStorageRegion = None
         self.isCertEnabledForBee = None
+        self._initSecureBootSeqValue()
         self._initSecureBootSeqColor()
+
+    def _initToolRunMode( self ):
+        if self.toolCommDict['isToolRunAsEntryMode']:
+            self.m_menuItem_entryMode.SetValue(True)
+            self.m_menuItem_masterMode.SetValue(False)
+        else:
+            self.m_menuItem_entryMode.SetValue(False)
+            self.m_menuItem_masterMode.SetValue(True)
 
     def setToolRunMode( self ):
         self.isToolRunAsEntryMode = self.m_menuItem_entryMode.IsChecked()
+        self.toolCommDict['isToolRunAsEntryMode'] = self.isToolRunAsEntryMode
 
     def _initTargetSetupValue( self ):
         self.m_choice_mcuSeries.Clear()
         self.m_choice_bootDevice.Clear()
         self.m_choice_mcuSeries.SetItems(uidef.kMcuSeries_v0_11_x)
         self.m_choice_bootDevice.SetItems(uidef.kBootDevice_v0_11_x)
-        self.m_choice_mcuSeries.SetSelection(0)
-        self.m_choice_bootDevice.SetSelection(0)
+        self.m_choice_mcuSeries.SetSelection(self.toolCommDict['mcuSeries'])
+        self.m_choice_mcuDevice.SetSelection(self.toolCommDict['mcuDevice'])
+        self.m_choice_bootDevice.SetSelection(self.toolCommDict['bootDevice'])
 
     def setTargetSetupValue( self ):
         self.mcuSeries = self.m_choice_mcuSeries.GetString(self.m_choice_mcuSeries.GetSelection())
         self.mcuDevice = self.m_choice_mcuDevice.GetString(self.m_choice_mcuDevice.GetSelection())
         self.bootDevice = self.m_choice_bootDevice.GetString(self.m_choice_bootDevice.GetSelection())
+        self.toolCommDict['mcuSeries'] = self.m_choice_mcuSeries.GetSelection()
+        self.toolCommDict['mcuDevice'] = self.m_choice_mcuDevice.GetSelection()
+        self.toolCommDict['bootDevice'] = self.m_choice_bootDevice.GetSelection()
 
     def _initPortSetupValue( self ):
-        self.m_radioBtn_uart.SetValue(False)
-        self.m_radioBtn_usbhid.SetValue(True)
+        if self.toolCommDict['isUsbhidPortSelected']:
+            self.m_radioBtn_uart.SetValue(False)
+            self.m_radioBtn_usbhid.SetValue(True)
+        else:
+            self.m_radioBtn_uart.SetValue(True)
+            self.m_radioBtn_usbhid.SetValue(False)
         usbIdList = self.getUsbid()
         self.setPortSetupValue(uidef.kConnectStage_Rom, usbIdList)
 
@@ -130,6 +154,7 @@ class secBootUi(secBootWin.secBootWin):
             self.usbhidPid = self.m_choice_baudPid.GetString(self.m_choice_baudPid.GetSelection())
         else:
             pass
+        self.toolCommDict['isUsbhidPortSelected'] = self.isUsbhidPortSelected
 
     def updateConnectStatus( self, color='black' ):
         if color == 'black':
@@ -156,6 +181,19 @@ class secBootUi(secBootWin.secBootWin):
 
     def getOneStepConnectMode( self ):
         self.isOneStepConnectMode = self.m_checkBox_oneStepConnect.GetValue()
+
+    def _initSecureBootSeqValue( self ):
+        self.m_choice_secureBootType.SetSelection(self.toolCommDict['secBootType'])
+        self.m_textCtrl_serial.Clear()
+        self.m_textCtrl_serial.write(self.toolCommDict['certSerial'])
+        self.m_textCtrl_keyPass.Clear()
+        self.m_textCtrl_keyPass.write(self.toolCommDict['certKeyPass'])
+        if self.toolCommDict['appFilename'] != None:
+            self.m_filePicker_appPath.SetPath(self.toolCommDict['appFilename'])
+        self.m_textCtrl_appBaseAddr.Clear()
+        self.m_textCtrl_appBaseAddr.write(self.toolCommDict['appBinBaseAddr'])
+        self.m_choice_keyStorageRegion.SetSelection(self.toolCommDict['keyStoreRegion'])
+        self.m_choice_enableCertForBee.SetSelection(self.toolCommDict['certOptForBee'])
 
     def _initSecureBootSeqColor ( self ):
         self.secureBootType = self.m_choice_secureBootType.GetString(self.m_choice_secureBootType.GetSelection())
@@ -266,6 +304,7 @@ class secBootUi(secBootWin.secBootWin):
 
     def setSecureBootSeqColor( self ):
         self.secureBootType = self.m_choice_secureBootType.GetString(self.m_choice_secureBootType.GetSelection())
+        self.toolCommDict['secBootType'] = self.m_choice_secureBootType.GetSelection()
         self._resetSecureBootSeqColor()
         if self.secureBootType == uidef.kSecureBootType_Development:
             self.m_panel_genImage1_browseApp.SetBackgroundColour( uidef.kBootSeqColor_Active )
@@ -321,10 +360,13 @@ class secBootUi(secBootWin.secBootWin):
     def getSerialAndKeypassContent( self ):
         serialContent = self.m_textCtrl_serial.GetLineText(0)
         keypassContent = self.m_textCtrl_keyPass.GetLineText(0)
+        self.toolCommDict['certSerial'] = serialContent
+        self.toolCommDict['certKeyPass'] = keypassContent
         return serialContent, keypassContent
 
     def setBeeCertColor( self ):
         txt = self.m_choice_enableCertForBee.GetString(self.m_choice_enableCertForBee.GetSelection())
+        self.toolCommDict['certOptForBee'] = self.m_choice_enableCertForBee.GetSelection()
         if txt == 'No':
             self.isCertEnabledForBee = False
             self.m_button_genImage.SetLabel('Generate Unsigned Bootable Image')
@@ -349,6 +391,7 @@ class secBootUi(secBootWin.secBootWin):
 
     def setKeyStorageRegionColor( self ):
         self.keyStorageRegion = self.m_choice_keyStorageRegion.GetString(self.m_choice_keyStorageRegion.GetSelection())
+        self.toolCommDict['keyStoreRegion'] = self.m_choice_keyStorageRegion.GetSelection()
         self._resetKeyStorageRegionColor()
         self.m_panel_prepBee1_beeKeyRegion.SetBackgroundColour( uidef.kBootSeqColor_Active )
         self.m_panel_prepBee2_beeCryptoAlgo.SetBackgroundColour( uidef.kBootSeqColor_Active )
@@ -413,12 +456,15 @@ class secBootUi(secBootWin.secBootWin):
 
     def getUserAppFilePath( self ):
         appPath = self.m_filePicker_appPath.GetPath()
+        self.toolCommDict['appFilename'] = appPath.encode('utf-8').encode("gbk")
         return appPath.encode('utf-8').encode("gbk")
 
     def getUserAppFileFormat( self ):
+        self.toolCommDict['appFormat'] = self.m_choice_appFormat.GetSelection()
         return self.m_choice_appFormat.GetString(self.m_choice_appFormat.GetSelection())
 
     def getUserBinaryBaseAddress( self ):
+        self.toolCommDict['appBinBaseAddr'] = self.m_textCtrl_appBaseAddr.GetLineText(0)
         return self._getVal32FromHexText(self.m_textCtrl_appBaseAddr.GetLineText(0))
 
     def printSrkData( self, srkStr ):

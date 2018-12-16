@@ -17,10 +17,6 @@ class secBootGen(uicore.secBootUi):
 
     def __init__(self, parent):
         uicore.secBootUi.__init__(self, parent)
-        self.exeTopRoot = os.path.dirname(self.exeBinRoot)
-        exeMainFile = os.path.join(self.exeTopRoot, 'src', 'main.py')
-        if not os.path.isfile(exeMainFile):
-            self.exeTopRoot = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
         self.serialFilename = os.path.join(self.exeTopRoot, 'gen', 'hab_cert', 'serial')
         self.keypassFilename = os.path.join(self.exeTopRoot, 'gen', 'hab_cert', 'key_pass.txt')
         self.cstBinFolder = os.path.join(self.exeTopRoot, 'tools', 'cst', uidef.kCstVersion_Invalid, 'mingw32', 'bin')
