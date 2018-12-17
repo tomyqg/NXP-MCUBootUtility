@@ -91,12 +91,17 @@ class secBootMain(memcore.secBootMem):
         else:
             pass
 
+    def _setUartUsbPort( self ):
+        usbIdList = self.getUsbid()
+        retryToDetectUsb = False
+        showError = True
+        self.setPortSetupValue(self.connectStage, usbIdList, retryToDetectUsb, showError)
+
     def callbackSetUartPort( self, event ):
-        self.setPortSetupValue(self.connectStage)
+        self._setUartUsbPort()
 
     def callbackSetUsbhidPort( self, event ):
-        usbIdList = self.getUsbid()
-        self.setPortSetupValue(self.connectStage, usbIdList)
+        self._setUartUsbPort()
 
     def callbackSetOneStep( self, event ):
         if not self.isToolRunAsEntryMode:
@@ -125,17 +130,21 @@ class secBootMain(memcore.secBootMem):
     def _connectStateMachine( self ):
         connectSteps = uidef.kConnectStep_Normal
         self.getOneStepConnectMode()
+        retryToDetectUsb = False
         if self.isOneStepConnectMode:
             if self.connectStage == uidef.kConnectStage_Reset or self.connectStage == uidef.kConnectStage_ExternalMemory:
                 connectSteps = uidef.kConnectStep_Fast - 2
             elif self.connectStage == uidef.kConnectStage_Flashloader:
                 connectSteps = uidef.kConnectStep_Fast - 1
+                retryToDetectUsb = True
             elif self.connectStage == uidef.kConnectStage_Rom:
                 connectSteps = uidef.kConnectStep_Fast
+                retryToDetectUsb = True
             else:
                 pass
         while connectSteps:
-            self.updatePortSetupValue()
+            if not self.updatePortSetupValue(retryToDetectUsb, True):
+                return
             if self.connectStage == uidef.kConnectStage_Rom:
                 self.connectToDevice(self.connectStage)
                 if self._retryToPingBootloader(kBootloaderType_Rom):
@@ -145,7 +154,7 @@ class secBootMain(memcore.secBootMem):
                         self.connectStage = uidef.kConnectStage_Flashloader
                         self.updateConnectStatus('yellow')
                         usbIdList = self.getUsbid()
-                        self.adjustPortSetupValue(self.connectStage, usbIdList)
+                        self.setPortSetupValue(self.connectStage, usbIdList, True, True)
                     else:
                         self.updateConnectStatus('red')
                         self.popupMsgBox('MCU has entered ROM SDP mode but failed to jump to Flashloader, Please reset board and try again!')
@@ -181,7 +190,7 @@ class secBootMain(memcore.secBootMem):
                 self.connectStage = uidef.kConnectStage_Rom
                 self.updateConnectStatus('black')
                 usbIdList = self.getUsbid()
-                self.adjustPortSetupValue(self.connectStage, usbIdList)
+                self.setPortSetupValue(self.connectStage, usbIdList, True, True)
                 self.connectToDevice(self.connectStage)
             else:
                 pass
