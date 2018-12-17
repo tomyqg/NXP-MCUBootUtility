@@ -30,7 +30,7 @@ class secBootFuse(runcore.secBootRun):
                 else:
                     self.runModeFuseFlagList[i] = False
         else:
-            for i in range(fusedef.kEfuseRemapLen):
+            for i in range(fusedef.kMaxEfuseWords):
                 self.runModeFuseFlagList[i] = True
 
     def applyFuseOperToRunMode( self ):
