@@ -7,6 +7,7 @@ import os
 import time
 import serial.tools.list_ports
 import pywinusb.hid
+import threading
 import uidef
 import uivar
 sys.path.append(os.path.abspath(".."))
@@ -55,6 +56,8 @@ class secBootUi(secBootWin.secBootWin):
         self.isUsbhidConnected = False
         self.usbhidToConnect = [None] * 2
         self._initPortSetupValue()
+        self.usbhidDetectTimer = None
+        self.periodicUsbhidDetectTask()
         self.isOneStepConnectMode = None
         self.initOneStepConnectMode()
 
@@ -103,6 +106,15 @@ class secBootUi(secBootWin.secBootWin):
         usbIdList = self.getUsbid()
         self.setPortSetupValue(uidef.kConnectStage_Rom, usbIdList)
 
+    def periodicUsbhidDetectTask( self ):
+        if self.isUsbhidPortSelected:
+            self._retryToDetectUsbhidDevice(False)
+            if self.isUsbhidConnected:
+                self.usbhidDetectTimer = threading.Timer(3, self.periodicUsbhidDetectTask)
+            else:
+                self.usbhidDetectTimer = threading.Timer(1, self.periodicUsbhidDetectTask)
+            self.usbhidDetectTimer.start()
+
     def _retryToDetectUsbhidDevice( self, needToRetry = True ):
         usbVid = [None]
         usbPid = [None]
@@ -118,21 +130,27 @@ class secBootUi(secBootWin.secBootWin):
                 self.isUsbhidConnected = True
                 usbVid[0] = self.usbhidToConnect[0]
                 usbPid[0] = self.usbhidToConnect[1]
-                self.m_choice_portVid.SetItems(usbVid)
-                self.m_choice_baudPid.SetItems(usbPid)
-                self.m_choice_portVid.SetSelection(0)
-                self.m_choice_baudPid.SetSelection(0)
                 break
             retryCnt = retryCnt - 1
             if retryCnt != 0:
                 time.sleep(2)
+            else:
+                usbVid[0] = 'No Device Connected'
+                usbPid[0] = 'No Device Connected'
+        if self.m_choice_portVid.GetString(self.m_choice_portVid.GetSelection()) != usbVid[0]:
+            self.m_choice_portVid.Clear()
+            self.m_choice_baudPid.Clear()
+            self.m_choice_portVid.SetItems(usbVid)
+            self.m_choice_baudPid.SetItems(usbPid)
+            self.m_choice_portVid.SetSelection(0)
+            self.m_choice_baudPid.SetSelection(0)
 
     def adjustPortSetupValue( self, connectStage=uidef.kConnectStage_Rom, usbIdList=[] ):
         self.isUartPortSelected = self.m_radioBtn_uart.GetValue()
         self.isUsbhidPortSelected = self.m_radioBtn_usbhid.GetValue()
-        self.m_choice_portVid.Clear()
-        self.m_choice_baudPid.Clear()
         if self.isUartPortSelected:
+            self.m_choice_portVid.Clear()
+            self.m_choice_baudPid.Clear()
             self.m_staticText_portVid.SetLabel('COM Port:')
             self.m_staticText_baudPid.SetLabel('Baudrate:')
             # Auto detect available ports
