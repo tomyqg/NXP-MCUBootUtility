@@ -870,23 +870,6 @@ class secBootGen(uicore.secBootUi):
         val32Vaule = ((binarray[3+offset]<<24) + (binarray[2+offset]<<16) + (binarray[1+offset]<<8) + binarray[0+offset])
         return val32Vaule
 
-    def getFormattedFuseValue( self, fuseValue, direction='LSB'):
-        formattedVal32 = ''
-        for i in range(8):
-            loc = 0
-            if direction =='LSB':
-                loc = 32 - (i + 1) * 4
-            elif direction =='MSB':
-                loc = i * 4
-            else:
-                pass
-            halfbyteStr = str(hex((fuseValue & (0xF << loc))>> loc))
-            formattedVal32 += halfbyteStr[2]
-        return formattedVal32
-
-    def getFormattedHexValue( self, val32 ):
-        return ('0x' + self.getFormattedFuseValue(val32))
-
     def fillVal32IntoBinFile( self, filename, val32):
         with open(filename, 'ab') as fileObj:
             byteStr = ''

@@ -613,13 +613,26 @@ class secBootUi(secBootWin.secBootWin):
         self.m_textCtrl_fuse8b0.SetBackgroundColour( wx.SystemSettings.GetColour( color ) )
         self.Refresh()
 
+    def getFormattedFuseValue( self, fuseValue, direction='LSB'):
+        formattedVal32 = ''
+        for i in range(8):
+            loc = 0
+            if direction =='LSB':
+                loc = 32 - (i + 1) * 4
+            elif direction =='MSB':
+                loc = i * 4
+            else:
+                pass
+            halfbyteStr = str(hex((fuseValue & (0xF << loc))>> loc))
+            formattedVal32 += halfbyteStr[2]
+        return formattedVal32
+
+    def getFormattedHexValue( self, val32 ):
+        return ('0x' + self.getFormattedFuseValue(val32))
+
     def _parseReadFuseValue( self, fuseValue ):
         if fuseValue != None:
-            result = str(hex(fuseValue))
-            if result[len(result) - 1] != 'L':
-                return result
-            else:
-                return result[0:len(result) - 1]
+            return self.getFormattedHexValue(fuseValue)
         else:
             return '--------'
 
