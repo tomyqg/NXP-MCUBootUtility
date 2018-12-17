@@ -91,7 +91,7 @@ kMaxFacRegionCount = 3
 
 kMemBlockColor_Background = wx.WHITE
 kMemBlockColor_Padding    = wx.BLACK
-kMemBlockColor_NFCB       = wx.Colour( 0x00, 0xff, 0xff ) #wx.CYAN
+kMemBlockColor_NFCB       = wx.Colour( 0x23, 0x23, 0x8e ) #wx.NAVY
 kMemBlockColor_DBBT       = wx.Colour( 0xcc, 0x7f, 0x32 ) #wx.GOLD
 kMemBlockColor_FDCB       = wx.Colour( 0x9f, 0x9f, 0x5f ) #wx.KHAKI
 kMemBlockColor_EKIB       = wx.Colour( 0xb0, 0x00, 0xff ) #wx.PURPLE

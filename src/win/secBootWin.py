@@ -1564,7 +1564,7 @@ class secBootWin ( wx.Frame ):
 
 		wSizer_memView = wx.WrapSizer( wx.HORIZONTAL, wx.WRAPSIZER_DEFAULT_FLAGS )
 
-		self.m_staticText_memStart = wx.StaticText( self.m_panel_memView, wx.ID_ANY, u"Start Address:", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.m_staticText_memStart = wx.StaticText( self.m_panel_memView, wx.ID_ANY, u"Start / Offset:", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.m_staticText_memStart.Wrap( -1 )
 
 		wSizer_memView.Add( self.m_staticText_memStart, 0, wx.ALL, 5 )
