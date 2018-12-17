@@ -12,6 +12,7 @@
 *.fbp.bak
 
 /.idea
+/bin/*.json
 /doc
 /ext
 /gen

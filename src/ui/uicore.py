@@ -31,6 +31,7 @@ class secBootUi(secBootWin.secBootWin):
         self.toolCommDict = uivar.getAdvancedSettings(uidef.kAdvancedSettings_Tool)
 
         self.isToolRunAsEntryMode = None
+        self._initToolRunMode()
         self.setToolRunMode()
 
         self.updateConnectStatus()
@@ -59,11 +60,11 @@ class secBootUi(secBootWin.secBootWin):
 
     def _initToolRunMode( self ):
         if self.toolCommDict['isToolRunAsEntryMode']:
-            self.m_menuItem_entryMode.SetValue(True)
-            self.m_menuItem_masterMode.SetValue(False)
+            self.m_menuItem_entryMode.Check(True)
+            self.m_menuItem_masterMode.Check(False)
         else:
-            self.m_menuItem_entryMode.SetValue(False)
-            self.m_menuItem_masterMode.SetValue(True)
+            self.m_menuItem_entryMode.Check(False)
+            self.m_menuItem_masterMode.Check(True)
 
     def setToolRunMode( self ):
         self.isToolRunAsEntryMode = self.m_menuItem_entryMode.IsChecked()
@@ -176,11 +177,17 @@ class secBootUi(secBootWin.secBootWin):
             pass
 
     def initOneStepConnectMode( self ):
-        self.m_checkBox_oneStepConnect.SetValue(True)
+        self.m_checkBox_oneStepConnect.SetValue(self.toolCommDict['isOneStepChecked'])
         self.getOneStepConnectMode()
 
     def getOneStepConnectMode( self ):
         self.isOneStepConnectMode = self.m_checkBox_oneStepConnect.GetValue()
+        self.toolCommDict['isOneStepChecked'] = self.isOneStepConnectMode
+
+    def enableOneStepForEntryMode( self ):
+        if self.isToolRunAsEntryMode:
+            self.m_checkBox_oneStepConnect.SetValue(True)
+            self.toolCommDict['isOneStepChecked'] = True
 
     def _initSecureBootSeqValue( self ):
         self.m_choice_secureBootType.SetSelection(self.toolCommDict['secBootType'])

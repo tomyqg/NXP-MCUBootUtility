@@ -5,18 +5,20 @@ import json
 import uidef
 
 g_cfgFilename = None
-g_toolCommDict = {'toolRunMode':None,
+g_toolCommDict = {'isToolRunAsEntryMode':None,
                   'secBootType':None,
                   'mcuSeries':None,
                   'mcuDevice':None,
                   'bootDevice':None,
-                  'portType':None,
+                  'isUsbhidPortSelected':None,
+                  'isOneStepChecked':None,
                   'certSerial':None,
                   'certKeyPass':None,
                   'appFilename':None,
                   'appFormat':None,
                   'appBinBaseAddr':None,
-                  'keyStoreRegion':None
+                  'keyStoreRegion':None,
+                  'certOptForBee':None
                  }
 
 g_flexspiNorOpt0 = None
@@ -125,6 +127,7 @@ def initVar(cfgFilename):
                           'mcuDevice':1,
                           'bootDevice':0,
                           'isUsbhidPortSelected':True,
+                          'isOneStepChecked':True,
                           'certSerial':'12345678',
                           'certKeyPass':'test',
                           'appFilename':None,

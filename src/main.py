@@ -125,8 +125,15 @@ class secBootMain(memcore.secBootMem):
     def _connectStateMachine( self ):
         connectSteps = uidef.kConnectStep_Normal
         self.getOneStepConnectMode()
-        if self.isOneStepConnectMode and self.connectStage != uidef.kConnectStage_Reset:
-            connectSteps = uidef.kConnectStep_Fast
+        if self.isOneStepConnectMode:
+            if self.connectStage == uidef.kConnectStage_Reset or self.connectStage == uidef.kConnectStage_ExternalMemory:
+                connectSteps = uidef.kConnectStep_Fast - 2
+            elif self.connectStage == uidef.kConnectStage_Flashloader:
+                connectSteps = uidef.kConnectStep_Fast - 1
+            elif self.connectStage == uidef.kConnectStage_Rom:
+                connectSteps = uidef.kConnectStep_Fast
+            else:
+                pass
         while connectSteps:
             self.updatePortSetupValue()
             if self.connectStage == uidef.kConnectStage_Rom:
@@ -575,6 +582,7 @@ class secBootMain(memcore.secBootMem):
     def _switchToolRunMode( self ):
         self.applyFuseOperToRunMode()
         self.setSecureBootButtonColor()
+        self.enableOneStepForEntryMode()
 
     def callbackSetEntryMode( self, event ):
         self.setToolRunMode()
