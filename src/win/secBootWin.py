@@ -432,7 +432,7 @@ class secBootWin ( wx.Frame ):
 		self.m_choice_keyStorageRegion.SetSelection( 1 )
 		sbSizer_keyStorageRegion.Add( self.m_choice_keyStorageRegion, 0, wx.ALIGN_CENTER|wx.ALL, 5 )
 
-		self.m_staticText_availBeeEngines = wx.StaticText( sbSizer_keyStorageRegion.GetStaticBox(), wx.ID_ANY, u"Available BEE Engines:", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.m_staticText_availBeeEngines = wx.StaticText( sbSizer_keyStorageRegion.GetStaticBox(), wx.ID_ANY, u"Max Available BEE Engines:", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.m_staticText_availBeeEngines.Wrap( -1 )
 
 		sbSizer_keyStorageRegion.Add( self.m_staticText_availBeeEngines, 0, wx.ALL, 5 )
