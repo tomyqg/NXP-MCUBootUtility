@@ -56,6 +56,9 @@ kCstVersion_v3_0_1  = '3.0.1'
 kCstVersion_v3_1_0  = '3.1.0'
 
 kCstVersion_Avail   = [kCstVersion_v3_0_1]
+kCstCrtsFileList = ['_temp.txt']
+kCstKeysFileList = ['add_key.bat', 'add_key.sh', 'ahab_pki_tree.bat', 'ahab_pki_tree.sh', 'hab3_pki_tree.bat', 'hab3_pki_tree.sh', 'hab4_pki_tree.bat', 'hab4_pki_tree.sh']
+kCstKeysToolFileList = ['libcrypto-1_1.dll', 'libssl-1_1.dll', 'openssl.exe']
 
 kPkiTreeKeySel_IsEcc  = ['p256', 'p384', 'p521']
 kPkiTreeKeySel_NotEcc = ['1024', '2048', '3072', '4096']

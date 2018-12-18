@@ -305,11 +305,13 @@ class secBootMain(memcore.secBootMem):
                 if reuseCert == None:
                     pass
                 elif not reuseCert:
+                    self.cleanUpCertificate()
                     if self.createSerialAndKeypassfile():
                         self.setSecureBootButtonColor()
                         self.genCertificate()
                         self.genSuperRootKeys()
                         self.showSuperRootKeys()
+                        self.backUpCertificate()
                         status = True
                 else:
                     status = True

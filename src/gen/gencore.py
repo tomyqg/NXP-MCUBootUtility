@@ -1,6 +1,7 @@
 #! /usr/bin/env python
 import sys
 import os
+import time
 import array
 import shutil
 import subprocess
@@ -31,6 +32,7 @@ class secBootGen(uicore.secBootUi):
         self.crtSrkCaPemFileList = [None] * 4
         self.crtCsfUsrPemFileList = [None] * 4
         self.crtImgUsrPemFileList = [None] * 4
+        self.certBackupFolder = os.path.join(self.exeTopRoot, 'gen', 'hab_cert', 'backup')
         self.srkBatFilename = os.path.join(self.exeTopRoot, 'gen', 'hab_cert', 'imx_srk_gen.bat')
         self.cstBinToElftosbPath = '../../cst/' + uidef.kCstVersion_Invalid + '/mingw32/bin'
         self.cstCrtsToElftosbPath = '../../cst/' + uidef.kCstVersion_Invalid + '/crts/'
@@ -232,6 +234,31 @@ class secBootGen(uicore.secBootUi):
         for i in range(keyWords):
             val32 = self.getVal32FromBinFile(self.srkFuseFilename, (i * 4))
             self.printSrkData(self.getFormattedHexValue(val32))
+
+    def cleanUpCertificate( self ):
+        for root, dirs, files in os.walk(self.cstCrtsFolder):
+            for file in files:
+                print os.path.join(root, file)
+                if os.path.split(file)[1] not in uidef.kCstCrtsFileList:
+                    os.remove(os.path.join(root, file))
+        for root, dirs, files in os.walk(self.cstKeysFolder):
+            for file in files:
+                print os.path.join(root, file)
+                if (os.path.split(file)[1] not in uidef.kCstKeysFileList) and \
+                   (os.path.split(file)[1] not in uidef.kCstKeysToolFileList) :
+                    os.remove(os.path.join(root, file))
+
+    def backUpCertificate( self ):
+        certSettingsDict = uivar.getAdvancedSettings(uidef.kAdvancedSettings_Cert)
+        backupFoldername = os.path.join(self.certBackupFolder, time.strftime('%Y-%m-%d_%Hh%Mm%Ss ',time.localtime(time.time())) + \
+                                                               '(' + str(certSettingsDict['SRKs']) + 'srk_' + str(certSettingsDict['pkiTreeKeyLen']) + 'bits_' + str(certSettingsDict['pkiTreeDuration']) + 'years)')
+        os.mkdir(backupFoldername)
+        shutil.copytree(self.cstKeysFolder, os.path.join(backupFoldername, 'keys'))
+        shutil.copytree(self.cstCrtsFolder, os.path.join(backupFoldername, 'crts'))
+        shutil.copy(self.srkTableFilename, backupFoldername)
+        shutil.copy(self.srkFuseFilename, backupFoldername)
+        shutil.make_archive(backupFoldername, 'zip', root_dir=backupFoldername)
+        shutil.rmtree(backupFoldername)
 
     def _convertElfOrAxfToSrec( self, appFilename, destSrecAppFilename, appFormat):
         batContent = ''
