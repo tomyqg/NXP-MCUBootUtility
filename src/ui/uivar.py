@@ -58,13 +58,13 @@ g_otpmkKeyOpt = None
 g_otpmkEncryptedRegionStart = None
 g_otpmkEncryptedRegionLength = None
 
-g_UserKeyCtrlDict = {'mcu_device':None,
+g_userKeyCtrlDict = {'mcu_device':None,
                      'engine_sel':None,
                      'engine0_key_src':None,
                      'engine0_fac_cnt':None,
                      'engine1_key_src':None,
                      'engine1_fac_cnt':None}
-g_UserKeyCmdDict = {'base_addr':None,
+g_userKeyCmdDict = {'base_addr':None,
                     'engine0_key':None,
                     'engine0_arg':None,
                     'engine0_lock':None,
@@ -113,10 +113,10 @@ def initVar(cfgFilename):
             g_otpmkEncryptedRegionStart = cfgDict["cfgSnvsKey"][1]
             g_otpmkEncryptedRegionLength = cfgDict["cfgSnvsKey"][2]
 
-            global g_UserKeyCtrlDict
-            global g_UserKeyCmdDict
-            g_UserKeyCtrlDict = cfgDict["cfgUserKey"][0]
-            g_UserKeyCmdDict = cfgDict["cfgUserKey"][1]
+            global g_userKeyCtrlDict
+            global g_userKeyCmdDict
+            g_userKeyCtrlDict = cfgDict["cfgUserKey"][0]
+            g_userKeyCmdDict = cfgDict["cfgUserKey"][1]
 
             fileObj.close()
     else:
@@ -195,22 +195,22 @@ def initVar(cfgFilename):
         g_otpmkEncryptedRegionStart = [None] * 3
         g_otpmkEncryptedRegionLength = [None] * 3
 
-        global g_UserKeyCtrlDict
-        global g_UserKeyCmdDict
-        g_UserKeyCtrlDict['engine_sel'] = uidef.kUserEngineSel_Engine0
-        g_UserKeyCtrlDict['engine0_key_src'] = uidef.kUserKeySource_SW_GP2
-        g_UserKeyCtrlDict['engine0_fac_cnt'] = 1
-        g_UserKeyCtrlDict['engine1_key_src'] = uidef.kUserKeySource_SW_GP2
-        g_UserKeyCtrlDict['engine1_fac_cnt'] = 1
-        g_UserKeyCmdDict['base_addr'] = '0x60000000'
-        g_UserKeyCmdDict['engine0_key'] = '0123456789abcdeffedcba9876543210'
-        g_UserKeyCmdDict['engine0_arg'] = '1,[0x60001000,0x1000,0]'
-        g_UserKeyCmdDict['engine0_lock'] = '0'
-        g_UserKeyCmdDict['engine1_key'] = '0123456789abcdeffedcba9876543210'
-        g_UserKeyCmdDict['engine1_arg'] = '1,[0x60002000,0x1000,0]'
-        g_UserKeyCmdDict['engine1_lock'] = '0'
-        g_UserKeyCmdDict['use_zero_key'] = '1'
-        g_UserKeyCmdDict['is_boot_image'] = '1'
+        global g_userKeyCtrlDict
+        global g_userKeyCmdDict
+        g_userKeyCtrlDict['engine_sel'] = uidef.kUserEngineSel_Engine0
+        g_userKeyCtrlDict['engine0_key_src'] = uidef.kUserKeySource_SW_GP2
+        g_userKeyCtrlDict['engine0_fac_cnt'] = 1
+        g_userKeyCtrlDict['engine1_key_src'] = uidef.kUserKeySource_SW_GP2
+        g_userKeyCtrlDict['engine1_fac_cnt'] = 1
+        g_userKeyCmdDict['base_addr'] = '0x60000000'
+        g_userKeyCmdDict['engine0_key'] = '0123456789abcdeffedcba9876543210'
+        g_userKeyCmdDict['engine0_arg'] = '1,[0x60001000,0x1000,0]'
+        g_userKeyCmdDict['engine0_lock'] = '0'
+        g_userKeyCmdDict['engine1_key'] = '0123456789abcdeffedcba9876543210'
+        g_userKeyCmdDict['engine1_arg'] = '1,[0x60002000,0x1000,0]'
+        g_userKeyCmdDict['engine1_lock'] = '0'
+        g_userKeyCmdDict['use_zero_key'] = '1'
+        g_userKeyCmdDict['is_boot_image'] = '1'
 
 def deinitVar(cfgFilename=None):
     global g_cfgFilename
@@ -230,8 +230,8 @@ def deinitVar(cfgFilename=None):
         global g_otpmkKeyOpt
         global g_otpmkEncryptedRegionStart
         global g_otpmkEncryptedRegionLength
-        global g_UserKeyCtrlDict
-        global g_UserKeyCmdDict
+        global g_userKeyCtrlDict
+        global g_userKeyCmdDict
         cfgDict = {
             "cfgToolCommon": [g_toolCommDict],
             "cfgFlexspiNor": [g_flexspiNorOpt0, g_flexspiNorOpt1, g_flexspiNorDeviceModel],
@@ -239,7 +239,7 @@ def deinitVar(cfgFilename=None):
             "cfgLpspiNor": [g_lpspiNorOpt0, g_lpspiNorOpt1],
             "cfgCertificate": [g_certSettingsDict],
             "cfgSnvsKey": [g_otpmkKeyOpt, g_otpmkEncryptedRegionStart, g_otpmkEncryptedRegionLength],
-            "cfgUserKey": [g_UserKeyCtrlDict, g_UserKeyCmdDict]
+            "cfgUserKey": [g_userKeyCtrlDict, g_userKeyCmdDict]
         }
         json.dump(cfgDict, fileObj)
         fileObj.close()
@@ -337,9 +337,9 @@ def getAdvancedSettings( group ):
         global g_otpmkEncryptedRegionLength
         return g_otpmkKeyOpt, g_otpmkEncryptedRegionStart, g_otpmkEncryptedRegionLength
     elif group == uidef.kAdvancedSettings_UserKeys:
-        global g_UserKeyCtrlDict
-        global g_UserKeyCmdDict
-        return g_UserKeyCtrlDict, g_UserKeyCmdDict
+        global g_userKeyCtrlDict
+        global g_userKeyCmdDict
+        return g_userKeyCtrlDict, g_userKeyCmdDict
     else:
         pass
 
@@ -358,9 +358,9 @@ def setAdvancedSettings( group, *args ):
         g_otpmkEncryptedRegionStart = args[1]
         g_otpmkEncryptedRegionLength = args[2]
     elif group == uidef.kAdvancedSettings_UserKeys:
-        global g_UserKeyCtrlDict
-        global g_UserKeyCmdDict
-        g_UserKeyCtrlDict = args[0]
-        g_UserKeyCmdDict = args[1]
+        global g_userKeyCtrlDict
+        global g_userKeyCmdDict
+        g_userKeyCtrlDict = args[0]
+        g_userKeyCmdDict = args[1]
     else:
         pass

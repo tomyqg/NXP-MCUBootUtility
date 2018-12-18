@@ -135,8 +135,8 @@ class secBootUi(secBootWin.secBootWin):
             if retryCnt != 0:
                 time.sleep(2)
             else:
-                usbVid[0] = 'No Device Connected'
-                usbPid[0] = 'No Device Connected'
+                usbVid[0] = 'N/A - Not Found'
+                usbPid[0] = usbVid[0]
         if self.m_choice_portVid.GetString(self.m_choice_portVid.GetSelection()) != usbVid[0]:
             self.m_choice_portVid.Clear()
             self.m_choice_baudPid.Clear()
@@ -169,8 +169,8 @@ class secBootUi(secBootWin.secBootWin):
             self.m_choice_portVid.SetSelection(0)
             self.m_choice_baudPid.SetSelection(0)
         elif self.isUsbhidPortSelected:
-            self.m_staticText_portVid.SetLabel('VID:')
-            self.m_staticText_baudPid.SetLabel('PID:')
+            self.m_staticText_portVid.SetLabel('Vendor ID:')
+            self.m_staticText_baudPid.SetLabel('Product ID:')
             if connectStage == uidef.kConnectStage_Rom:
                 self.usbhidToConnect[0] = usbIdList[0]
                 self.usbhidToConnect[1] = usbIdList[1]

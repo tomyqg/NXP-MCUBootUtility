@@ -41,7 +41,7 @@ kSecureBootType_HabAuth     = 'HAB Signed Image Boot'
 kSecureBootType_HabCrypto   = 'HAB Encrypted Image Boot'
 kSecureBootType_BeeCrypto   = 'BEE Encrypted Image Boot'
 
-kKeyStorageRegion_FixedOtpmkKey    = 'Fixed SNVS Key'
+kKeyStorageRegion_FixedOtpmkKey    = 'Fixed Otpmk(SNVS) Key'
 kKeyStorageRegion_FlexibleUserKeys = 'Flexible User Keys'
 
 kAdvancedSettings_Tool      = 0

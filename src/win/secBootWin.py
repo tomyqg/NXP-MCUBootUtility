@@ -427,7 +427,7 @@ class secBootWin ( wx.Frame ):
 
 		sbSizer_keyStorageRegion.Add( self.m_staticText_keyStorageRegion, 0, wx.ALL, 5 )
 
-		m_choice_keyStorageRegionChoices = [ u"Fixed SNVS Key", u"Flexible User Keys" ]
+		m_choice_keyStorageRegionChoices = [ u"Fixed Otpmk(SNVS) Key", u"Flexible User Keys" ]
 		self.m_choice_keyStorageRegion = wx.Choice( sbSizer_keyStorageRegion.GetStaticBox(), wx.ID_ANY, wx.DefaultPosition, wx.Size( 150,-1 ), m_choice_keyStorageRegionChoices, 0 )
 		self.m_choice_keyStorageRegion.SetSelection( 1 )
 		sbSizer_keyStorageRegion.Add( self.m_choice_keyStorageRegion, 0, wx.ALIGN_CENTER|wx.ALL, 5 )
@@ -829,56 +829,56 @@ class secBootWin ( wx.Frame ):
 
 		bSizer_fuseGroupTxt1.Add( self.m_staticText_fuse4f0, 0, wx.ALL, 5 )
 
-		self.m_staticText_fuse500 = wx.StaticText( self.m_panel_fuseUtil, wx.ID_ANY, u"0x500:", wx.DefaultPosition, wx.Size( 31,20 ), 0 )
+		self.m_staticText_fuse500 = wx.StaticText( self.m_panel_fuseUtil, wx.ID_ANY, u"Otpmk", wx.DefaultPosition, wx.Size( 31,20 ), 0 )
 		self.m_staticText_fuse500.Wrap( -1 )
 
 		self.m_staticText_fuse500.SetFont( wx.Font( 9, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, "宋体" ) )
 
 		bSizer_fuseGroupTxt1.Add( self.m_staticText_fuse500, 0, wx.ALL, 5 )
 
-		self.m_staticText_fuse510 = wx.StaticText( self.m_panel_fuseUtil, wx.ID_ANY, u"0x510:", wx.DefaultPosition, wx.Size( 31,20 ), 0 )
+		self.m_staticText_fuse510 = wx.StaticText( self.m_panel_fuseUtil, wx.ID_ANY, u"Otpmk", wx.DefaultPosition, wx.Size( 31,20 ), 0 )
 		self.m_staticText_fuse510.Wrap( -1 )
 
 		self.m_staticText_fuse510.SetFont( wx.Font( 9, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, "宋体" ) )
 
 		bSizer_fuseGroupTxt1.Add( self.m_staticText_fuse510, 0, wx.ALL, 5 )
 
-		self.m_staticText_fuse520 = wx.StaticText( self.m_panel_fuseUtil, wx.ID_ANY, u"0x520:", wx.DefaultPosition, wx.Size( 31,20 ), 0 )
+		self.m_staticText_fuse520 = wx.StaticText( self.m_panel_fuseUtil, wx.ID_ANY, u"Otpmk", wx.DefaultPosition, wx.Size( 31,20 ), 0 )
 		self.m_staticText_fuse520.Wrap( -1 )
 
 		self.m_staticText_fuse520.SetFont( wx.Font( 9, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, "宋体" ) )
 
 		bSizer_fuseGroupTxt1.Add( self.m_staticText_fuse520, 0, wx.ALL, 5 )
 
-		self.m_staticText_fuse530 = wx.StaticText( self.m_panel_fuseUtil, wx.ID_ANY, u"0x530:", wx.DefaultPosition, wx.Size( 31,20 ), 0 )
+		self.m_staticText_fuse530 = wx.StaticText( self.m_panel_fuseUtil, wx.ID_ANY, u"Otpmk", wx.DefaultPosition, wx.Size( 31,20 ), 0 )
 		self.m_staticText_fuse530.Wrap( -1 )
 
 		self.m_staticText_fuse530.SetFont( wx.Font( 9, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, "宋体" ) )
 
 		bSizer_fuseGroupTxt1.Add( self.m_staticText_fuse530, 0, wx.ALL, 5 )
 
-		self.m_staticText_fuse540 = wx.StaticText( self.m_panel_fuseUtil, wx.ID_ANY, u"0x540:", wx.DefaultPosition, wx.Size( 31,20 ), 0 )
+		self.m_staticText_fuse540 = wx.StaticText( self.m_panel_fuseUtil, wx.ID_ANY, u"Otpmk", wx.DefaultPosition, wx.Size( 31,20 ), 0 )
 		self.m_staticText_fuse540.Wrap( -1 )
 
 		self.m_staticText_fuse540.SetFont( wx.Font( 9, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, "宋体" ) )
 
 		bSizer_fuseGroupTxt1.Add( self.m_staticText_fuse540, 0, wx.ALL, 5 )
 
-		self.m_staticText_fuse550 = wx.StaticText( self.m_panel_fuseUtil, wx.ID_ANY, u"0x550:", wx.DefaultPosition, wx.Size( 31,20 ), 0 )
+		self.m_staticText_fuse550 = wx.StaticText( self.m_panel_fuseUtil, wx.ID_ANY, u"Otpmk", wx.DefaultPosition, wx.Size( 31,20 ), 0 )
 		self.m_staticText_fuse550.Wrap( -1 )
 
 		self.m_staticText_fuse550.SetFont( wx.Font( 9, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, "宋体" ) )
 
 		bSizer_fuseGroupTxt1.Add( self.m_staticText_fuse550, 0, wx.ALL, 5 )
 
-		self.m_staticText_fuse560 = wx.StaticText( self.m_panel_fuseUtil, wx.ID_ANY, u"0x560:", wx.DefaultPosition, wx.Size( 31,20 ), 0 )
+		self.m_staticText_fuse560 = wx.StaticText( self.m_panel_fuseUtil, wx.ID_ANY, u"Otpmk", wx.DefaultPosition, wx.Size( 31,20 ), 0 )
 		self.m_staticText_fuse560.Wrap( -1 )
 
 		self.m_staticText_fuse560.SetFont( wx.Font( 9, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, "宋体" ) )
 
 		bSizer_fuseGroupTxt1.Add( self.m_staticText_fuse560, 0, wx.ALL, 5 )
 
-		self.m_staticText_fuse570 = wx.StaticText( self.m_panel_fuseUtil, wx.ID_ANY, u"0x570:", wx.DefaultPosition, wx.Size( 31,20 ), 0 )
+		self.m_staticText_fuse570 = wx.StaticText( self.m_panel_fuseUtil, wx.ID_ANY, u"Otpmk", wx.DefaultPosition, wx.Size( 31,20 ), 0 )
 		self.m_staticText_fuse570.Wrap( -1 )
 
 		self.m_staticText_fuse570.SetFont( wx.Font( 9, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, "宋体" ) )
