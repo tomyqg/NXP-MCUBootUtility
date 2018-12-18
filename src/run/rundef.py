@@ -1,6 +1,6 @@
 import sys, os
 
-kUartSpeed_Blhost = ['4800', '9600', '19200', '57600', '115200']
+kUartSpeed_Blhost = ['115200', '57600', '19200', '9600', '4800']
 kUartSpeed_Sdphost = ['115200']
 
 kBootDeviceMemId_SemcNor      = 0x8

@@ -149,8 +149,6 @@ class secBootUi(secBootWin.secBootWin):
         self.isUartPortSelected = self.m_radioBtn_uart.GetValue()
         self.isUsbhidPortSelected = self.m_radioBtn_usbhid.GetValue()
         if self.isUartPortSelected:
-            self.m_choice_portVid.Clear()
-            self.m_choice_baudPid.Clear()
             self.m_staticText_portVid.SetLabel('COM Port:')
             self.m_staticText_baudPid.SetLabel('Baudrate:')
             # Auto detect available ports
@@ -159,15 +157,28 @@ class secBootUi(secBootWin.secBootWin):
             for i in range(len(comports)):
                 comport = list(comports[i])
                 ports[i] = comport[0]
-            self.m_choice_portVid.SetItems(ports)
             if connectStage == uidef.kConnectStage_Rom:
+                self.m_choice_portVid.Clear()
+                self.m_choice_baudPid.Clear()
+                self.m_choice_portVid.SetItems(ports)
                 self.m_choice_baudPid.SetItems(rundef.kUartSpeed_Sdphost)
+                self.m_choice_portVid.SetSelection(0)
+                self.m_choice_baudPid.SetSelection(0)
             elif connectStage == uidef.kConnectStage_Flashloader:
+                if not self.isOneStepConnectMode:
+                    lastPort = self.m_choice_portVid.GetString(self.m_choice_portVid.GetSelection())
+                    self.m_choice_portVid.Clear()
+                    self.m_choice_portVid.SetItems(ports)
+                    self.m_choice_portVid.SetSelection(0)
+                    for i in range(len(ports)):
+                        if lastPort == ports[i]:
+                            self.m_choice_portVid.SetSelection(i)
+                            break
+                self.m_choice_baudPid.Clear()
                 self.m_choice_baudPid.SetItems(rundef.kUartSpeed_Blhost)
+                self.m_choice_baudPid.SetSelection(0)
             else:
                 pass
-            self.m_choice_portVid.SetSelection(0)
-            self.m_choice_baudPid.SetSelection(0)
         elif self.isUsbhidPortSelected:
             self.m_staticText_portVid.SetLabel('Vendor ID:')
             self.m_staticText_baudPid.SetLabel('Product ID:')
