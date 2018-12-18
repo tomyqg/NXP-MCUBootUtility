@@ -420,7 +420,12 @@ class secBootRun(gencore.secBootGen):
             self._getSemcNandDeviceInfo()
         elif self.bootDevice == uidef.kBootDevice_FlexspiNor:
             self.printDeviceStatus("--------FlexSPI NOR memory--------")
-            self._getFlexspiNorDeviceInfo()
+            if not self._getFlexspiNorDeviceInfo():
+                if not self._eraseFlexspiNorForConfigBlockLoading():
+                    return False
+                if not self._programFlexspiNorConfigBlock():
+                    return False
+                self._getFlexspiNorDeviceInfo()
         elif self.bootDevice == uidef.kBootDevice_LpspiNor:
             self.printDeviceStatus("--------LPSPI NOR/EEPROM memory---")
             self._getLpspiNorDeviceInfo()
@@ -485,10 +490,6 @@ class secBootRun(gencore.secBootGen):
             status, results, cmdStr = self.blhost.configureMemory(self.bootDeviceMemId, rundef.kRamFreeSpaceStart_LoadCommOpt)
             self.printLog(cmdStr)
             if status != boot.status.kStatus_Success:
-                return False
-            if not self._eraseFlexspiNorForConfigBlockLoading():
-                return False
-            if not self._programFlexspiNorConfigBlock():
                 return False
         elif self.bootDevice == uidef.kBootDevice_LpspiNor:
             lpspiNorOpt0, lpspiNorOpt1 = uivar.getBootDeviceConfiguration(self.bootDevice)
