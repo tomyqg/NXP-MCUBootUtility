@@ -590,7 +590,8 @@ class secBootMain(memcore.secBootMem):
         self.clearLog()
 
     def _deinitToolToExit( self ):
-        self.usbhidDetectTimer.cancel()
+        if self.usbhidDetectTimer != None:
+            self.usbhidDetectTimer.cancel()
         uivar.setAdvancedSettings(uidef.kAdvancedSettings_Tool, self.toolCommDict)
         uivar.deinitVar()
         exit(0)
