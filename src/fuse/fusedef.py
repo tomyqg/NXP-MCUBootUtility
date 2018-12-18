@@ -5,6 +5,7 @@ kMaxEfuseWords  = 80
 ##################################################
 
 kEfuseIndex_START  = 0x0
+kEfuseIndex_LOCK  = kEfuseIndex_START
 
 kEfuseIndex_TESTER0  = 0x1
 kEfuseIndex_TESTER1  = 0x2
@@ -47,6 +48,12 @@ kEfuseIndex_GP4_2 = 0x3E
 kEfuseIndex_GP4_3 = 0x3F
 
 ##################################################
+
+kEfuseMask_LockLow  = 0x0FFFFFFF
+kEfuseMask_LockHigh = 0xF0000000
+kEfuseMask_LockSrk  = 0x00004000
+kEfuseShift_LockLow  = 0
+kEfuseShift_LockHigh = 28
 
 kEfuseMask_SecConfig0 = 0x00000002
 kEfuseMask_SecConfig1 = 0x00000002

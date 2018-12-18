@@ -88,6 +88,23 @@ class secBootFuse(runcore.secBootRun):
         else:
             pass
 
+    def _burnFuseLockRegion( self, srcFuseValue, destFuseValue ):
+        destFuseValue = destFuseValue | srcFuseValue
+        # High-4bits cannot be burned along with low-28bits for fuse lock region, this is design limitation
+        srcLock = srcFuseValue & fusedef.kEfuseMask_LockLow
+        destLock = destFuseValue & fusedef.kEfuseMask_LockLow
+        if srcLock != destLock:
+            # Don't allow to lock Fuse SRK because SRK will be OP+RP+WP if lock bit is set and then ROM cannot get SRK
+            if ((srcLock & fusedef.kEfuseMask_LockSrk) == 0) and \
+               ((destLock & fusedef.kEfuseMask_LockSrk) != 0):
+                destLock = destLock & (~fusedef.kEfuseMask_LockSrk)
+                self.popupMsgBox('Fuse 0x400[14] - SRK_LOCK is not allowed to be set, because SRK will be OP+RP+WP if SRK_LOCK is set and then ROM cannot get SRK!')
+            self.burnMcuDeviceFuseByBlhost(fusedef.kEfuseIndex_LOCK, destLock)
+        srcLock = srcFuseValue & fusedef.kEfuseMask_LockHigh
+        destLock = destFuseValue & fusedef.kEfuseMask_LockHigh
+        if srcLock != destLock:
+            self.burnMcuDeviceFuseByBlhost(fusedef.kEfuseIndex_LOCK, destLock)
+
     def burnAllFuseRegions( self ):
         self.toBeBurnnedFuseList = self.getUserFuses()
         self._swapRemappedToBeBurnFuseIfAppliable()
@@ -101,7 +118,10 @@ class secBootFuse(runcore.secBootRun):
                 if self.toBeBurnnedFuseList[i] != self.scannedFuseList[i] and \
                    self.toBeBurnnedFuseList[i] != None and \
                    self.scannedFuseList[i] != None:
-                    fuseValue = self.toBeBurnnedFuseList[i] | self.scannedFuseList[i]
-                    self.burnMcuDeviceFuseByBlhost(fusedef.kEfuseIndex_START + i, fuseValue)
+                    if i == fusedef.kEfuseIndex_LOCK:
+                        self._burnFuseLockRegion(self.scannedFuseList[i], self.toBeBurnnedFuseList[i])
+                    else:
+                        fuseValue = self.toBeBurnnedFuseList[i] | self.scannedFuseList[i]
+                        self.burnMcuDeviceFuseByBlhost(fusedef.kEfuseIndex_START + i, fuseValue)
                     self.toBeRefreshedFuseList[i] = True
         self.scanAllFuseRegions(True, True)
