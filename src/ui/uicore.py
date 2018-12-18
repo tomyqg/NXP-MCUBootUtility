@@ -401,10 +401,10 @@ class secBootUi(secBootWin.secBootWin):
             self.m_panel_progDek1_showHabDek.SetBackgroundColour( uidef.kBootSeqColor_Active )
         elif self.secureBootType == uidef.kSecureBootType_BeeCrypto:
             if self.bootDevice == uidef.kBootDevice_FlexspiNor:
-                self.setBeeCertColor()
                 self.m_panel_genImage1_browseApp.SetBackgroundColour( uidef.kBootSeqColor_Active )
                 self.m_panel_genImage3_enableCertForBee.SetBackgroundColour( uidef.kBootSeqColor_Active )
                 self.setKeyStorageRegionColor()
+                self.setBeeCertColor()
                 self.m_panel_flashImage1_showImage.SetBackgroundColour( uidef.kBootSeqColor_Active )
                 if self.isCertEnabledForBee:
                     self.m_button_genImage.SetLabel('Generate Signed Bootable Image')
@@ -443,13 +443,20 @@ class secBootUi(secBootWin.secBootWin):
         self.m_button_flashImage.SetLabel('Load Encrypted Image')
         self._resetCertificateColor()
         if self.isCertEnabledForBee:
-            self.m_panel_doAuth1_certInput.SetBackgroundColour( uidef.kBootSeqColor_Optional )
+            activeColor = None
+            if self.keyStorageRegion == uidef.kKeyStorageRegion_FixedOtpmkKey:
+                activeColor = uidef.kBootSeqColor_Active
+            elif self.keyStorageRegion == uidef.kKeyStorageRegion_FlexibleUserKeys:
+                activeColor = uidef.kBootSeqColor_Optional
+            else:
+                pass
+            self.m_panel_doAuth1_certInput.SetBackgroundColour( activeColor )
             self.m_textCtrl_serial.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
             self.m_textCtrl_keyPass.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
-            self.m_panel_doAuth2_certFmt.SetBackgroundColour( uidef.kBootSeqColor_Optional )
-            self.m_button_genCert.SetBackgroundColour( uidef.kBootSeqColor_Optional )
-            self.m_panel_progSrk1_showSrk.SetBackgroundColour( uidef.kBootSeqColor_Optional )
-            self.m_button_progSrk.SetBackgroundColour( uidef.kBootSeqColor_Optional )
+            self.m_panel_doAuth2_certFmt.SetBackgroundColour( activeColor )
+            self.m_button_genCert.SetBackgroundColour( activeColor )
+            self.m_panel_progSrk1_showSrk.SetBackgroundColour( activeColor )
+            self.m_button_progSrk.SetBackgroundColour( activeColor )
         self.Refresh()
 
     def setKeyStorageRegionColor( self ):
@@ -459,12 +466,20 @@ class secBootUi(secBootWin.secBootWin):
         self.m_panel_prepBee1_beeKeyRegion.SetBackgroundColour( uidef.kBootSeqColor_Active )
         self.m_panel_prepBee2_beeCryptoAlgo.SetBackgroundColour( uidef.kBootSeqColor_Active )
         if self.keyStorageRegion == uidef.kKeyStorageRegion_FixedOtpmkKey:
+            self.m_choice_enableCertForBee.Clear()
+            self.m_choice_enableCertForBee.SetItems(['Yes'])
+            self.m_choice_enableCertForBee.SetSelection(0)
+            self.setBeeCertColor()
             self.m_choice_availBeeEngines.Clear()
             self.m_choice_availBeeEngines.SetItems(['1'])
             self.m_choice_availBeeEngines.SetSelection(0)
             self.m_button_prepBee.SetLabel('Prepare For Encryption')
             self.m_button_prepBee.SetBackgroundColour( uidef.kBootSeqColor_Active )
         elif self.keyStorageRegion == uidef.kKeyStorageRegion_FlexibleUserKeys:
+            self.m_choice_enableCertForBee.Clear()
+            self.m_choice_enableCertForBee.SetItems(['Yes', 'No'])
+            self.m_choice_enableCertForBee.SetSelection(1)
+            self.setBeeCertColor()
             self.m_choice_availBeeEngines.Clear()
             self.m_choice_availBeeEngines.SetItems(['2'])
             self.m_choice_availBeeEngines.SetSelection(0)
