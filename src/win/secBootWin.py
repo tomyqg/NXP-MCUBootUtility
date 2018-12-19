@@ -1709,6 +1709,7 @@ class secBootWin ( wx.Frame ):
 		self.m_choice_mcuDevice.Bind( wx.EVT_CHOICE, self.callbackSetMcuDevice )
 		self.m_choice_bootDevice.Bind( wx.EVT_CHOICE, self.callbackSetBootDevice )
 		self.m_button_bootDeviceConfiguration.Bind( wx.EVT_BUTTON, self.callbackBootDeviceConfiguration )
+		self.m_button_deviceConfigurationData.Bind( wx.EVT_BUTTON, self.callbackDeviceConfigurationData )
 		self.m_radioBtn_uart.Bind( wx.EVT_RADIOBUTTON, self.callbackSetUartPort )
 		self.m_radioBtn_usbhid.Bind( wx.EVT_RADIOBUTTON, self.callbackSetUsbhidPort )
 		self.m_checkBox_oneStepConnect.Bind( wx.EVT_CHECKBOX, self.callbackSetOneStep )
@@ -1772,6 +1773,9 @@ class secBootWin ( wx.Frame ):
 		event.Skip()
 
 	def callbackBootDeviceConfiguration( self, event ):
+		event.Skip()
+
+	def callbackDeviceConfigurationData( self, event ):
 		event.Skip()
 
 	def callbackSetUartPort( self, event ):
