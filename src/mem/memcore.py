@@ -19,6 +19,7 @@ class secBootMem(fusecore.secBootFuse):
     def __init__(self, parent):
         fusecore.secBootFuse.__init__(self, parent)
 
+        self.userFolder = os.path.join(self.exeTopRoot, 'gen', 'user_file')
         self.userFilename = os.path.join(self.exeTopRoot, 'gen', 'user_file', 'user.dat')
 
         self.needToShowCfgIntr = None
@@ -141,6 +142,21 @@ class secBootMem(fusecore.secBootFuse):
             pass
         return True
 
+    def _tryToSaveImageDataFile( self, readbackFilename ):
+        if self.needToSaveReadbackImageData():
+            savedBinFile = self.getImageDataFileToSave()
+            if os.path.isfile(savedBinFile):
+                if readbackFilename != savedBinFile:
+                    shutil.copy(readbackFilename, savedBinFile)
+            else:
+                finalBinFile = os.path.join(self.userFolder, os.path.split(readbackFilename)[1])
+                shutil.copy(readbackFilename, finalBinFile)
+                self.setImageDataFilePath(finalBinFile)
+        try:
+            os.remove(readbackFilename)
+        except:
+            pass
+
     def readProgrammedMemoryAndShow( self ):
         if not os.path.isfile(self.destAppFilename):
             self.popupMsgBox('You should program your image first!')
@@ -167,7 +183,7 @@ class secBootMem(fusecore.secBootFuse):
         else:
             readoutMemLen += imageFileLen
 
-        memFilename = 'bootDeviceMem.dat'
+        memFilename = 'bootableImageFromBootDevice.dat'
         memFilepath = os.path.join(self.blhostVectorsDir, memFilename)
         status, results, cmdStr = self.blhost.readMemory(imageMemBase, readoutMemLen, memFilename, self.bootDeviceMemId)
         self.printLog(cmdStr)
@@ -257,10 +273,7 @@ class secBootMem(fusecore.secBootFuse):
                         self.printMem(contentToShow)
             fileObj.close()
         self._initShowIntr()
-        try:
-            os.remove(memFilepath)
-        except:
-            pass
+        self._tryToSaveImageDataFile(memFilepath)
 
     def _getUserComMemParameters( self, isMemWrite=False ):
         status = False
@@ -295,7 +308,7 @@ class secBootMem(fusecore.secBootFuse):
             alignedMemLength = misc.align_up(memLength, self.comMemReadUnit) + self.comMemReadUnit
             if memLength + memStart > alignedMemStart + self.comMemReadUnit:
                 alignedMemLength += self.comMemReadUnit
-            memFilename = 'comMemRead.dat'
+            memFilename = 'commonDataFromBootDevice.dat'
             memFilepath = os.path.join(self.blhostVectorsDir, memFilename)
             status, results, cmdStr = self.blhost.readMemory(alignedMemStart, alignedMemLength, memFilename, self.bootDeviceMemId)
             self.printLog(cmdStr)
@@ -310,6 +323,7 @@ class secBootMem(fusecore.secBootFuse):
                         memLeft -= len(memContent)
                         addr += len(memContent)
                         self.printMem(contentToShow)
+                self._tryToSaveImageDataFile(memFilepath)
             else:
                 self.popupMsgBox('Failed to read boot device, error code is %d !' %(status))
 

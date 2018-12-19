@@ -615,6 +615,16 @@ class secBootUi(secBootWin.secBootWin):
         memBinFile = self.m_filePicker_memBinFile.GetPath()
         return memBinFile.encode('utf-8').encode("gbk")
 
+    def needToSaveReadbackImageData( self ):
+        return self.m_checkBox_saveImageData.GetValue()
+
+    def getImageDataFileToSave( self ):
+        savedBinFile = self.m_filePicker_savedBinFile.GetPath()
+        return savedBinFile.encode('utf-8').encode("gbk")
+
+    def setImageDataFilePath( self, filePath ):
+        self.m_filePicker_savedBinFile.SetPath(filePath)
+
     def printMem( self , memStr, strColor=uidef.kMemBlockColor_Padding ):
         self.m_textCtrl_bootDeviceMem.SetDefaultStyle(wx.TextAttr(strColor, uidef.kMemBlockColor_Background))
         self.m_textCtrl_bootDeviceMem.AppendText(memStr + "\n")

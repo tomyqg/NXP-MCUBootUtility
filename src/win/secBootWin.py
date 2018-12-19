@@ -1603,7 +1603,7 @@ class secBootWin ( wx.Frame ):
 
 		wSizer_memView.Add( self.m_textCtrl_bootDeviceMem, 0, wx.ALL, 5 )
 
-		self.m_staticText_null0MemView = wx.StaticText( self.m_panel_memView, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.Size( 200,-1 ), 0 )
+		self.m_staticText_null0MemView = wx.StaticText( self.m_panel_memView, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.Size( 35,-1 ), 0 )
 		self.m_staticText_null0MemView.Wrap( -1 )
 
 		wSizer_memView.Add( self.m_staticText_null0MemView, 0, wx.ALL, 5 )
@@ -1611,7 +1611,7 @@ class secBootWin ( wx.Frame ):
 		self.m_button_viewMem = wx.Button( self.m_panel_memView, wx.ID_ANY, u"View Bootable Image", wx.DefaultPosition, wx.DefaultSize, 0 )
 		wSizer_memView.Add( self.m_button_viewMem, 0, wx.ALL, 5 )
 
-		self.m_staticText_null1MemView = wx.StaticText( self.m_panel_memView, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.Size( 50,-1 ), 0 )
+		self.m_staticText_null1MemView = wx.StaticText( self.m_panel_memView, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.Size( 10,-1 ), 0 )
 		self.m_staticText_null1MemView.Wrap( -1 )
 
 		wSizer_memView.Add( self.m_staticText_null1MemView, 0, wx.ALL, 5 )
@@ -1619,10 +1619,16 @@ class secBootWin ( wx.Frame ):
 		self.m_button_clearMem = wx.Button( self.m_panel_memView, wx.ID_ANY, u"Clear The Screen", wx.DefaultPosition, wx.DefaultSize, 0 )
 		wSizer_memView.Add( self.m_button_clearMem, 0, wx.ALL, 5 )
 
-		self.m_staticText_null2MemView = wx.StaticText( self.m_panel_memView, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.Size( 150,-1 ), 0 )
+		self.m_staticText_null2MemView = wx.StaticText( self.m_panel_memView, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.Size( 10,-1 ), 0 )
 		self.m_staticText_null2MemView.Wrap( -1 )
 
 		wSizer_memView.Add( self.m_staticText_null2MemView, 0, wx.ALL, 5 )
+
+		self.m_checkBox_saveImageData = wx.CheckBox( self.m_panel_memView, wx.ID_ANY, u"Save image/data file to", wx.DefaultPosition, wx.Size( -1,-1 ), 0 )
+		wSizer_memView.Add( self.m_checkBox_saveImageData, 0, wx.ALL, 5 )
+
+		self.m_filePicker_savedBinFile = wx.FilePickerCtrl( self.m_panel_memView, wx.ID_ANY, wx.EmptyString, u"Select a file", u"*.*", wx.DefaultPosition, wx.DefaultSize, wx.FLP_DEFAULT_STYLE )
+		wSizer_memView.Add( self.m_filePicker_savedBinFile, 0, wx.ALL, 5 )
 
 
 		self.m_panel_memView.SetSizer( wSizer_memView )
