@@ -411,6 +411,25 @@ class secBootGen(uicore.secBootUi):
         #print ('Image length is 0x%x' %(lengthInByte))
         return startAddress, entryPointAddress, lengthInByte
 
+    def _verifyAppVectorAddressForBd( self, vectorAddr, initialLoadSize ):
+        executeBase = 0
+        if ((vectorAddr >= self.tgt.memoryRange['itcm'].start) and (vectorAddr < self.tgt.memoryRange['itcm'].start + self.tgt.memoryRange['itcm'].length)):
+             executeBase = self.tgt.memoryRange['itcm'].start
+        elif ((vectorAddr >= self.tgt.memoryRange['dtcm'].start) and (vectorAddr < self.tgt.memoryRange['dtcm'].start + self.tgt.memoryRange['dtcm'].length)):
+             executeBase = self.tgt.memoryRange['dtcm'].start
+        elif ((vectorAddr >= self.tgt.memoryRange['ocram'].start) and (vectorAddr < self.tgt.memoryRange['ocram'].start + self.tgt.memoryRange['ocram'].length)):
+             executeBase = self.tgt.memoryRange['ocram'].start
+        elif ((vectorAddr >= self.tgt.flexspiNorMemBase) and (vectorAddr < self.tgt.flexspiNorMemBase + rundef.kBootDeviceMemXipSize_FlexspiNor)):
+             executeBase = self.tgt.flexspiNorMemBase
+        elif ((vectorAddr >= rundef.kBootDeviceMemBase_SemcNor) and (vectorAddr < rundef.kBootDeviceMemBase_SemcNor + rundef.kBootDeviceMemXipSize_SemcNor)):
+             executeBase = rundef.kBootDeviceMemBase_SemcNor
+        else:
+            pass
+        if (vectorAddr - executeBase) >= initialLoadSize:
+            return True
+        else:
+            return False
+
     def _updateBdfileContent( self, secureBootType, bootDevice, vectorAddress, entryPointAddress):
         bdContent = ""
         ############################################################################
@@ -456,7 +475,7 @@ class secBootGen(uicore.secBootUi):
             self.destAppInitialLoadSize = gendef.kInitialLoadSize_RAM_FLASHLOADER
         else:
             pass
-        if vectorAddress < self.destAppInitialLoadSize:
+        if not self._verifyAppVectorAddressForBd(vectorAddress, self.destAppInitialLoadSize):
             if bootDevice != uidef.kBootDevice_RamFlashloader:
                 self.popupMsgBox('Invalid vector address found in image file: ' + self.srcAppFilename)
             return False
@@ -650,7 +669,7 @@ class secBootGen(uicore.secBootUi):
         self.srcAppFilename = self.getUserAppFilePath()
         imageStartAddr, imageEntryAddr, imageLength = self._getImageInfo(self.srcAppFilename)
         if imageStartAddr == None or imageEntryAddr == None:
-            self.popupMsgBox('You should first specify a source image file (.elf/.srec)!')
+            self.popupMsgBox('You should first specify a source image file (.elf/.axf/.srec/.hex/.bin)!')
             return False
         self.isXipApp = False
         self.destAppVectorAddress = imageStartAddr
@@ -665,7 +684,7 @@ class secBootGen(uicore.secBootUi):
             else:
                 self.destAppVectorOffset = gendef.kInitialLoadSize_NOR
         elif self.bootDevice == uidef.kBootDevice_SemcNor:
-            if ((imageStartAddr >= rundef.kBootDeviceMemBase_SemcNor) and (imageStartAddr <= rundef.kBootDeviceMemBase_SemcNor + rundef.kBootDeviceMemXipSize_SemcNor)):
+            if ((imageStartAddr >= rundef.kBootDeviceMemBase_SemcNor) and (imageStartAddr < rundef.kBootDeviceMemBase_SemcNor + rundef.kBootDeviceMemXipSize_SemcNor)):
                 if (imageStartAddr + imageLength <= rundef.kBootDeviceMemBase_SemcNor + rundef.kBootDeviceMemXipSize_SemcNor):
                     self.isXipApp = True
                     self.destAppVectorOffset = imageStartAddr - rundef.kBootDeviceMemBase_SemcNor
