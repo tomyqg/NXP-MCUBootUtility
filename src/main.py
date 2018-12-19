@@ -17,6 +17,7 @@ from ui import ui_cfg_semcnand
 from ui import ui_cfg_usdhcsd
 from ui import ui_cfg_usdhcmmc
 from ui import ui_cfg_lpspinor
+from ui import ui_cfg_dcd
 from ui import ui_settings_cert
 from ui import ui_settings_fixed_otpmk_key
 from ui import ui_settings_flexible_user_keys
@@ -90,6 +91,12 @@ class secBootMain(memcore.secBootMem):
             lpspiNorFrame.Show(True)
         else:
             pass
+
+    def callbackDeviceConfigurationData( self, event ):
+        dcdFrame = ui_cfg_dcd.secBootUiCfgDcd(None)
+        dcdFrame.SetTitle(u"Device Configuration Data")
+        dcdFrame.setNecessaryInfo(self.dcdBinFilename, self.dcdCfgFilename, self.dcdModelFolder)
+        dcdFrame.Show(True)
 
     def _setUartUsbPort( self ):
         usbIdList = self.getUsbid()

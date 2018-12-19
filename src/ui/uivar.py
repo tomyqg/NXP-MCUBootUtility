@@ -45,6 +45,16 @@ g_usdhcMmcOpt2 = None
 g_lpspiNorOpt0 = None
 g_lpspiNorOpt1 = None
 
+g_dcdCtrlDict = {'isDcdEnabled':None,
+                 'dcdFileType':None}
+g_dcdSettingsDict = {'dcdSource':None,
+                     'userBinFile':None,
+                     'userCfgFile':None,
+                     'dcdPurpose':None,
+                     'sdramBase':None,
+                     'deviceModel':None,
+                     'dcdDesc':None}
+
 g_certSettingsDict = {'cstVersion':None,
                       'useExistingCaKey':None,
                       'useEllipticCurveCrypto':None,
@@ -102,6 +112,11 @@ def initVar(cfgFilename):
             global g_lpspiNorOpt1
             g_lpspiNorOpt0 = cfgDict["cfgLpspiNor"][0]
             g_lpspiNorOpt1 = cfgDict["cfgLpspiNor"][1]
+
+            global g_dcdCtrlDict
+            global g_dcdSettingsDict
+            g_dcdCtrlDict = cfgDict["cfgDcd"][0]
+            g_dcdSettingsDict = cfgDict["cfgDcd"][1]
 
             global g_certSettingsDict
             g_certSettingsDict = cfgDict["cfgCertificate"][0]
@@ -179,6 +194,18 @@ def initVar(cfgFilename):
         g_lpspiNorOpt0 = 0xc1100500
         g_lpspiNorOpt1 = 0x00000000
 
+        global g_dcdCtrlDict
+        global g_dcdSettingsDict
+        g_dcdCtrlDict['isDcdEnabled'] = False
+        g_dcdCtrlDict['dcdFileType'] = None
+        g_dcdSettingsDict['dcdSource'] = 'Disable DCD'
+        g_dcdSettingsDict['userBinFile'] = 'N/A'
+        g_dcdSettingsDict['userCfgFile'] = 'N/A'
+        g_dcdSettingsDict['dcdPurpose'] = 'SDRAM'
+        g_dcdSettingsDict['sdramBase'] = '0x80000000'
+        g_dcdSettingsDict['deviceModel'] = 'No'
+        g_dcdSettingsDict['dcdDesc'] = None
+
         global g_certSettingsDict
         g_certSettingsDict['cstVersion'] = uidef.kCstVersion_v3_0_1
         g_certSettingsDict['useExistingCaKey'] = 'n'
@@ -226,6 +253,8 @@ def deinitVar(cfgFilename=None):
         global g_semcNandImageInfo
         global g_lpspiNorOpt0
         global g_lpspiNorOpt1
+        global g_dcdCtrlDict
+        global g_dcdSettingsDict
         global g_certSettingsDict
         global g_otpmkKeyOpt
         global g_otpmkEncryptedRegionStart
@@ -237,6 +266,7 @@ def deinitVar(cfgFilename=None):
             "cfgFlexspiNor": [g_flexspiNorOpt0, g_flexspiNorOpt1, g_flexspiNorDeviceModel],
             "cfgSemcNand": [g_semcNandOpt, g_semcNandFcbOpt, g_semcNandImageInfo],
             "cfgLpspiNor": [g_lpspiNorOpt0, g_lpspiNorOpt1],
+            "cfgDcd": [g_dcdCtrlDict, g_dcdSettingsDict],
             "cfgCertificate": [g_certSettingsDict],
             "cfgSnvsKey": [g_otpmkKeyOpt, g_otpmkEncryptedRegionStart, g_otpmkEncryptedRegionLength],
             "cfgUserKey": [g_userKeyCtrlDict, g_userKeyCmdDict]
@@ -276,6 +306,10 @@ def getBootDeviceConfiguration( group ):
         global g_lpspiNorOpt0
         global g_lpspiNorOpt1
         return g_lpspiNorOpt0, g_lpspiNorOpt1
+    elif group == uidef.kBootDevice_Dcd:
+        global g_dcdCtrlDict
+        global g_dcdSettingsDict
+        return g_dcdCtrlDict, g_dcdSettingsDict
     else:
         pass
 
@@ -321,6 +355,11 @@ def setBootDeviceConfiguration( group, *args ):
         global g_lpspiNorOpt1
         g_lpspiNorOpt0 = args[0]
         g_lpspiNorOpt1 = args[1]
+    elif group == uidef.kBootDevice_Dcd:
+        global g_dcdCtrlDict
+        global g_dcdSettingsDict
+        g_dcdCtrlDict = args[0]
+        g_dcdSettingsDict = args[1]
     else:
         pass
 

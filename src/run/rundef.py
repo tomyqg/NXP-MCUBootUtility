@@ -12,6 +12,7 @@ kBootDeviceMemId_UsdhcSd      = 0x120
 kBootDeviceMemId_UsdhcMmc     = 0x121
 
 kBootDeviceMemBase_SemcNor       = 0x90000000
+kBootDeviceMemBase_SemcSdram     = 0x80000000
 kBootDeviceMemBase_FlexspiNor    = 0x60000000
 kBootDeviceMemBase_FlexspiNorSip = 0x70000000
 kBootDeviceMemBase_SemcNand      = 0x0
@@ -22,6 +23,8 @@ kBootDeviceMemBase_UsdhcMmc      = 0x0
 
 kBootDeviceMemXipSize_SemcNor      = 0x01000000 #16MB
 kBootDeviceMemXipSize_FlexspiNor   = 0x10000000 #256MB
+
+kBootDeviceMemMaxSize_SemcSdram    = 0x60000000 #1.5GB
 
 kRamFreeSpaceStart_LoadCommOpt        = 0x00002000
 kRamFreeSpaceStart_LoadDekData        = 0x00002100

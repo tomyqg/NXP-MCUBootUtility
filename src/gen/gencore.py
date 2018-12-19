@@ -42,6 +42,14 @@ class secBootGen(uicore.secBootUi):
         self.opensslBinFolder = os.path.join(self.exeTopRoot, 'tools', 'openssl', '1.1.0j', 'win32')
         self.habDekFilename = os.path.join(self.exeTopRoot, 'gen', 'hab_crypto', 'hab_dek.bin')
         self.habDekDataOffset = None
+
+        self.dcdFolder = os.path.join(self.exeTopRoot, 'gen', 'dcd_file')
+        self.dcdBinFilename = os.path.join(self.exeTopRoot, 'gen', 'dcd_file', gendef.kStdDcdFilename_Bin)
+        self.dcdCfgFilename = os.path.join(self.exeTopRoot, 'gen', 'dcd_file', gendef.kStdDcdFilename_Cfg)
+        self.dcdBatFilename = os.path.join(self.exeTopRoot, 'gen', 'dcd_file', 'imx_dcd_gen.bat')
+        self.dcdModelFolder = os.path.join(self.exeTopRoot, 'src', 'targets', 'dcd_model')
+        self.dcdSdramBaseAddress = None
+
         self.srcAppFilename = None
         self.destAppFilename = os.path.join(self.exeTopRoot, 'gen', 'bootable_image', 'ivt_application.bin')
         self.destAppNoPaddingFilename = os.path.join(self.exeTopRoot, 'gen', 'bootable_image', 'ivt_application_nopadding.bin')
