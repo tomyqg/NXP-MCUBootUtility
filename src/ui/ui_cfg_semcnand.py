@@ -21,60 +21,59 @@ class secBootUiCfgSemcNand(bootDeviceWin_SemcNand.bootDeviceWin_SemcNand):
         if imageCopies < 2:
             self.m_textCtrl_image1Idx.Clear()
             self.m_textCtrl_image1Cnt.Clear()
-            self.m_textCtrl_image1Idx.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_GRAYTEXT ) )
-            self.m_textCtrl_image1Cnt.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_GRAYTEXT ) )
+            self.m_textCtrl_image1Idx.Enable( False )
+            self.m_textCtrl_image1Cnt.Enable( False )
         else:
-            self.m_textCtrl_image1Idx.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
-            self.m_textCtrl_image1Cnt.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
+            self.m_textCtrl_image1Idx.Enable( True )
+            self.m_textCtrl_image1Cnt.Enable( True )
         if imageCopies < 3:
             self.m_textCtrl_image2Idx.Clear()
             self.m_textCtrl_image2Cnt.Clear()
-            self.m_textCtrl_image2Idx.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_GRAYTEXT ) )
-            self.m_textCtrl_image2Cnt.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_GRAYTEXT ) )
+            self.m_textCtrl_image2Idx.Enable( False )
+            self.m_textCtrl_image2Cnt.Enable( False )
         else:
-            self.m_textCtrl_image2Idx.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
-            self.m_textCtrl_image2Cnt.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
+            self.m_textCtrl_image2Idx.Enable( True )
+            self.m_textCtrl_image2Cnt.Enable( True )
         if imageCopies < 4:
             self.m_textCtrl_image3Idx.Clear()
             self.m_textCtrl_image3Cnt.Clear()
-            self.m_textCtrl_image3Idx.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_GRAYTEXT ) )
-            self.m_textCtrl_image3Cnt.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_GRAYTEXT ) )
+            self.m_textCtrl_image3Idx.Enable( False )
+            self.m_textCtrl_image3Cnt.Enable( False )
         else:
-            self.m_textCtrl_image3Idx.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
-            self.m_textCtrl_image3Cnt.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
+            self.m_textCtrl_image3Idx.Enable( True )
+            self.m_textCtrl_image3Cnt.Enable( True )
         if imageCopies < 5:
             self.m_textCtrl_image4Idx.Clear()
             self.m_textCtrl_image4Cnt.Clear()
-            self.m_textCtrl_image4Idx.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_GRAYTEXT ) )
-            self.m_textCtrl_image4Cnt.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_GRAYTEXT ) )
+            self.m_textCtrl_image4Idx.Enable( False )
+            self.m_textCtrl_image4Cnt.Enable( False )
         else:
-            self.m_textCtrl_image4Idx.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
-            self.m_textCtrl_image4Cnt.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
+            self.m_textCtrl_image4Idx.Enable( True )
+            self.m_textCtrl_image4Cnt.Enable( True )
         if imageCopies < 6:
             self.m_textCtrl_image5Idx.Clear()
             self.m_textCtrl_image5Cnt.Clear()
-            self.m_textCtrl_image5Idx.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_GRAYTEXT ) )
-            self.m_textCtrl_image5Cnt.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_GRAYTEXT ) )
+            self.m_textCtrl_image5Idx.Enable( False )
+            self.m_textCtrl_image5Cnt.Enable( False )
         else:
-            self.m_textCtrl_image5Idx.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
-            self.m_textCtrl_image5Cnt.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
+            self.m_textCtrl_image5Idx.Enable( True )
+            self.m_textCtrl_image5Cnt.Enable( True )
         if imageCopies < 7:
             self.m_textCtrl_image6Idx.Clear()
             self.m_textCtrl_image6Cnt.Clear()
-            self.m_textCtrl_image6Idx.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_GRAYTEXT ) )
-            self.m_textCtrl_image6Cnt.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_GRAYTEXT ) )
+            self.m_textCtrl_image6Idx.Enable( False )
+            self.m_textCtrl_image6Cnt.Enable( False )
         else:
-            self.m_textCtrl_image6Idx.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
-            self.m_textCtrl_image6Cnt.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
+            self.m_textCtrl_image6Idx.Enable( True )
+            self.m_textCtrl_image6Cnt.Enable( True )
         if imageCopies < 8:
             self.m_textCtrl_image7Idx.Clear()
             self.m_textCtrl_image7Cnt.Clear()
-            self.m_textCtrl_image7Idx.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_GRAYTEXT ) )
-            self.m_textCtrl_image7Cnt.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_GRAYTEXT ) )
+            self.m_textCtrl_image7Idx.Enable( False )
+            self.m_textCtrl_image7Cnt.Enable( False )
         else:
-            self.m_textCtrl_image7Idx.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
-            self.m_textCtrl_image7Cnt.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
-        self.Refresh()
+            self.m_textCtrl_image7Idx.Enable( True )
+            self.m_textCtrl_image7Cnt.Enable( True )
 
     def _recoverLastSettings ( self ):
         onfiVersion = (self.semcNandOpt & 0x00000007) >> 0

@@ -21,24 +21,23 @@ class secBootUiSettingsFixedOtpmkKey(advSettingsWin_FixedOtpmkKey.advSettingsWin
 
     def _updateRegionInfoField ( self, regionCnt ):
         if regionCnt < 1:
-            self.m_textCtrl_region0Start.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_GRAYTEXT ) )
-            self.m_textCtrl_region0Length.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_GRAYTEXT ) )
+            self.m_textCtrl_region0Start.Enable( False )
+            self.m_textCtrl_region0Length.Enable( False )
         else:
-            self.m_textCtrl_region0Start.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
-            self.m_textCtrl_region0Length.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
+            self.m_textCtrl_region0Start.Enable( True )
+            self.m_textCtrl_region0Length.Enable( True )
         if regionCnt < 2:
-            self.m_textCtrl_region1Start.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_GRAYTEXT ) )
-            self.m_textCtrl_region1Length.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_GRAYTEXT ) )
+            self.m_textCtrl_region1Start.Enable( False )
+            self.m_textCtrl_region1Length.Enable( False )
         else:
-            self.m_textCtrl_region1Start.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
-            self.m_textCtrl_region1Length.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
+            self.m_textCtrl_region0Start.Enable( True )
+            self.m_textCtrl_region0Length.Enable( True )
         if regionCnt < 3:
-            self.m_textCtrl_region2Start.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_GRAYTEXT ) )
-            self.m_textCtrl_region2Length.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_GRAYTEXT ) )
+            self.m_textCtrl_region2Start.Enable( False )
+            self.m_textCtrl_region2Length.Enable( False )
         else:
-            self.m_textCtrl_region2Start.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
-            self.m_textCtrl_region2Length.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
-        self.Refresh()
+            self.m_textCtrl_region0Start.Enable( True )
+            self.m_textCtrl_region0Length.Enable( True )
 
     def _recoverLastSettings ( self ):
         keySource = (self.otpmkKeyOpt & 0x0F000000) >> 24

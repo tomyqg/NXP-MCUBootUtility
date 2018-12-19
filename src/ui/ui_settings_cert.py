@@ -47,11 +47,17 @@ class secBootUiSettingsCert(advSettingsWin_Cert.advSettingsWin_Cert):
         else:
             pass
 
-        useEllipticCurveCrypto = self.certSettingsDict['useEllipticCurveCrypto']
-        if useEllipticCurveCrypto == 'n':
-            self.m_choice_useEcc.SetSelection(0)
-        elif useEllipticCurveCrypto == 'y':
-            self.m_choice_useEcc.SetSelection(1)
+        if self.certSettingsDict['cstVersion'] == uidef.kCstVersion_v3_1_0:
+            self.m_choice_useEcc.Enable( True )
+            useEllipticCurveCrypto = self.certSettingsDict['useEllipticCurveCrypto']
+            if useEllipticCurveCrypto == 'n':
+                self.m_choice_useEcc.SetSelection(0)
+            elif useEllipticCurveCrypto == 'y':
+                self.m_choice_useEcc.SetSelection(1)
+            else:
+                pass
+        elif self.certSettingsDict['cstVersion'] == uidef.kCstVersion_v2_3_3 or self.certSettingsDict['cstVersion'] == uidef.kCstVersion_v3_0_1:
+            self.m_choice_useEcc.Enable( False )
         else:
             pass
 
@@ -123,9 +129,9 @@ class secBootUiSettingsCert(advSettingsWin_Cert.advSettingsWin_Cert):
     def callbackSwitchCstVersion( self, event ):
         self._getCstVersion()
         if self.certSettingsDict['cstVersion'] == uidef.kCstVersion_v3_1_0:
-            self.m_staticText_useEcc.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
+            self.m_choice_useEcc.Enable( True )
         elif self.certSettingsDict['cstVersion'] == uidef.kCstVersion_v2_3_3 or self.certSettingsDict['cstVersion'] == uidef.kCstVersion_v3_0_1:
-            self.m_staticText_useEcc.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_GRAYTEXT ) )
+            self.m_choice_useEcc.Enable( False )
         else:
             pass
         self._setPkiTreeKeyLenItems()
