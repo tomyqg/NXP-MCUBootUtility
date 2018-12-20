@@ -5,6 +5,8 @@ kMemBlockOffset_EPRDB0 = 0x480
 kMemBlockOffset_EKIB1  = 0x800
 kMemBlockOffset_EPRDB1 = 0x880
 
+kMemBlockOffsetToIvt_DCD = 0x40
+
 kMemBlockSize_NFCB       = 0x400
 kMemBlockSize_DBBT       = 0x420
 kMemBlockSize_FDCB       = 0x200

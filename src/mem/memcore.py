@@ -58,6 +58,13 @@ class secBootMem(fusecore.secBootFuse):
     def _getInfoFromIvt( self ):
         self._getCsfBlockInfo()
 
+    def _getDcdInfo( self ):
+        dcdCtrlDict, dcdSettingsDict = uivar.getBootDeviceConfiguration(uidef.kBootDevice_Dcd)
+        if dcdCtrlDict['isDcdEnabled']:
+            self.destAppDcdLength = os.path.getsize(self.dcdBinFilename)
+        else:
+            self.destAppDcdLength = 0
+
     def _getOneLineContentToShow( self, addr, memLeft, fileObj ):
         memContent = ''
         padBytesBefore= addr % 16
@@ -163,6 +170,7 @@ class secBootMem(fusecore.secBootFuse):
             return
         self.clearMem()
         self._getInfoFromIvt()
+        self._getDcdInfo()
 
         imageMemBase = 0
         readoutMemLen = 0
@@ -243,6 +251,13 @@ class secBootMem(fusecore.secBootFuse):
                         self.printMem('---------------------------------Boot Data--------------------------------------------', uidef.kMemBlockColor_BootData)
                         self.needToShowBootDataIntr = False
                     self.printMem(contentToShow, uidef.kMemBlockColor_BootData)
+                elif addr <= imageMemBase + self.destAppIvtOffset + memdef.kMemBlockOffsetToIvt_DCD:
+                    self.printMem(contentToShow)
+                elif addr <= imageMemBase + self.destAppIvtOffset + memdef.kMemBlockOffsetToIvt_DCD + self.destAppDcdLength:
+                    if self.needToShowDcdIntr:
+                        self.printMem('------------------------------------DCD-----------------------------------------------', uidef.kMemBlockColor_DCD)
+                        self.needToShowDcdIntr = False
+                    self.printMem(contentToShow, uidef.kMemBlockColor_DCD)
                 elif addr <= imageMemBase + self.destAppVectorOffset:
                     self.printMem(contentToShow)
                 elif addr <= imageMemBase + self.destAppVectorOffset + self.destAppBinaryBytes:
