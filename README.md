@@ -2,17 +2,20 @@
 
 [![GitHub release](https://img.shields.io/github/release/JayHeng/nxp-sec-boot-ui.svg)](https://github.com/JayHeng/nxp-sec-boot-ui/releases/latest) [![GitHub commits](https://img.shields.io/github/commits-since/JayHeng/nxp-sec-boot-ui/v0.11.2.svg)](https://github.com/JayHeng/nxp-sec-boot-ui/compare/v0.11.2...master)
 
+中文 | [English](./README-en.md)
+
 ### 1 软件概览
 #### 1.1 介绍
 　　nxpSecBoot是一个专为NXP MCU安全加密启动而设计的工具，其特性与NXP MCU里BootROM功能相对应，目前主要支持i.MXRT系列MCU芯片，与NXP官方提供的标准安全加密配套工具集（OpenSSL, CST, sdphost, blhost, elftosb, BD, MfgTool2）相比，nxpSecBoot是一个真正的一站式工具，一个工具包含NXP官方所有加密配套工具的功能，并且是全图形用户界面操作。借助于nxpSecBoot，你可以轻松上手NXP MCU安全加密启动。  
 　　nxpSecBoot主要功能如下：  
 
 > * 支持i.MXRT全系列MCU，包含i.MXRT1021、i.MXRT1051/1052、i.MXRT1061/1062、i.MXRT1064 SIP  
-> * 支持UART和USB-HID两种串行下载方式  
-> * 支持.elf和.srec两种格式的源image文件输入  
+> * 支持UART和USB-HID两种串行下载方式（COM端口/USB设备自动识别）  
+> * 支持五种常用格式(elf/axf/srec/hex/bin)源image文件输入  
 > * 支持将源image文件自动转换成Bootable image  
 > * 支持下载Bootable image进主动启动设备 - FlexSPI NOR、SEMC NAND接口Flash  
 > * 支持下载Bootable image进备份启动设备 - LPSPI接口NOR/EEPROM Flash  
+> * 支持DCD配置功能，可用于加载image进SDRAM执行  
 > * 支持基于HAB实现的安全加密启动（单签名，签名和加密）  
 > * 支持基于BEE实现的安全加密启动（唯一SNVS key，用户自定义key）  
 > * 支持基于HAB和BEE联合实现的安全加密启动（HAB签名 & BEE加密）  
@@ -21,7 +24,7 @@
 > * 支持从启动设备回读已下载的Bootable image数据，并对数据组成部分进行标注  
 
 #### 1.2 下载
-　　nxpSecBoot完全基于Python语言开发，并且源代码全部开源，其具体开发环境为Python 2.7.14、wxPython 4.0.3、pySerial 3.4、bincopy 15.0.0、PyInstaller 3.3.1。  
+　　nxpSecBoot完全基于Python语言开发，并且源代码全部开源，其具体开发环境为Python 2.7.14、wxPython 4.0.3、pySerial 3.4、pywinusb 0.4.2、bincopy 15.0.0、PyInstaller 3.3.1。  
 
 > * 安装包: https://github.com/JayHeng/nxp-sec-boot-ui/releases  
 > * 源代码: https://github.com/JayHeng/nxp-sec-boot-ui  
@@ -77,7 +80,7 @@
 ### 2 准备工作
 　　在使用nxpSecBoot工具前主要有两个准备工作：一、准备好i.MXRT硬件板以及串行下载连接线（USB/UART）；二、准备好用于下载进Flash的源image文件。  
 　　关于串行下载线连接，需要查看i.MXRT参考手册System Boot章节，确保连接的UART/USB引脚是BootROM指定的。  
-　　关于源image文件准备，nxpSecBoot工具主要能识别.elf（.out）/.srec（.s19）两种格式的image，源image文件后缀必须设为上面4种之一，否则nxpSecBoot无法识别。另外需要注意的是源image中不需要包含任何i.MXRT加载启动所需要的头（IVT, BootData等），nxpSecBoot会自动添加i.MXRT加载启动所需的文件头。  
+　　关于源image文件准备，nxpSecBoot工具能够识别五种常见格式(elf/axf/srec/hex/bin)的image，唯一需要注意的是源image中不需要包含任何i.MXRT加载启动所需要的头（IVT, BootData等），nxpSecBoot会自动添加i.MXRT加载启动所需的文件头。  
 　　以NXP官方SDK为例进一步讲解源image文件的生成，注册并登录NXP官网，来到 [MCUXpresso SDK Builder](https://mcuxpresso.nxp.com/en/select) 页面，选择合适的MCU芯片以及IDE（以RT1060芯片，IAR IDE为例）并点击Download SDK后便可得到SDK_2.4.0_EVK-MIMXRT1060.zip。  
 　　使用IAR打开SDK包里的\boards\evkmimxrt1060\demo_apps\led_blinky\iar\led_blinky.eww示例应用：  
 
@@ -142,7 +145,9 @@ define symbol m_data2_end              = 0x202BFFFF;
 
 ##### 3.3.1 模式一：不启用任何安全措施
 　　第一种模式是最简单的模式，即不启动任何安全措施，一般用于产品开发调试阶段。  
-　　【Secure Boot Type】选择“Unsigned (XIP) Image Boot”，然后点击【Browse】按钮选择一个原始image文件（使用IDE生成的裸.elf/.srec文件即可，不需要包含任何i.MXRT启动所需的额外文件头），点击【All-In-One Action】按钮即可完成bootable image生成与下载所有操作。  
+　　【Secure Boot Type】选择“Unsigned (XIP) Image Boot”，然后点击【Browse】按钮选择一个原始image文件（使用IDE生成的裸image文件即可，不需要包含任何i.MXRT启动所需的额外文件头），点击【All-In-One Action】按钮即可完成bootable image生成与下载所有操作。  
+
+> Note: 软件如果设置为Auto-detect image format选项，则根据文件后缀名自动识别源文件格式。但是对于MCUXpresso或者GCC生成的axf文件，需要主动设置为".out(axf) from MCUXpresso/GCC ARM"。  
 
 ![nxpSecBoot_secboot1_unsigned](https://s1.ax1x.com/2018/12/07/F3A2ZR.png)
 
