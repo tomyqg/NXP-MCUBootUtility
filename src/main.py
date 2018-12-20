@@ -135,6 +135,12 @@ class secBootMain(memcore.secBootMem):
                 time.sleep(2)
         return pingStatus
 
+    def _connectFailureHandler( self ):
+        self.connectStage = uidef.kConnectStage_Rom
+        self.updateConnectStatus('red')
+        usbIdList = self.getUsbid()
+        self.setPortSetupValue(self.connectStage, usbIdList, False, False)
+
     def _connectStateMachine( self ):
         connectSteps = uidef.kConnectStep_Normal
         self.getOneStepConnectMode()
@@ -152,6 +158,7 @@ class secBootMain(memcore.secBootMem):
                 pass
         while connectSteps:
             if not self.updatePortSetupValue(retryToDetectUsb, True):
+                self._connectFailureHandler()
                 return
             if self.connectStage == uidef.kConnectStage_Rom:
                 self.connectToDevice(self.connectStage)
@@ -179,9 +186,8 @@ class secBootMain(memcore.secBootMem):
                     self.updateConnectStatus('green')
                     self.connectStage = uidef.kConnectStage_ExternalMemory
                 else:
-                    self.connectStage = uidef.kConnectStage_Rom
-                    self.updateConnectStatus('red')
                     self.popupMsgBox('Failed to ping Flashloader, Please reset board and consider updating flashloader.srec file under /src/targets/ then try again!')
+                    self._connectFailureHandler()
                     return
             elif self.connectStage == uidef.kConnectStage_ExternalMemory:
                 if self.configureBootDevice():
@@ -189,9 +195,8 @@ class secBootMain(memcore.secBootMem):
                     self.connectStage = uidef.kConnectStage_Reset
                     self.updateConnectStatus('blue')
                 else:
-                    self.connectStage = uidef.kConnectStage_Rom
-                    self.updateConnectStatus('red')
                     self.popupMsgBox('MCU has entered Flashloader but failed to configure external memory, Please reset board and set proper boot device then try again!')
+                    self._connectFailureHandler()
                     return
             elif self.connectStage == uidef.kConnectStage_Reset:
                 self.resetMcuDevice()
