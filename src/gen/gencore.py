@@ -46,6 +46,7 @@ class secBootGen(uicore.secBootUi):
         self.dcdFolder = os.path.join(self.exeTopRoot, 'gen', 'dcd_file')
         self.dcdBinFilename = os.path.join(self.exeTopRoot, 'gen', 'dcd_file', gendef.kStdDcdFilename_Bin)
         self.dcdCfgFilename = os.path.join(self.exeTopRoot, 'gen', 'dcd_file', gendef.kStdDcdFilename_Cfg)
+        self.imgutilPath = os.path.join(self.exeTopRoot, 'tools', 'imgutil', 'win', 'imgutil.exe')
         self.dcdBatFilename = os.path.join(self.exeTopRoot, 'gen', 'dcd_file', 'imx_dcd_gen.bat')
         self.dcdModelFolder = os.path.join(self.exeTopRoot, 'src', 'targets', 'dcd_model')
         self.dcdSdramBaseAddress = None
@@ -431,12 +432,66 @@ class secBootGen(uicore.secBootUi):
              executeBase = self.tgt.flexspiNorMemBase
         elif ((vectorAddr >= rundef.kBootDeviceMemBase_SemcNor) and (vectorAddr < rundef.kBootDeviceMemBase_SemcNor + rundef.kBootDeviceMemXipSize_SemcNor)):
              executeBase = rundef.kBootDeviceMemBase_SemcNor
+        elif ((self.dcdSdramBaseAddress != None) and ((vectorAddr >= self.dcdSdramBaseAddress) and (vectorAddr < rundef.kBootDeviceMemBase_SemcSdram + rundef.kBootDeviceMemMaxSize_SemcSdram))):
+             executeBase = self.dcdSdramBaseAddress
         else:
             pass
         if (vectorAddr - executeBase) >= initialLoadSize:
             return True
         else:
             return False
+
+    def _updateDcdBatfileContent( self ):
+        batContent = "\"" + self.imgutilPath + "\""
+        batContent += " --dcd_gen"
+        batContent += " dcd_desc_file=" + "\"" + self.dcdCfgFilename + "\""
+        batContent += " ofile=" + "\"" + self.dcdBinFilename + "\""
+        with open(self.dcdBatFilename, 'wb') as fileObj:
+            fileObj.write(batContent)
+            fileObj.close()
+
+    def _parseDcdGenerationResult( self, output ):
+        # imgutil ouput template:
+        # DCD binary file is generated successfully
+        info = 'DCD binary file is generated successfully'
+        if output.find(info) != -1:
+            self.printLog('DCD binary is generated: ' + self.dcdBinFilename)
+            return True
+        else:
+            self.popupMsgBox('DCD binary is not generated successfully! Check your DCD descriptor file and make sure you don\'t put the tool in path with blank space!')
+            return False
+
+    def _genDcdBinFileAccordingToCfgFile( self ):
+        curdir = os.getcwd()
+        os.chdir(os.path.split(self.imgutilPath)[0])
+        process = subprocess.Popen(self.dcdBatFilename, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+        os.chdir(curdir)
+        commandOutput = process.communicate()[0]
+        print commandOutput
+        if self._parseDcdGenerationResult(commandOutput):
+            return True
+        else:
+            return False
+
+    def _addDcdContentIfAppliable( self ):
+        dcdConvResult = True
+        dcdContent = ''
+        self.dcdSdramBaseAddress = None
+        dcdCtrlDict, dcdSettingsDict = uivar.getBootDeviceConfiguration(uidef.kBootDevice_Dcd)
+        if dcdCtrlDict['isDcdEnabled']:
+            if dcdCtrlDict['dcdFileType'] == gendef.kUserDcdFileType_Bin:
+                pass
+            elif dcdCtrlDict['dcdFileType'] == gendef.kUserDcdFileType_Cfg:
+                self._updateDcdBatfileContent()
+                dcdConvResult = self._genDcdBinFileAccordingToCfgFile()
+            else:
+                pass
+            if dcdConvResult:
+                shutil.copy(self.dcdBinFilename, os.path.join(os.path.split(self.elftosbPath)[0], gendef.kStdDcdFilename_Bin))
+                dcdContent += "    DCDFilePath = \"" + gendef.kStdDcdFilename_Bin + "\";\n"
+                if dcdSettingsDict['sdramBase'] != None:
+                    self.dcdSdramBaseAddress = self._getVal32FromHexText(dcdSettingsDict['sdramBase'])
+        return dcdConvResult, dcdContent
 
     def _updateBdfileContent( self, secureBootType, bootDevice, vectorAddress, entryPointAddress):
         bdContent = ""
@@ -492,6 +547,11 @@ class secBootGen(uicore.secBootUi):
         bdContent += "    startAddress = " + str(hex(startAddress)) + ";\n"
         bdContent += "    ivtOffset = " + str(hex(self.destAppIvtOffset)) + ";\n"
         bdContent += "    initialLoadSize = " + str(hex(self.destAppInitialLoadSize)) + ";\n"
+        dcdConvResult, dcdContent = self._addDcdContentIfAppliable()
+        if dcdConvResult:
+            bdContent += dcdContent
+        else:
+            return False
         if secureBootType == uidef.kSecureBootType_HabAuth:
             #bdContent += "    cstFolderPath = \"" + self.cstBinFolder + "\";\n"
             #bdContent += "    cstFolderPath = \"" + self.cstBinToElftosbPath + "\";\n"
@@ -653,10 +713,11 @@ class secBootGen(uicore.secBootUi):
     def _isValidNonXipAppImage( self, imageStartAddr ):
         if ((imageStartAddr >= self.tgt.memoryRange['itcm'].start) and (imageStartAddr < self.tgt.memoryRange['itcm'].start + self.tgt.memoryRange['itcm'].length)) or \
            ((imageStartAddr >= self.tgt.memoryRange['dtcm'].start) and (imageStartAddr < self.tgt.memoryRange['dtcm'].start + self.tgt.memoryRange['dtcm'].length)) or \
-           ((imageStartAddr >= self.tgt.memoryRange['ocram'].start) and (imageStartAddr < self.tgt.memoryRange['ocram'].start + self.tgt.memoryRange['ocram'].length)):
+           ((imageStartAddr >= self.tgt.memoryRange['ocram'].start) and (imageStartAddr < self.tgt.memoryRange['ocram'].start + self.tgt.memoryRange['ocram'].length)) or \
+           ((imageStartAddr >= rundef.kBootDeviceMemBase_SemcSdram) and (imageStartAddr < rundef.kBootDeviceMemBase_SemcSdram + rundef.kBootDeviceMemMaxSize_SemcSdram)):
             return True
         else:
-            self.popupMsgBox('Non-XIP Application is detected but it is not in the range of ITCM/DTCM/OCRAM!')
+            self.popupMsgBox('Non-XIP Application is detected but it is not in the range of ITCM/DTCM/OCRAM/SDRAM!')
             return False
 
     def _isValidAppImage( self, imageStartAddr ):
@@ -716,6 +777,9 @@ class secBootGen(uicore.secBootUi):
         destAppPath, destAppFile = os.path.split(self.destAppFilename)
         destAppName, destAppType = os.path.splitext(destAppFile)
         destAppName ='ivt_' + srcAppName
+        dcdCtrlDict, dcdSettingsDict = uivar.getBootDeviceConfiguration(uidef.kBootDevice_Dcd)
+        if dcdCtrlDict['isDcdEnabled']:
+            destAppName += '_dcd'
         if self.secureBootType == uidef.kSecureBootType_Development:
             destAppName += '_unsigned'
         elif self.secureBootType == uidef.kSecureBootType_HabAuth:

@@ -20,13 +20,12 @@ class secBootUiCfgDcd(bootDeviceWin_DCD.bootDeviceWin_DCD):
         self.destBinFilename = None
         self.destCfgFilename = None
         self.dcdModelFolder = None
-        self._recoverLastSettings()
 
     def setNecessaryInfo( self, binFilename, cfgFilename, dcdModelFolder ):
         self.destBinFilename = binFilename
         self.destCfgFilename = cfgFilename
         self.dcdModelFolder = dcdModelFolder
-
+        self._recoverLastSettings()
 
     def _recoverLastSettings ( self ):
         self.m_choice_dcdSource.SetSelection(self.m_choice_dcdSource.FindString(self.dcdSettingsDict['dcdSource']))
@@ -140,6 +139,8 @@ class secBootUiCfgDcd(bootDeviceWin_DCD.bootDeviceWin_DCD):
                     self.popupMsgBox('Illegal input detected! You should input like this format: 0x80000000')
             else:
                 self.popupMsgBox('Illegal input detected! You should input like this format: 0x80000000')
+        else:
+            self.dcdSettingsDict['sdramBase'] = None
         return status
 
     def _getDeviceModel( self ):
