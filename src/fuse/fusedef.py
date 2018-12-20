@@ -49,9 +49,13 @@ kEfuseIndex_GP4_3 = 0x3F
 
 ##################################################
 
-kEfuseMask_LockLow  = 0x0FFFFFFF
-kEfuseMask_LockHigh = 0xF0000000
-kEfuseMask_LockSrk  = 0x00004000
+kEfuseMask_LockLow    = 0x0FFFFFFF
+kEfuseMask_LockHigh   = 0xF0000000
+kEfuseMask_LockSrk    = 0x00004000
+kEfuseMask_RLockGp4   = 0x00000080
+kEfuseMask_WLockGp4   = 0x03000000
+kEfuseMask_WLockSwGp2 = 0x00200000
+kEfuseMask_RLockSwGp2 = 0x00800000
 kEfuseShift_LockLow  = 0
 kEfuseShift_LockHigh = 28
 
