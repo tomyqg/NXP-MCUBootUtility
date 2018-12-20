@@ -153,7 +153,7 @@ class secBootRun(gencore.secBootGen):
         if (status == boot.status.kSDP_Status_HabEnabled or status == boot.status.kSDP_Status_HabDisabled):
             regVal = self.getVal32FromBinFile(filepath)
             if needToShow:
-                self.printDeviceStatus(regName + " = " + str(hex(regVal)))
+                self.printDeviceStatus(regName + " = " + self._convertLongIntHexText(str(hex(regVal))))
             return regVal
         else:
             if needToShow:
@@ -221,7 +221,7 @@ class secBootRun(gencore.secBootGen):
         self.printLog(cmdStr)
         if (status == boot.status.kStatus_Success):
             if needToShow:
-                self.printDeviceStatus(fuseName + " = " + str(hex(results[1])))
+                self.printDeviceStatus(fuseName + " = " + self._convertLongIntHexText(str(hex(results[1]))))
             return results[1]
         else:
             if needToShow:
@@ -336,10 +336,10 @@ class secBootRun(gencore.secBootGen):
             pagesInBlock = self.getVal32FromBinFile(filepath, rundef.kSemcNandFcbOffset_PagesInBlock)
             blocksInPlane = self.getVal32FromBinFile(filepath, rundef.kSemcNandFcbOffset_BlocksInPlane)
             planesInDevice = self.getVal32FromBinFile(filepath, rundef.kSemcNandFcbOffset_PlanesInDevice)
-            self.printDeviceStatus("Page Size (bytes) = " + str(hex(pageByteSize)))
-            self.printDeviceStatus("Pages In Block    = " + str(hex(pagesInBlock)))
-            self.printDeviceStatus("Blocks In Plane   = " + str(hex(blocksInPlane)))
-            self.printDeviceStatus("Planes In Device  = " + str(hex(planesInDevice)))
+            self.printDeviceStatus("Page Size (bytes) = " + self._convertLongIntHexText(str(hex(pageByteSize))))
+            self.printDeviceStatus("Pages In Block    = " + self._convertLongIntHexText(str(hex(pagesInBlock))))
+            self.printDeviceStatus("Blocks In Plane   = " + self._convertLongIntHexText(str(hex(blocksInPlane))))
+            self.printDeviceStatus("Planes In Device  = " + self._convertLongIntHexText(str(hex(planesInDevice))))
             self.semcNandImageCopies = firmwareCopies
             self.semcNandBlockSize = pageByteSize * pagesInBlock
             self.comMemWriteUnit = pageByteSize
@@ -369,9 +369,9 @@ class secBootRun(gencore.secBootGen):
             pageByteSize = self.getVal32FromBinFile(filepath, rundef.kFlexspiNorCfgOffset_PageByteSize)
             sectorByteSize = self.getVal32FromBinFile(filepath, rundef.kFlexspiNorCfgOffset_SectorByteSize)
             blockByteSize = self.getVal32FromBinFile(filepath, rundef.kFlexspiNorCfgOffset_BlockByteSize)
-            self.printDeviceStatus("Page Size (bytes)   = " + str(hex(pageByteSize)))
-            self.printDeviceStatus("Sector Size (bytes) = " + str(hex(sectorByteSize)))
-            self.printDeviceStatus("Block Size (bytes)  = " + str(hex(blockByteSize)))
+            self.printDeviceStatus("Page Size (bytes)   = " + self._convertLongIntHexText(str(hex(pageByteSize))))
+            self.printDeviceStatus("Sector Size (bytes) = " + self._convertLongIntHexText(str(hex(sectorByteSize))))
+            self.printDeviceStatus("Block Size (bytes)  = " + self._convertLongIntHexText(str(hex(blockByteSize))))
             self.comMemWriteUnit = pageByteSize
             self.comMemEraseUnit = sectorByteSize
             self.comMemReadUnit = pageByteSize
@@ -406,9 +406,9 @@ class secBootRun(gencore.secBootGen):
             totalByteSize = int(math.pow(2, val + 19))
         else:
             totalByteSize = int(math.pow(2, val + 3))
-        self.printDeviceStatus("Page Size (bytes)   = " + str(hex(pageByteSize)))
-        self.printDeviceStatus("Sector Size (bytes) = " + str(hex(sectorByteSize)))
-        self.printDeviceStatus("Total Size (bytes)  = " + str(hex(totalByteSize)))
+        self.printDeviceStatus("Page Size (bytes)   = " + self._convertLongIntHexText(str(hex(pageByteSize))))
+        self.printDeviceStatus("Sector Size (bytes) = " + self._convertLongIntHexText(str(hex(sectorByteSize))))
+        self.printDeviceStatus("Total Size (bytes)  = " + self._convertLongIntHexText(str(hex(totalByteSize))))
         self.comMemWriteUnit = pageByteSize
         self.comMemEraseUnit = sectorByteSize
         self.comMemReadUnit = pageByteSize

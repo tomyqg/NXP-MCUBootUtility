@@ -103,10 +103,6 @@ class secBootUiSettingsFlexibleUserKeys(advSettingsWin_FlexibleUserKeys.advSetti
             pass
         self.m_choice_beeEngKeySel.SetSelection(int(self.userKeyCmdDict['use_zero_key']))
         self.m_choice_imageType.SetSelection(int(self.userKeyCmdDict['is_boot_image']))
-        if self.userKeyCmdDict['base_addr'] == '0x60000000':
-            self.m_choice_xipBaseAddr.SetSelection(0)
-        else:
-            pass
 
     def _getEngineSelection( self ):
         self.userKeyCtrlDict['engine_sel'] = self.m_choice_engineSel.GetString(self.m_choice_engineSel.GetSelection())

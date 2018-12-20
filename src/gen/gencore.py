@@ -544,9 +544,9 @@ class secBootGen(uicore.secBootUi):
             return False
         else:
             startAddress = vectorAddress - self.destAppInitialLoadSize
-        bdContent += "    startAddress = " + str(hex(startAddress)) + ";\n"
-        bdContent += "    ivtOffset = " + str(hex(self.destAppIvtOffset)) + ";\n"
-        bdContent += "    initialLoadSize = " + str(hex(self.destAppInitialLoadSize)) + ";\n"
+        bdContent += "    startAddress = " + self._convertLongIntHexText(str(hex(startAddress))) + ";\n"
+        bdContent += "    ivtOffset = " + self._convertLongIntHexText(str(hex(self.destAppIvtOffset))) + ";\n"
+        bdContent += "    initialLoadSize = " + self._convertLongIntHexText(str(hex(self.destAppInitialLoadSize))) + ";\n"
         dcdConvResult, dcdContent = self._addDcdContentIfAppliable()
         if dcdConvResult:
             bdContent += dcdContent
@@ -558,7 +558,7 @@ class secBootGen(uicore.secBootUi):
             pass
         else:
             pass
-        bdContent += "    entryPointAddress = " + str(hex(entryPointAddress)) + ";\n"
+        bdContent += "    entryPointAddress = " + self._convertLongIntHexText(str(hex(entryPointAddress))) + ";\n"
         bdContent += "}\n"
         ############################################################################
         bdContent += "\nsources {\n"
