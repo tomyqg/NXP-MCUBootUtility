@@ -456,7 +456,7 @@ class secBootRun(gencore.secBootGen):
     def configureBootDevice ( self ):
         self._prepareForBootDeviceOperation()
         if self.bootDevice == uidef.kBootDevice_SemcNand:
-            semcNandOpt, semcNandFcbOpt, semcNandImageInfo = uivar.getBootDeviceConfiguration(self.bootDevice)
+            semcNandOpt, semcNandFcbOpt, semcNandImageInfoList = uivar.getBootDeviceConfiguration(self.bootDevice)
             status, results, cmdStr = self.blhost.fillMemory(rundef.kRamFreeSpaceStart_LoadCommOpt, 0x4, semcNandOpt)
             self.printLog(cmdStr)
             if status != boot.status.kStatus_Success:
@@ -465,9 +465,9 @@ class secBootRun(gencore.secBootGen):
             self.printLog(cmdStr)
             if status != boot.status.kStatus_Success:
                 return False
-            for i in range(len(semcNandImageInfo)):
-                if semcNandImageInfo[i] != None:
-                    status, results, cmdStr = self.blhost.fillMemory(rundef.kRamFreeSpaceStart_LoadCommOpt + 8 + i * 4, 0x4, semcNandImageInfo[i])
+            for i in range(len(semcNandImageInfoList)):
+                if semcNandImageInfoList[i] != None:
+                    status, results, cmdStr = self.blhost.fillMemory(rundef.kRamFreeSpaceStart_LoadCommOpt + 8 + i * 4, 0x4, semcNandImageInfoList[i])
                     self.printLog(cmdStr)
                     if status != boot.status.kStatus_Success:
                         return False
@@ -532,7 +532,7 @@ class secBootRun(gencore.secBootGen):
         #self._showOtpmkDek()
         if not self._eraseFlexspiNorForImageLoading():
             return False
-        otpmkKeyOpt, otpmkEncryptedRegionStart, otpmkEncryptedRegionLength = uivar.getAdvancedSettings(uidef.kAdvancedSettings_OtpmkKey)
+        otpmkKeyOpt, otpmkEncryptedRegionStartListList, otpmkEncryptedRegionLengthList = uivar.getAdvancedSettings(uidef.kAdvancedSettings_OtpmkKey)
         # Prepare PRDB options
         #---------------------------------------------------------------------------
         # 0xe0120000 is an option for PRDB contruction and image encryption
@@ -546,8 +546,8 @@ class secBootRun(gencore.secBootGen):
         if encryptedRegionCnt == 0:
             otpmkKeyOpt = (otpmkKeyOpt & 0xFFF0FFFF) | (0x1 << 16)
             encryptedRegionCnt = 1
-            otpmkEncryptedRegionStart[0] = self.tgt.flexspiNorMemBase + gendef.kIvtOffset_NOR
-            otpmkEncryptedRegionLength[0] = misc.align_up(os.path.getsize(self.destAppFilename), gendef.kSecFacRegionAlignedUnit) - gendef.kIvtOffset_NOR
+            otpmkEncryptedRegionStartListList[0] = self.tgt.flexspiNorMemBase + gendef.kIvtOffset_NOR
+            otpmkEncryptedRegionLengthList[0] = misc.align_up(os.path.getsize(self.destAppFilename), gendef.kSecFacRegionAlignedUnit) - gendef.kIvtOffset_NOR
         else:
             pass
         status, results, cmdStr = self.blhost.fillMemory(rundef.kRamFreeSpaceStart_LoadPrdbOpt, 0x4, otpmkKeyOpt)
@@ -555,11 +555,11 @@ class secBootRun(gencore.secBootGen):
         if status != boot.status.kStatus_Success:
             return False
         for i in range(encryptedRegionCnt):
-            status, results, cmdStr = self.blhost.fillMemory(rundef.kRamFreeSpaceStart_LoadPrdbOpt + i * 8 + 4, 0x4, otpmkEncryptedRegionStart[i])
+            status, results, cmdStr = self.blhost.fillMemory(rundef.kRamFreeSpaceStart_LoadPrdbOpt + i * 8 + 4, 0x4, otpmkEncryptedRegionStartListList[i])
             self.printLog(cmdStr)
             if status != boot.status.kStatus_Success:
                 return False
-            status, results, cmdStr = self.blhost.fillMemory(rundef.kRamFreeSpaceStart_LoadPrdbOpt + i * 8 + 8, 0x4, otpmkEncryptedRegionLength[i])
+            status, results, cmdStr = self.blhost.fillMemory(rundef.kRamFreeSpaceStart_LoadPrdbOpt + i * 8 + 8, 0x4, otpmkEncryptedRegionLengthList[i])
             self.printLog(cmdStr)
             if status != boot.status.kStatus_Success:
                 return False
@@ -704,10 +704,10 @@ class secBootRun(gencore.secBootGen):
         self._prepareForBootDeviceOperation()
         imageLen = os.path.getsize(self.destAppFilename)
         if self.bootDevice == uidef.kBootDevice_SemcNand:
-            semcNandOpt, semcNandFcbOpt, imageInfo = uivar.getBootDeviceConfiguration(self.bootDevice)
+            semcNandOpt, semcNandFcbOpt, semcNandImageInfoList = uivar.getBootDeviceConfiguration(self.bootDevice)
             memEraseLen = misc.align_up(imageLen, self.comMemEraseUnit)
             for i in range(self.semcNandImageCopies):
-                imageLoadAddr = self.bootDeviceMemBase + (imageInfo[i] >> 16) * self.semcNandBlockSize
+                imageLoadAddr = self.bootDeviceMemBase + (semcNandImageInfoList[i] >> 16) * self.semcNandBlockSize
                 status, results, cmdStr = self.blhost.flashEraseRegion(imageLoadAddr, memEraseLen, self.bootDeviceMemId)
                 self.printLog(cmdStr)
                 if status != boot.status.kStatus_Success:
@@ -847,7 +847,7 @@ class secBootRun(gencore.secBootGen):
         setBeeKey0Sel = None
         setBeeKey1Sel = None
         if self.keyStorageRegion == uidef.kKeyStorageRegion_FixedOtpmkKey:
-            otpmkKeyOpt, otpmkEncryptedRegionStart, otpmkEncryptedRegionLength = uivar.getAdvancedSettings(uidef.kAdvancedSettings_OtpmkKey)
+            otpmkKeyOpt, otpmkEncryptedRegionStartListList, otpmkEncryptedRegionLengthList = uivar.getAdvancedSettings(uidef.kAdvancedSettings_OtpmkKey)
             encryptedRegionCnt = (otpmkKeyOpt & 0x000F0000) >> 16
             # One PRDB means one BEE_KEY, no matter how many FAC regions it has
             if encryptedRegionCnt >= 0:

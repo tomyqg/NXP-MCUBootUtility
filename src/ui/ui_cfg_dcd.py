@@ -15,8 +15,8 @@ class secBootUiCfgDcd(bootDeviceWin_DCD.bootDeviceWin_DCD):
     def __init__(self, parent):
         bootDeviceWin_DCD.bootDeviceWin_DCD.__init__(self, parent)
         dcdCtrlDict, dcdSettingsDict = uivar.getBootDeviceConfiguration(uidef.kBootDevice_Dcd)
-        self.dcdCtrlDict = dcdCtrlDict
-        self.dcdSettingsDict = dcdSettingsDict
+        self.dcdCtrlDict = dcdCtrlDict.copy()
+        self.dcdSettingsDict = dcdSettingsDict.copy()
         self.destBinFilename = None
         self.destCfgFilename = None
         self.dcdModelFolder = None

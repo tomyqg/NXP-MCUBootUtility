@@ -13,10 +13,10 @@ class secBootUiSettingsFixedOtpmkKey(advSettingsWin_FixedOtpmkKey.advSettingsWin
 
     def __init__(self, parent):
         advSettingsWin_FixedOtpmkKey.advSettingsWin_FixedOtpmkKey.__init__(self, parent)
-        otpmkKeyOpt, otpmkEncryptedRegionStart, otpmkEncryptedRegionLength = uivar.getAdvancedSettings(uidef.kAdvancedSettings_OtpmkKey)
+        otpmkKeyOpt, otpmkEncryptedRegionStartList, otpmkEncryptedRegionLengthList = uivar.getAdvancedSettings(uidef.kAdvancedSettings_OtpmkKey)
         self.otpmkKeyOpt = otpmkKeyOpt
-        self.otpmkEncryptedRegionStart = otpmkEncryptedRegionStart
-        self.otpmkEncryptedRegionLength = otpmkEncryptedRegionLength
+        self.otpmkEncryptedRegionStartList = otpmkEncryptedRegionStartList[:]
+        self.otpmkEncryptedRegionLengthList = otpmkEncryptedRegionLengthList[:]
         self._recoverLastSettings()
 
     def _updateRegionInfoField ( self, regionCnt ):
@@ -55,18 +55,18 @@ class secBootUiSettingsFixedOtpmkKey(advSettingsWin_FixedOtpmkKey.advSettingsWin
         if encryptedRegionCnt > 0:
             self.m_textCtrl_region0Start.Clear()
             self.m_textCtrl_region0Length.Clear()
-            self.m_textCtrl_region0Start.write(str(hex(self.otpmkEncryptedRegionStart[0])))
-            self.m_textCtrl_region0Length.write(str(hex(self.otpmkEncryptedRegionLength[0])))
+            self.m_textCtrl_region0Start.write(str(hex(self.otpmkEncryptedRegionStartList[0])))
+            self.m_textCtrl_region0Length.write(str(hex(self.otpmkEncryptedRegionLengthList[0])))
         if encryptedRegionCnt > 1:
             self.m_textCtrl_region1Start.Clear()
             self.m_textCtrl_region1Length.Clear()
-            self.m_textCtrl_region1Start.write(str(hex(self.otpmkEncryptedRegionStart[1])))
-            self.m_textCtrl_region1Length.write(str(hex(self.otpmkEncryptedRegionLength[1])))
+            self.m_textCtrl_region1Start.write(str(hex(self.otpmkEncryptedRegionStartList[1])))
+            self.m_textCtrl_region1Length.write(str(hex(self.otpmkEncryptedRegionLengthList[1])))
         if encryptedRegionCnt > 2:
             self.m_textCtrl_region2Start.Clear()
             self.m_textCtrl_region2Length.Clear()
-            self.m_textCtrl_region2Start.write(str(hex(self.otpmkEncryptedRegionStart[2])))
-            self.m_textCtrl_region2Length.write(str(hex(self.otpmkEncryptedRegionLength[2])))
+            self.m_textCtrl_region2Start.write(str(hex(self.otpmkEncryptedRegionStartList[2])))
+            self.m_textCtrl_region2Length.write(str(hex(self.otpmkEncryptedRegionLengthList[2])))
 
     def _getKeySource( self ):
         txt = self.m_choice_keySource.GetString(self.m_choice_keySource.GetSelection())
@@ -113,59 +113,59 @@ class secBootUiSettingsFixedOtpmkKey(advSettingsWin_FixedOtpmkKey.advSettingsWin
         txt = self.m_choice_regionCnt.GetString(self.m_choice_regionCnt.GetSelection())
         regionCnt = int(txt[0])
         if regionCnt > 0:
-            convertStatus, self.otpmkEncryptedRegionStart[0] = self._convertRegionInfoToVal32(self.m_textCtrl_region0Start.GetLineText(0))
+            convertStatus, self.otpmkEncryptedRegionStartList[0] = self._convertRegionInfoToVal32(self.m_textCtrl_region0Start.GetLineText(0))
             if convertStatus:
-                if self.otpmkEncryptedRegionStart[0] < rundef.kBootDeviceMemBase_FlexspiNor + gendef.kIvtOffset_NOR:
+                if self.otpmkEncryptedRegionStartList[0] < rundef.kBootDeviceMemBase_FlexspiNor + gendef.kIvtOffset_NOR:
                     self.popupMsgBox('FAC Region 0 start address shouldn\'t less than 0x%x' %(rundef.kBootDeviceMemBase_FlexspiNor + gendef.kIvtOffset_NOR))
                     return False
             else:
                 return False
-            convertStatus, self.otpmkEncryptedRegionLength[0] = self._convertRegionInfoToVal32(self.m_textCtrl_region0Length.GetLineText(0))
+            convertStatus, self.otpmkEncryptedRegionLengthList[0] = self._convertRegionInfoToVal32(self.m_textCtrl_region0Length.GetLineText(0))
             if convertStatus:
-                if self.otpmkEncryptedRegionLength[0] % gendef.kSecFacRegionAlignedUnit != 0:
+                if self.otpmkEncryptedRegionLengthList[0] % gendef.kSecFacRegionAlignedUnit != 0:
                     self.popupMsgBox('FAC Region 0 length should be aligned with %dKB' %(gendef.kSecFacRegionAlignedUnit / 0x400))
                     return False
             else:
                 return False
         else:
-            self.otpmkEncryptedRegionStart[0] = None
-            self.otpmkEncryptedRegionLength[0] = None
+            self.otpmkEncryptedRegionStartList[0] = None
+            self.otpmkEncryptedRegionLengthList[0] = None
         if regionCnt > 1:
-            convertStatus, self.otpmkEncryptedRegionStart[1] = self._convertRegionInfoToVal32(self.m_textCtrl_region1Start.GetLineText(0))
+            convertStatus, self.otpmkEncryptedRegionStartList[1] = self._convertRegionInfoToVal32(self.m_textCtrl_region1Start.GetLineText(0))
             if convertStatus:
-                if self.otpmkEncryptedRegionStart[1] < self.otpmkEncryptedRegionStart[0] + self.otpmkEncryptedRegionLength[0]:
-                    self.popupMsgBox('FAC Region 1 start address shouldn\'t less than FAC region 0 end address 0x%x' %(self.otpmkEncryptedRegionStart[0] + self.otpmkEncryptedRegionLength[0]))
+                if self.otpmkEncryptedRegionStartList[1] < self.otpmkEncryptedRegionStartList[0] + self.otpmkEncryptedRegionLengthList[0]:
+                    self.popupMsgBox('FAC Region 1 start address shouldn\'t less than FAC region 0 end address 0x%x' %(self.otpmkEncryptedRegionStartList[0] + self.otpmkEncryptedRegionLengthList[0]))
                     return False
             else:
                 return False
-            convertStatus, self.otpmkEncryptedRegionLength[1] = self._convertRegionInfoToVal32(self.m_textCtrl_region1Length.GetLineText(0))
+            convertStatus, self.otpmkEncryptedRegionLengthList[1] = self._convertRegionInfoToVal32(self.m_textCtrl_region1Length.GetLineText(0))
             if convertStatus:
-                if self.otpmkEncryptedRegionLength[1] % gendef.kSecFacRegionAlignedUnit != 0:
+                if self.otpmkEncryptedRegionLengthList[1] % gendef.kSecFacRegionAlignedUnit != 0:
                     self.popupMsgBox('FAC Region 1 length should be aligned with %dKB' %(gendef.kSecFacRegionAlignedUnit / 0x400))
                     return False
             else:
                 return False
         else:
-            self.otpmkEncryptedRegionStart[1] = None
-            self.otpmkEncryptedRegionLength[1] = None
+            self.otpmkEncryptedRegionStartList[1] = None
+            self.otpmkEncryptedRegionLengthList[1] = None
         if regionCnt > 2:
-            convertStatus, self.otpmkEncryptedRegionStart[2] = self._convertRegionInfoToVal32(self.m_textCtrl_region2Start.GetLineText(0))
+            convertStatus, self.otpmkEncryptedRegionStartList[2] = self._convertRegionInfoToVal32(self.m_textCtrl_region2Start.GetLineText(0))
             if convertStatus:
-                if self.otpmkEncryptedRegionStart[2] < self.otpmkEncryptedRegionStart[1] + self.otpmkEncryptedRegionLength[1]:
-                    self.popupMsgBox('FAC Region 2 start address shouldn\'t less than FAC region 1 end address 0x%x' %(self.otpmkEncryptedRegionStart[1] + self.otpmkEncryptedRegionLength[1]))
+                if self.otpmkEncryptedRegionStartList[2] < self.otpmkEncryptedRegionStartList[1] + self.otpmkEncryptedRegionLengthList[1]:
+                    self.popupMsgBox('FAC Region 2 start address shouldn\'t less than FAC region 1 end address 0x%x' %(self.otpmkEncryptedRegionStartList[1] + self.otpmkEncryptedRegionLengthList[1]))
                     return False
             else:
                 return False
-            convertStatus, self.otpmkEncryptedRegionLength[2] = self._convertRegionInfoToVal32(self.m_textCtrl_region2Length.GetLineText(0))
+            convertStatus, self.otpmkEncryptedRegionLengthList[2] = self._convertRegionInfoToVal32(self.m_textCtrl_region2Length.GetLineText(0))
             if convertStatus:
-                if self.otpmkEncryptedRegionLength[2] % gendef.kSecFacRegionAlignedUnit != 0:
+                if self.otpmkEncryptedRegionLengthList[2] % gendef.kSecFacRegionAlignedUnit != 0:
                     self.popupMsgBox('FAC Region 2 length should be aligned with %dKB' %(gendef.kSecFacRegionAlignedUnit / 0x400))
                     return False
             else:
                 return False
         else:
-            self.otpmkEncryptedRegionStart[2] = None
-            self.otpmkEncryptedRegionLength[2] = None
+            self.otpmkEncryptedRegionStartList[2] = None
+            self.otpmkEncryptedRegionLengthList[2] = None
         return True
 
     def callbackChangeRegionCount( self, event ):
@@ -179,7 +179,7 @@ class secBootUiSettingsFixedOtpmkKey(advSettingsWin_FixedOtpmkKey.advSettingsWin
         self._getEncryptedRegionCount()
         if not self._getEncryptedRegionInfo():
             return
-        uivar.setAdvancedSettings(uidef.kAdvancedSettings_OtpmkKey, self.otpmkKeyOpt, self.otpmkEncryptedRegionStart, self.otpmkEncryptedRegionLength)
+        uivar.setAdvancedSettings(uidef.kAdvancedSettings_OtpmkKey, self.otpmkKeyOpt, self.otpmkEncryptedRegionStartList, self.otpmkEncryptedRegionLengthList)
         self.Show(False)
 
     def callbackCancel( self, event ):

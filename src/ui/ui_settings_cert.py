@@ -12,7 +12,8 @@ class secBootUiSettingsCert(advSettingsWin_Cert.advSettingsWin_Cert):
     def __init__(self, parent):
         advSettingsWin_Cert.advSettingsWin_Cert.__init__(self, parent)
         self._initCstVersion()
-        self.certSettingsDict = uivar.getAdvancedSettings(uidef.kAdvancedSettings_Cert)
+        certSettingsDict = uivar.getAdvancedSettings(uidef.kAdvancedSettings_Cert)
+        self.certSettingsDict = certSettingsDict.copy()
         self._recoverLastSettings()
 
     def _initCstVersion( self ):

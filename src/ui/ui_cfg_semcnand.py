@@ -11,10 +11,10 @@ class secBootUiCfgSemcNand(bootDeviceWin_SemcNand.bootDeviceWin_SemcNand):
 
     def __init__(self, parent):
         bootDeviceWin_SemcNand.bootDeviceWin_SemcNand.__init__(self, parent)
-        semcNandOpt, semcNandFcbOpt, semcNandImageInfo = uivar.getBootDeviceConfiguration(uidef.kBootDevice_SemcNand)
+        semcNandOpt, semcNandFcbOpt, semcNandImageInfoList = uivar.getBootDeviceConfiguration(uidef.kBootDevice_SemcNand)
         self.semcNandOpt = semcNandOpt
         self.semcNandFcbOpt = semcNandFcbOpt
-        self.semcNandImageInfo = semcNandImageInfo
+        self.semcNandImageInfoList = semcNandImageInfoList[:]
         self._recoverLastSettings()
 
     def _updateImageInfoField ( self, imageCopies ):
@@ -110,57 +110,57 @@ class secBootUiCfgSemcNand(bootDeviceWin_SemcNand.bootDeviceWin_SemcNand):
         self._updateImageInfoField(imageCopies)
 
         if imageCopies > 0:
-            imageIdx = self.semcNandImageInfo[0] >> 16
-            imageCnt = self.semcNandImageInfo[0] & 0x0000FFFF
+            imageIdx = self.semcNandImageInfoList[0] >> 16
+            imageCnt = self.semcNandImageInfoList[0] & 0x0000FFFF
             self.m_textCtrl_image0Idx.Clear()
             self.m_textCtrl_image0Cnt.Clear()
             self.m_textCtrl_image0Idx.write(str(imageIdx))
             self.m_textCtrl_image0Cnt.write(str(imageCnt))
         if imageCopies > 1:
-            imageIdx = self.semcNandImageInfo[1] >> 16
-            imageCnt = self.semcNandImageInfo[1] & 0x0000FFFF
+            imageIdx = self.semcNandImageInfoList[1] >> 16
+            imageCnt = self.semcNandImageInfoList[1] & 0x0000FFFF
             self.m_textCtrl_image1Idx.Clear()
             self.m_textCtrl_image1Cnt.Clear()
             self.m_textCtrl_image1Idx.write(str(imageIdx))
             self.m_textCtrl_image1Cnt.write(str(imageCnt))
         if imageCopies > 2:
-            imageIdx = self.semcNandImageInfo[2] >> 16
-            imageCnt = self.semcNandImageInfo[2] & 0x0000FFFF
+            imageIdx = self.semcNandImageInfoList[2] >> 16
+            imageCnt = self.semcNandImageInfoList[2] & 0x0000FFFF
             self.m_textCtrl_image2Idx.Clear()
             self.m_textCtrl_image2Cnt.Clear()
             self.m_textCtrl_image2Idx.write(str(imageIdx))
             self.m_textCtrl_image2Cnt.write(str(imageCnt))
         if imageCopies > 3:
-            imageIdx = self.semcNandImageInfo[3] >> 16
-            imageCnt = self.semcNandImageInfo[3] & 0x0000FFFF
+            imageIdx = self.semcNandImageInfoList[3] >> 16
+            imageCnt = self.semcNandImageInfoList[3] & 0x0000FFFF
             self.m_textCtrl_image3Idx.Clear()
             self.m_textCtrl_image3Cnt.Clear()
             self.m_textCtrl_image3Idx.write(str(imageIdx))
             self.m_textCtrl_image3Cnt.write(str(imageCnt))
         if imageCopies > 4:
-            imageIdx = self.semcNandImageInfo[4] >> 16
-            imageCnt = self.semcNandImageInfo[4] & 0x0000FFFF
+            imageIdx = self.semcNandImageInfoList[4] >> 16
+            imageCnt = self.semcNandImageInfoList[4] & 0x0000FFFF
             self.m_textCtrl_image4Idx.Clear()
             self.m_textCtrl_image4Cnt.Clear()
             self.m_textCtrl_image4Idx.write(str(imageIdx))
             self.m_textCtrl_image4Cnt.write(str(imageCnt))
         if imageCopies > 5:
-            imageIdx = self.semcNandImageInfo[5] >> 16
-            imageCnt = self.semcNandImageInfo[5] & 0x0000FFFF
+            imageIdx = self.semcNandImageInfoList[5] >> 16
+            imageCnt = self.semcNandImageInfoList[5] & 0x0000FFFF
             self.m_textCtrl_image5Idx.Clear()
             self.m_textCtrl_image5Cnt.Clear()
             self.m_textCtrl_image5Idx.write(str(imageIdx))
             self.m_textCtrl_image5Cnt.write(str(imageCnt))
         if imageCopies > 6:
-            imageIdx = self.semcNandImageInfo[6] >> 16
-            imageCnt = self.semcNandImageInfo[6] & 0x0000FFFF
+            imageIdx = self.semcNandImageInfoList[6] >> 16
+            imageCnt = self.semcNandImageInfoList[6] & 0x0000FFFF
             self.m_textCtrl_image6Idx.Clear()
             self.m_textCtrl_image6Cnt.Clear()
             self.m_textCtrl_image6Idx.write(str(imageIdx))
             self.m_textCtrl_image6Cnt.write(str(imageCnt))
         if imageCopies > 7:
-            imageIdx = self.semcNandImageInfo[7] >> 16
-            imageCnt = self.semcNandImageInfo[7] & 0x0000FFFF
+            imageIdx = self.semcNandImageInfoList[7] >> 16
+            imageCnt = self.semcNandImageInfoList[7] & 0x0000FFFF
             self.m_textCtrl_image7Idx.Clear()
             self.m_textCtrl_image7Cnt.Clear()
             self.m_textCtrl_image7Idx.write(str(imageIdx))
@@ -255,37 +255,37 @@ class secBootUiCfgSemcNand(bootDeviceWin_SemcNand.bootDeviceWin_SemcNand):
     def _getImageInfo( self ):
         imageCopies = int(self.m_choice_imageCopies.GetString(self.m_choice_imageCopies.GetSelection()))
         if imageCopies > 0:
-            self.semcNandImageInfo[0] = (int(self.m_textCtrl_image0Idx.GetLineText(0)) << 16) + int(self.m_textCtrl_image0Cnt.GetLineText(0))
+            self.semcNandImageInfoList[0] = (int(self.m_textCtrl_image0Idx.GetLineText(0)) << 16) + int(self.m_textCtrl_image0Cnt.GetLineText(0))
         else:
-            self.semcNandImageInfo[0] = None
+            self.semcNandImageInfoList[0] = None
         if imageCopies > 1:
-            self.semcNandImageInfo[1] = (int(self.m_textCtrl_image1Idx.GetLineText(0)) << 16) + int(self.m_textCtrl_image1Cnt.GetLineText(0))
+            self.semcNandImageInfoList[1] = (int(self.m_textCtrl_image1Idx.GetLineText(0)) << 16) + int(self.m_textCtrl_image1Cnt.GetLineText(0))
         else:
-            self.semcNandImageInfo[1] = None
+            self.semcNandImageInfoList[1] = None
         if imageCopies > 2:
-            self.semcNandImageInfo[2] = (int(self.m_textCtrl_image2Idx.GetLineText(0)) << 16) + int(self.m_textCtrl_image2Cnt.GetLineText(0))
+            self.semcNandImageInfoList[2] = (int(self.m_textCtrl_image2Idx.GetLineText(0)) << 16) + int(self.m_textCtrl_image2Cnt.GetLineText(0))
         else:
-            self.semcNandImageInfo[2] = None
+            self.semcNandImageInfoList[2] = None
         if imageCopies > 3:
-            self.semcNandImageInfo[3] = (int(self.m_textCtrl_image3Idx.GetLineText(0)) << 16) + int(self.m_textCtrl_image3Cnt.GetLineText(0))
+            self.semcNandImageInfoList[3] = (int(self.m_textCtrl_image3Idx.GetLineText(0)) << 16) + int(self.m_textCtrl_image3Cnt.GetLineText(0))
         else:
-            self.semcNandImageInfo[3] = None
+            self.semcNandImageInfoList[3] = None
         if imageCopies > 4:
-            self.semcNandImageInfo[4] = (int(self.m_textCtrl_image4Idx.GetLineText(0)) << 16) + int(self.m_textCtrl_image4Cnt.GetLineText(0))
+            self.semcNandImageInfoList[4] = (int(self.m_textCtrl_image4Idx.GetLineText(0)) << 16) + int(self.m_textCtrl_image4Cnt.GetLineText(0))
         else:
-            self.semcNandImageInfo[4] = None
+            self.semcNandImageInfoList[4] = None
         if imageCopies > 5:
-            self.semcNandImageInfo[5] = (int(self.m_textCtrl_image5Idx.GetLineText(0)) << 16) + int(self.m_textCtrl_image5Cnt.GetLineText(0))
+            self.semcNandImageInfoList[5] = (int(self.m_textCtrl_image5Idx.GetLineText(0)) << 16) + int(self.m_textCtrl_image5Cnt.GetLineText(0))
         else:
-            self.semcNandImageInfo[5] = None
+            self.semcNandImageInfoList[5] = None
         if imageCopies > 6:
-            self.semcNandImageInfo[6] = (int(self.m_textCtrl_image6Idx.GetLineText(0)) << 16) + int(self.m_textCtrl_image6Cnt.GetLineText(0))
+            self.semcNandImageInfoList[6] = (int(self.m_textCtrl_image6Idx.GetLineText(0)) << 16) + int(self.m_textCtrl_image6Cnt.GetLineText(0))
         else:
-            self.semcNandImageInfo[6] = None
+            self.semcNandImageInfoList[6] = None
         if imageCopies > 7:
-            self.semcNandImageInfo[7] = (int(self.m_textCtrl_image7Idx.GetLineText(0)) << 16) + int(self.m_textCtrl_image7Cnt.GetLineText(0))
+            self.semcNandImageInfoList[7] = (int(self.m_textCtrl_image7Idx.GetLineText(0)) << 16) + int(self.m_textCtrl_image7Cnt.GetLineText(0))
         else:
-            self.semcNandImageInfo[7] = None
+            self.semcNandImageInfoList[7] = None
 
     def callbackChangeImageCopies( self, event ):
         imageCopies = int(self.m_choice_imageCopies.GetString(self.m_choice_imageCopies.GetSelection()))
@@ -303,7 +303,7 @@ class secBootUiCfgSemcNand(bootDeviceWin_SemcNand.bootDeviceWin_SemcNand):
         self._getSearchStride()
         self._getImageCopies()
         self._getImageInfo()
-        uivar.setBootDeviceConfiguration(uidef.kBootDevice_SemcNand, self.semcNandOpt, self.semcNandFcbOpt, self.semcNandImageInfo)
+        uivar.setBootDeviceConfiguration(uidef.kBootDevice_SemcNand, self.semcNandOpt, self.semcNandFcbOpt, self.semcNandImageInfoList)
         self.Show(False)
 
     def callbackCancel( self, event ):

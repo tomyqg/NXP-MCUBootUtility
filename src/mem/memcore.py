@@ -168,12 +168,12 @@ class secBootMem(fusecore.secBootFuse):
         readoutMemLen = 0
         imageFileLen = os.path.getsize(self.destAppFilename)
         if self.bootDevice == uidef.kBootDevice_SemcNand:
-            semcNandOpt, semcNandFcbOpt, imageInfo = uivar.getBootDeviceConfiguration(self.bootDevice)
+            semcNandOpt, semcNandFcbOpt, semcNandImageInfoList = uivar.getBootDeviceConfiguration(self.bootDevice)
             status, dbbtAddr = self._showSemcNandFcb()
             if status:
                 self._showSemcNandDbbt(dbbtAddr)
             # Only Readout first image
-            imageMemBase = self.bootDeviceMemBase + (imageInfo[0] >> 16) * self.semcNandBlockSize
+            imageMemBase = self.bootDeviceMemBase + (semcNandImageInfoList[0] >> 16) * self.semcNandBlockSize
         elif self.bootDevice == uidef.kBootDevice_FlexspiNor or self.bootDevice == uidef.kBootDevice_LpspiNor:
             imageMemBase = self.bootDeviceMemBase
         else:

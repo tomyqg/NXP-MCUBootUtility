@@ -33,7 +33,8 @@ class secBootUi(secBootWin.secBootWin):
         if not os.path.isfile(exeMainFile):
             self.exeTopRoot = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
         uivar.initVar(os.path.join(self.exeTopRoot, 'bin', 'nxpSecBoot.json'))
-        self.toolCommDict = uivar.getAdvancedSettings(uidef.kAdvancedSettings_Tool)
+        toolCommDict = uivar.getAdvancedSettings(uidef.kAdvancedSettings_Tool)
+        self.toolCommDict = toolCommDict.copy()
 
         self.isToolRunAsEntryMode = None
         self._initToolRunMode()

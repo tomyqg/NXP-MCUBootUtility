@@ -35,7 +35,7 @@ g_semcNorSetting = None
 
 g_semcNandOpt = None
 g_semcNandFcbOpt = None
-g_semcNandImageInfo = None
+g_semcNandImageInfoList = [None] * 8
 
 g_usdhcSdOpt = None
 
@@ -65,8 +65,8 @@ g_certSettingsDict = {'cstVersion':None,
                       'caFlagSet':None}
 
 g_otpmkKeyOpt = None
-g_otpmkEncryptedRegionStart = None
-g_otpmkEncryptedRegionLength = None
+g_otpmkEncryptedRegionStartList = [None] * 3
+g_otpmkEncryptedRegionLengthList = [None] * 3
 
 g_userKeyCtrlDict = {'mcu_device':None,
                      'engine_sel':None,
@@ -103,10 +103,10 @@ def initVar(cfgFilename):
 
             global g_semcNandOpt
             global g_semcNandFcbOpt
-            global g_semcNandImageInfo
+            global g_semcNandImageInfoList
             g_semcNandOpt = cfgDict["cfgSemcNand"][0]
             g_semcNandFcbOpt = cfgDict["cfgSemcNand"][1]
-            g_semcNandImageInfo = cfgDict["cfgSemcNand"][2]
+            g_semcNandImageInfoList = cfgDict["cfgSemcNand"][2]
 
             global g_lpspiNorOpt0
             global g_lpspiNorOpt1
@@ -122,11 +122,11 @@ def initVar(cfgFilename):
             g_certSettingsDict = cfgDict["cfgCertificate"][0]
 
             global g_otpmkKeyOpt
-            global g_otpmkEncryptedRegionStart
-            global g_otpmkEncryptedRegionLength
+            global g_otpmkEncryptedRegionStartList
+            global g_otpmkEncryptedRegionLengthList
             g_otpmkKeyOpt = cfgDict["cfgSnvsKey"][0]
-            g_otpmkEncryptedRegionStart = cfgDict["cfgSnvsKey"][1]
-            g_otpmkEncryptedRegionLength = cfgDict["cfgSnvsKey"][2]
+            g_otpmkEncryptedRegionStartList = cfgDict["cfgSnvsKey"][1]
+            g_otpmkEncryptedRegionLengthList = cfgDict["cfgSnvsKey"][2]
 
             global g_userKeyCtrlDict
             global g_userKeyCmdDict
@@ -175,11 +175,11 @@ def initVar(cfgFilename):
 
         global g_semcNandOpt
         global g_semcNandFcbOpt
-        global g_semcNandImageInfo
+        global g_semcNandImageInfoList
         g_semcNandOpt = 0xD0010101
         g_semcNandFcbOpt = 0x00010101
-        g_semcNandImageInfo = [None] * 8
-        g_semcNandImageInfo[0] = 0x00020001
+        g_semcNandImageInfoList = [None] * 8
+        g_semcNandImageInfoList[0] = 0x00020001
 
         global g_usdhcSdOpt
         g_usdhcSdOpt = 0xD0010101
@@ -216,11 +216,11 @@ def initVar(cfgFilename):
         g_certSettingsDict['caFlagSet'] = 'y'
 
         global g_otpmkKeyOpt
-        global g_otpmkEncryptedRegionStart
-        global g_otpmkEncryptedRegionLength
+        global g_otpmkEncryptedRegionStartList
+        global g_otpmkEncryptedRegionLengthList
         g_otpmkKeyOpt = 0xe0100000
-        g_otpmkEncryptedRegionStart = [None] * 3
-        g_otpmkEncryptedRegionLength = [None] * 3
+        g_otpmkEncryptedRegionStartList = [None] * 3
+        g_otpmkEncryptedRegionLengthList = [None] * 3
 
         global g_userKeyCtrlDict
         global g_userKeyCmdDict
@@ -250,25 +250,25 @@ def deinitVar(cfgFilename=None):
         global g_flexspiNorDeviceModel
         global g_semcNandOpt
         global g_semcNandFcbOpt
-        global g_semcNandImageInfo
+        global g_semcNandImageInfoList
         global g_lpspiNorOpt0
         global g_lpspiNorOpt1
         global g_dcdCtrlDict
         global g_dcdSettingsDict
         global g_certSettingsDict
         global g_otpmkKeyOpt
-        global g_otpmkEncryptedRegionStart
-        global g_otpmkEncryptedRegionLength
+        global g_otpmkEncryptedRegionStartList
+        global g_otpmkEncryptedRegionLengthList
         global g_userKeyCtrlDict
         global g_userKeyCmdDict
         cfgDict = {
             "cfgToolCommon": [g_toolCommDict],
             "cfgFlexspiNor": [g_flexspiNorOpt0, g_flexspiNorOpt1, g_flexspiNorDeviceModel],
-            "cfgSemcNand": [g_semcNandOpt, g_semcNandFcbOpt, g_semcNandImageInfo],
+            "cfgSemcNand": [g_semcNandOpt, g_semcNandFcbOpt, g_semcNandImageInfoList],
             "cfgLpspiNor": [g_lpspiNorOpt0, g_lpspiNorOpt1],
             "cfgDcd": [g_dcdCtrlDict, g_dcdSettingsDict],
             "cfgCertificate": [g_certSettingsDict],
-            "cfgSnvsKey": [g_otpmkKeyOpt, g_otpmkEncryptedRegionStart, g_otpmkEncryptedRegionLength],
+            "cfgSnvsKey": [g_otpmkKeyOpt, g_otpmkEncryptedRegionStartList, g_otpmkEncryptedRegionLengthList],
             "cfgUserKey": [g_userKeyCtrlDict, g_userKeyCmdDict]
         }
         json.dump(cfgDict, fileObj)
@@ -293,8 +293,8 @@ def getBootDeviceConfiguration( group ):
     elif group == uidef.kBootDevice_SemcNand:
         global g_semcNandOpt
         global g_semcNandFcbOpt
-        global g_semcNandImageInfo
-        return g_semcNandOpt, g_semcNandFcbOpt, g_semcNandImageInfo
+        global g_semcNandImageInfoList
+        return g_semcNandOpt, g_semcNandFcbOpt, g_semcNandImageInfoList
     elif group == uidef.kBootDevice_UsdhcSd:
         global g_usdhcSdOpt
         return g_usdhcSdOpt
@@ -338,10 +338,10 @@ def setBootDeviceConfiguration( group, *args ):
     elif group == uidef.kBootDevice_SemcNand:
         global g_semcNandOpt
         global g_semcNandFcbOpt
-        global g_semcNandImageInfo
+        global g_semcNandImageInfoList
         g_semcNandOpt = args[0]
         g_semcNandFcbOpt = args[1]
-        g_semcNandImageInfo = args[2]
+        g_semcNandImageInfoList = args[2]
     elif group == uidef.kBootDevice_UsdhcSd:
         global g_usdhcSdOpt
         g_usdhcSdOpt = args[0]
@@ -372,9 +372,9 @@ def getAdvancedSettings( group ):
         return g_certSettingsDict
     elif group == uidef.kAdvancedSettings_OtpmkKey:
         global g_otpmkKeyOpt
-        global g_otpmkEncryptedRegionStart
-        global g_otpmkEncryptedRegionLength
-        return g_otpmkKeyOpt, g_otpmkEncryptedRegionStart, g_otpmkEncryptedRegionLength
+        global g_otpmkEncryptedRegionStartList
+        global g_otpmkEncryptedRegionLengthList
+        return g_otpmkKeyOpt, g_otpmkEncryptedRegionStartList, g_otpmkEncryptedRegionLengthList
     elif group == uidef.kAdvancedSettings_UserKeys:
         global g_userKeyCtrlDict
         global g_userKeyCmdDict
@@ -391,11 +391,11 @@ def setAdvancedSettings( group, *args ):
         g_certSettingsDict = args[0]
     elif group == uidef.kAdvancedSettings_OtpmkKey:
         global g_otpmkKeyOpt
-        global g_otpmkEncryptedRegionStart
-        global g_otpmkEncryptedRegionLength
+        global g_otpmkEncryptedRegionStartList
+        global g_otpmkEncryptedRegionLengthList
         g_otpmkKeyOpt = args[0]
-        g_otpmkEncryptedRegionStart = args[1]
-        g_otpmkEncryptedRegionLength = args[2]
+        g_otpmkEncryptedRegionStartList = args[1]
+        g_otpmkEncryptedRegionLengthList = args[2]
     elif group == uidef.kAdvancedSettings_UserKeys:
         global g_userKeyCtrlDict
         global g_userKeyCmdDict

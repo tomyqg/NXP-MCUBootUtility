@@ -15,8 +15,8 @@ class secBootUiSettingsFlexibleUserKeys(advSettingsWin_FlexibleUserKeys.advSetti
     def __init__(self, parent):
         advSettingsWin_FlexibleUserKeys.advSettingsWin_FlexibleUserKeys.__init__(self, parent)
         userKeyCtrlDict, userKeyCmdDict = uivar.getAdvancedSettings(uidef.kAdvancedSettings_UserKeys)
-        self.userKeyCtrlDict = userKeyCtrlDict
-        self.userKeyCmdDict = userKeyCmdDict
+        self.userKeyCtrlDict = userKeyCtrlDict.copy()
+        self.userKeyCmdDict = userKeyCmdDict.copy()
         self.engine0FacStart = [None] * uidef.kMaxFacRegionCount
         self.engine0FacLength = [None] * uidef.kMaxFacRegionCount
         self.engine1FacStart = [None] * uidef.kMaxFacRegionCount
