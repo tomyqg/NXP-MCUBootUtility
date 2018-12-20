@@ -83,7 +83,6 @@ class secBootGen(uicore.secBootUi):
         self.destAppVectorOffset = None
         self.destAppBinaryBytes = 0
         self.destAppCsfAddress = None
-        self.isNandDevice = False
         self.isXipApp = False
 
     def _copyCstBinToElftosbFolder( self ):
@@ -519,7 +518,6 @@ class secBootGen(uicore.secBootUi):
                 self.destAppInitialLoadSize = self.destAppVectorOffset
             else:
                 self.destAppInitialLoadSize = gendef.kInitialLoadSize_NOR
-            self.isNandDevice = False
         elif bootDevice == uidef.kBootDevice_FlexspiNand or \
              bootDevice == uidef.kBootDevice_SemcNand or \
              bootDevice == uidef.kBootDevice_UsdhcSd or \
@@ -527,10 +525,6 @@ class secBootGen(uicore.secBootUi):
              bootDevice == uidef.kBootDevice_LpspiNor:
             self.destAppIvtOffset = gendef.kIvtOffset_NAND_SD_EEPROM
             self.destAppInitialLoadSize = gendef.kInitialLoadSize_NAND_SD_EEPROM
-            if bootDevice == uidef.kBootDevice_LpspiNor:
-                self.isNandDevice = False
-            else:
-                self.isNandDevice = True
             self.isXipApp = False
             self.destAppVectorOffset = self.destAppInitialLoadSize
         elif bootDevice == uidef.kBootDevice_RamFlashloader:

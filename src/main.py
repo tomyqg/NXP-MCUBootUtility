@@ -351,6 +351,8 @@ class secBootMain(memcore.secBootMem):
         else:
             self._startGaugeTimer()
             self.printLog("'Generate Bootable Image' button is clicked")
+            # Need to update image picture for DCD
+            self.setSecureBootSeqColor()
             if self.createMatchedAppBdfile():
                 if self.genBootableImage():
                     self.showHabDekIfApplicable()
@@ -632,7 +634,7 @@ class secBootMain(memcore.secBootMem):
         wx.MessageBox(msgText, "Home Page", wx.OK | wx.ICON_INFORMATION)
 
     def callbackShowAboutAuthor( self, event ):
-        author = "Author:  衡杰Jay、李嘉奕Joyee \n"
+        author = "Author:  痞子衡 \n"
         blog = "Blog:      痞子衡嵌入式 https://www.cnblogs.com/henjay724/ \n"
         msgText = ((author.encode('utf-8')) +
                    ('Email:     jie.heng@nxp.com \n') +

@@ -1009,7 +1009,7 @@ class secBootRun(gencore.secBootGen):
             if self.bootDevice == uidef.kBootDevice_FlexspiNor:
                 if not self._programFlexspiNorConfigBlock():
                     return False
-            self.showImageLayout(u"../img/image_signed_hab_encrypted.png")
+            self.updateImgPictureAfterFlashDek()
             return True
         else:
             self.popupMsgBox('Dek file hasn\'t been generated!')
