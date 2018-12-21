@@ -86,56 +86,77 @@ g_userKeyCmdDict = {'base_addr':None,
 
 def initVar(cfgFilename):
     global g_cfgFilename
+
+    global g_toolCommDict
+
+    global g_flexspiNorOpt0
+    global g_flexspiNorOpt1
+    global g_flexspiNorDeviceModel
+
+    global g_semcNandOpt
+    global g_semcNandFcbOpt
+    global g_semcNandImageInfoList
+
+    global g_lpspiNorOpt0
+    global g_lpspiNorOpt1
+
+    global g_flexspiNandOpt
+    global g_flexspiNandFcbOpt
+    global g_flexspiNandKeyBlob
+    global g_flexspiNandImageInfo
+
+    global g_semcNorOpt
+    global g_semcNorSetting
+
+    global g_usdhcSdOpt
+
+    global g_usdhcMmcOpt1
+    global g_usdhcMmcOpt2
+
+    global g_dcdCtrlDict
+    global g_dcdSettingsDict
+
+    global g_certSettingsDict
+
+    global g_otpmkKeyOpt
+    global g_otpmkEncryptedRegionStartList
+    global g_otpmkEncryptedRegionLengthList
+
+    global g_userKeyCtrlDict
+    global g_userKeyCmdDict
+
     g_cfgFilename = cfgFilename
     if os.path.isfile(cfgFilename):
         cfgDict = None
         with open(cfgFilename, 'r') as fileObj:
             cfgDict = json.load(fileObj)
-            global g_toolCommDict
-            g_toolCommDict = cfgDict["cfgToolCommon"][0]
-
-            global g_flexspiNorOpt0
-            global g_flexspiNorOpt1
-            global g_flexspiNorDeviceModel
-            g_flexspiNorOpt0 = cfgDict["cfgFlexspiNor"][0]
-            g_flexspiNorOpt1 = cfgDict["cfgFlexspiNor"][1]
-            g_flexspiNorDeviceModel = cfgDict["cfgFlexspiNor"][2]
-
-            global g_semcNandOpt
-            global g_semcNandFcbOpt
-            global g_semcNandImageInfoList
-            g_semcNandOpt = cfgDict["cfgSemcNand"][0]
-            g_semcNandFcbOpt = cfgDict["cfgSemcNand"][1]
-            g_semcNandImageInfoList = cfgDict["cfgSemcNand"][2]
-
-            global g_lpspiNorOpt0
-            global g_lpspiNorOpt1
-            g_lpspiNorOpt0 = cfgDict["cfgLpspiNor"][0]
-            g_lpspiNorOpt1 = cfgDict["cfgLpspiNor"][1]
-
-            global g_dcdCtrlDict
-            global g_dcdSettingsDict
-            g_dcdCtrlDict = cfgDict["cfgDcd"][0]
-            g_dcdSettingsDict = cfgDict["cfgDcd"][1]
-
-            global g_certSettingsDict
-            g_certSettingsDict = cfgDict["cfgCertificate"][0]
-
-            global g_otpmkKeyOpt
-            global g_otpmkEncryptedRegionStartList
-            global g_otpmkEncryptedRegionLengthList
-            g_otpmkKeyOpt = cfgDict["cfgSnvsKey"][0]
-            g_otpmkEncryptedRegionStartList = cfgDict["cfgSnvsKey"][1]
-            g_otpmkEncryptedRegionLengthList = cfgDict["cfgSnvsKey"][2]
-
-            global g_userKeyCtrlDict
-            global g_userKeyCmdDict
-            g_userKeyCtrlDict = cfgDict["cfgUserKey"][0]
-            g_userKeyCmdDict = cfgDict["cfgUserKey"][1]
-
             fileObj.close()
+
+        g_toolCommDict = cfgDict["cfgToolCommon"][0]
+
+        g_flexspiNorOpt0 = cfgDict["cfgFlexspiNor"][0]
+        g_flexspiNorOpt1 = cfgDict["cfgFlexspiNor"][1]
+        g_flexspiNorDeviceModel = cfgDict["cfgFlexspiNor"][2]
+
+        g_semcNandOpt = cfgDict["cfgSemcNand"][0]
+        g_semcNandFcbOpt = cfgDict["cfgSemcNand"][1]
+        g_semcNandImageInfoList = cfgDict["cfgSemcNand"][2]
+
+        g_lpspiNorOpt0 = cfgDict["cfgLpspiNor"][0]
+        g_lpspiNorOpt1 = cfgDict["cfgLpspiNor"][1]
+
+        g_dcdCtrlDict = cfgDict["cfgDcd"][0]
+        g_dcdSettingsDict = cfgDict["cfgDcd"][1]
+
+        g_certSettingsDict = cfgDict["cfgCertificate"][0]
+
+        g_otpmkKeyOpt = cfgDict["cfgSnvsKey"][0]
+        g_otpmkEncryptedRegionStartList = cfgDict["cfgSnvsKey"][1]
+        g_otpmkEncryptedRegionLengthList = cfgDict["cfgSnvsKey"][2]
+
+        g_userKeyCtrlDict = cfgDict["cfgUserKey"][0]
+        g_userKeyCmdDict = cfgDict["cfgUserKey"][1]
     else:
-        global g_toolCommDict
         g_toolCommDict = {'isToolRunAsEntryMode':True,
                           'secBootType':0,
                           'mcuSeries':0,
@@ -152,50 +173,31 @@ def initVar(cfgFilename):
                           'certOptForBee':0
                          }
 
-        global g_flexspiNorOpt0
-        global g_flexspiNorOpt1
-        global g_flexspiNorDeviceModel
         g_flexspiNorOpt0 = 0xc0000007
         g_flexspiNorOpt1 = 0x00000000
         g_flexspiNorDeviceModel = 0
 
-        global g_flexspiNandOpt
-        global g_flexspiNandFcbOpt
-        global g_flexspiNandKeyBlob
-        global g_flexspiNandImageInfo
-        g_flexspiNandOpt = 0xD0010101
-        g_flexspiNandFcbOpt = 0x00010601
-        g_flexspiNandImageInfo = 0x0
-        g_flexspiNandKeyBlob = 0x0
-
-        global g_semcNorOpt
-        global g_semcNorSetting
-        g_semcNorOpt = 0xD0010101
-        g_semcNorSetting = 0x00010601
-
-        global g_semcNandOpt
-        global g_semcNandFcbOpt
-        global g_semcNandImageInfoList
         g_semcNandOpt = 0xD0010101
         g_semcNandFcbOpt = 0x00010101
         g_semcNandImageInfoList = [None] * 8
         g_semcNandImageInfoList[0] = 0x00020001
 
-        global g_usdhcSdOpt
-        g_usdhcSdOpt = 0xD0010101
-
-        global g_usdhcMmcOpt1
-        global g_usdhcMmcOpt2
-        g_usdhcMmcOpt1 = 0xD0010101
-        g_usdhcMmcOpt2 = 0xD0010101
-
-        global g_lpspiNorOpt0
-        global g_lpspiNorOpt1
         g_lpspiNorOpt0 = 0xc1100500
         g_lpspiNorOpt1 = 0x00000000
 
-        global g_dcdCtrlDict
-        global g_dcdSettingsDict
+        g_flexspiNandOpt = 0xD0010101
+        g_flexspiNandFcbOpt = 0x00010601
+        g_flexspiNandImageInfo = 0x0
+        g_flexspiNandKeyBlob = 0x0
+
+        g_semcNorOpt = 0xD0010101
+        g_semcNorSetting = 0x00010601
+
+        g_usdhcSdOpt = 0xD0010101
+
+        g_usdhcMmcOpt1 = 0xD0010101
+        g_usdhcMmcOpt2 = 0xD0010101
+
         g_dcdCtrlDict['isDcdEnabled'] = False
         g_dcdCtrlDict['dcdFileType'] = None
         g_dcdSettingsDict['dcdSource'] = 'Disable DCD'
@@ -206,7 +208,6 @@ def initVar(cfgFilename):
         g_dcdSettingsDict['deviceModel'] = 'No'
         g_dcdSettingsDict['dcdDesc'] = None
 
-        global g_certSettingsDict
         g_certSettingsDict['cstVersion'] = uidef.kCstVersion_v3_0_1
         g_certSettingsDict['useExistingCaKey'] = 'n'
         g_certSettingsDict['useEllipticCurveCrypto'] = 'n'
@@ -215,15 +216,10 @@ def initVar(cfgFilename):
         g_certSettingsDict['SRKs'] = 4
         g_certSettingsDict['caFlagSet'] = 'y'
 
-        global g_otpmkKeyOpt
-        global g_otpmkEncryptedRegionStartList
-        global g_otpmkEncryptedRegionLengthList
         g_otpmkKeyOpt = 0xe0100000
         g_otpmkEncryptedRegionStartList = [None] * 3
         g_otpmkEncryptedRegionLengthList = [None] * 3
 
-        global g_userKeyCtrlDict
-        global g_userKeyCmdDict
         g_userKeyCtrlDict['engine_sel'] = uidef.kUserEngineSel_Engine0
         g_userKeyCtrlDict['engine0_key_src'] = uidef.kUserKeySource_SW_GP2
         g_userKeyCtrlDict['engine0_fac_cnt'] = 1
