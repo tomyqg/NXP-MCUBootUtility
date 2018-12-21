@@ -22,6 +22,8 @@ from ui import ui_settings_cert
 from ui import ui_settings_fixed_otpmk_key
 from ui import ui_settings_flexible_user_keys
 
+g_main_win = None
+
 kRetryPingTimes = 5
 
 kBootloaderType_Rom         = 0
@@ -611,7 +613,9 @@ class secBootMain(memcore.secBootMem):
             self.usbhidDetectTimer.cancel()
         uivar.setAdvancedSettings(uidef.kAdvancedSettings_Tool, self.toolCommDict)
         uivar.deinitVar()
-        exit(0)
+        #exit(0)
+        global g_main_win
+        g_main_win.Show(False)
 
     def callbackExit( self, event ):
         self._deinitToolToExit()
@@ -653,8 +657,8 @@ class secBootMain(memcore.secBootMem):
 if __name__ == '__main__':
     app = wx.App()
 
-    main_win = secBootMain(None)
-    main_win.SetTitle(u"nxpSecBoot v0.15.0")
-    main_win.Show()
+    g_main_win = secBootMain(None)
+    g_main_win.SetTitle(u"nxpSecBoot v0.15.0")
+    g_main_win.Show()
 
     app.MainLoop()
