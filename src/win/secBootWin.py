@@ -661,22 +661,22 @@ class secBootWin ( wx.Frame ):
 
 		bSizer_fuseGroupTxt0 = wx.BoxSizer( wx.VERTICAL )
 
-		self.m_staticText_fuse400 = wx.StaticText( self.m_panel_fuseUtil, wx.ID_ANY, u"Lock:", wx.DefaultPosition, wx.Size( 31,20 ), 0 )
+		self.m_staticText_fuse400 = wx.StaticText( self.m_panel_fuseUtil, wx.ID_ANY, u"LOCK", wx.DefaultPosition, wx.Size( 31,20 ), 0 )
 		self.m_staticText_fuse400.Wrap( -1 )
 
 		self.m_staticText_fuse400.SetFont( wx.Font( 9, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, "宋体" ) )
-		self.m_staticText_fuse400.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_INFOBK ) )
+		self.m_staticText_fuse400.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
 
 		bSizer_fuseGroupTxt0.Add( self.m_staticText_fuse400, 0, wx.ALL, 5 )
 
-		self.m_staticText_fuse410 = wx.StaticText( self.m_panel_fuseUtil, wx.ID_ANY, u"0x410:", wx.DefaultPosition, wx.Size( 31,20 ), 0 )
+		self.m_staticText_fuse410 = wx.StaticText( self.m_panel_fuseUtil, wx.ID_ANY, u"UUID0", wx.DefaultPosition, wx.Size( 31,20 ), 0 )
 		self.m_staticText_fuse410.Wrap( -1 )
 
 		self.m_staticText_fuse410.SetFont( wx.Font( 9, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, "宋体" ) )
 
 		bSizer_fuseGroupTxt0.Add( self.m_staticText_fuse410, 0, wx.ALL, 5 )
 
-		self.m_staticText_fuse420 = wx.StaticText( self.m_panel_fuseUtil, wx.ID_ANY, u"0x420:", wx.DefaultPosition, wx.Size( 31,20 ), 0 )
+		self.m_staticText_fuse420 = wx.StaticText( self.m_panel_fuseUtil, wx.ID_ANY, u"UUID1", wx.DefaultPosition, wx.Size( 31,20 ), 0 )
 		self.m_staticText_fuse420.Wrap( -1 )
 
 		self.m_staticText_fuse420.SetFont( wx.Font( 9, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, "宋体" ) )
@@ -701,7 +701,7 @@ class secBootWin ( wx.Frame ):
 		self.m_staticText_fuse450.Wrap( -1 )
 
 		self.m_staticText_fuse450.SetFont( wx.Font( 9, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, "宋体" ) )
-		self.m_staticText_fuse450.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_ACTIVECAPTION ) )
+		self.m_staticText_fuse450.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
 
 		bSizer_fuseGroupTxt0.Add( self.m_staticText_fuse450, 0, wx.ALL, 5 )
 
@@ -709,7 +709,7 @@ class secBootWin ( wx.Frame ):
 		self.m_staticText_fuse460.Wrap( -1 )
 
 		self.m_staticText_fuse460.SetFont( wx.Font( 9, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, "宋体" ) )
-		self.m_staticText_fuse460.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_ACTIVECAPTION ) )
+		self.m_staticText_fuse460.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
 
 		bSizer_fuseGroupTxt0.Add( self.m_staticText_fuse460, 0, wx.ALL, 5 )
 
@@ -717,7 +717,7 @@ class secBootWin ( wx.Frame ):
 		self.m_staticText_fuse470.Wrap( -1 )
 
 		self.m_staticText_fuse470.SetFont( wx.Font( 9, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, "宋体" ) )
-		self.m_staticText_fuse470.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_ACTIVECAPTION ) )
+		self.m_staticText_fuse470.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
 
 		bSizer_fuseGroupTxt0.Add( self.m_staticText_fuse470, 0, wx.ALL, 5 )
 
@@ -783,13 +783,13 @@ class secBootWin ( wx.Frame ):
 		self.m_textCtrl_fuse440 = wx.TextCtrl( self.m_panel_fuseUtil, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.Size( 75,20 ), 0 )
 		bSizer_fuseGroupCtrl0.Add( self.m_textCtrl_fuse440, 0, wx.ALL, 5 )
 
-		self.m_textCtrl_fuse450 = wx.TextCtrl( self.m_panel_fuseUtil, wx.ID_ANY, u"Boot Cfg", wx.DefaultPosition, wx.Size( 75,20 ), 0 )
+		self.m_textCtrl_fuse450 = wx.TextCtrl( self.m_panel_fuseUtil, wx.ID_ANY, u"Boot Cfg0", wx.DefaultPosition, wx.Size( 75,20 ), 0 )
 		bSizer_fuseGroupCtrl0.Add( self.m_textCtrl_fuse450, 0, wx.ALL, 5 )
 
-		self.m_textCtrl_fuse460 = wx.TextCtrl( self.m_panel_fuseUtil, wx.ID_ANY, u"Boot Cfg", wx.DefaultPosition, wx.Size( 75,20 ), 0 )
+		self.m_textCtrl_fuse460 = wx.TextCtrl( self.m_panel_fuseUtil, wx.ID_ANY, u"Boot Cfg1", wx.DefaultPosition, wx.Size( 75,20 ), 0 )
 		bSizer_fuseGroupCtrl0.Add( self.m_textCtrl_fuse460, 0, wx.ALL, 5 )
 
-		self.m_textCtrl_fuse470 = wx.TextCtrl( self.m_panel_fuseUtil, wx.ID_ANY, u"Boot Cfg", wx.DefaultPosition, wx.Size( 75,20 ), 0 )
+		self.m_textCtrl_fuse470 = wx.TextCtrl( self.m_panel_fuseUtil, wx.ID_ANY, u"Boot Cfg2", wx.DefaultPosition, wx.Size( 75,20 ), 0 )
 		bSizer_fuseGroupCtrl0.Add( self.m_textCtrl_fuse470, 0, wx.ALL, 5 )
 
 		self.m_textCtrl_fuse480 = wx.TextCtrl( self.m_panel_fuseUtil, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.Size( 75,20 ), 0 )
@@ -829,56 +829,56 @@ class secBootWin ( wx.Frame ):
 
 		bSizer_fuseGroupTxt1.Add( self.m_staticText_fuse4f0, 0, wx.ALL, 5 )
 
-		self.m_staticText_fuse500 = wx.StaticText( self.m_panel_fuseUtil, wx.ID_ANY, u"Otpmk", wx.DefaultPosition, wx.Size( 31,20 ), 0 )
+		self.m_staticText_fuse500 = wx.StaticText( self.m_panel_fuseUtil, wx.ID_ANY, u"OTPMK", wx.DefaultPosition, wx.Size( 31,20 ), 0 )
 		self.m_staticText_fuse500.Wrap( -1 )
 
 		self.m_staticText_fuse500.SetFont( wx.Font( 9, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, "宋体" ) )
 
 		bSizer_fuseGroupTxt1.Add( self.m_staticText_fuse500, 0, wx.ALL, 5 )
 
-		self.m_staticText_fuse510 = wx.StaticText( self.m_panel_fuseUtil, wx.ID_ANY, u"Otpmk", wx.DefaultPosition, wx.Size( 31,20 ), 0 )
+		self.m_staticText_fuse510 = wx.StaticText( self.m_panel_fuseUtil, wx.ID_ANY, u"OTPMK", wx.DefaultPosition, wx.Size( 31,20 ), 0 )
 		self.m_staticText_fuse510.Wrap( -1 )
 
 		self.m_staticText_fuse510.SetFont( wx.Font( 9, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, "宋体" ) )
 
 		bSizer_fuseGroupTxt1.Add( self.m_staticText_fuse510, 0, wx.ALL, 5 )
 
-		self.m_staticText_fuse520 = wx.StaticText( self.m_panel_fuseUtil, wx.ID_ANY, u"Otpmk", wx.DefaultPosition, wx.Size( 31,20 ), 0 )
+		self.m_staticText_fuse520 = wx.StaticText( self.m_panel_fuseUtil, wx.ID_ANY, u"OTPMK", wx.DefaultPosition, wx.Size( 31,20 ), 0 )
 		self.m_staticText_fuse520.Wrap( -1 )
 
 		self.m_staticText_fuse520.SetFont( wx.Font( 9, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, "宋体" ) )
 
 		bSizer_fuseGroupTxt1.Add( self.m_staticText_fuse520, 0, wx.ALL, 5 )
 
-		self.m_staticText_fuse530 = wx.StaticText( self.m_panel_fuseUtil, wx.ID_ANY, u"Otpmk", wx.DefaultPosition, wx.Size( 31,20 ), 0 )
+		self.m_staticText_fuse530 = wx.StaticText( self.m_panel_fuseUtil, wx.ID_ANY, u"OTPMK", wx.DefaultPosition, wx.Size( 31,20 ), 0 )
 		self.m_staticText_fuse530.Wrap( -1 )
 
 		self.m_staticText_fuse530.SetFont( wx.Font( 9, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, "宋体" ) )
 
 		bSizer_fuseGroupTxt1.Add( self.m_staticText_fuse530, 0, wx.ALL, 5 )
 
-		self.m_staticText_fuse540 = wx.StaticText( self.m_panel_fuseUtil, wx.ID_ANY, u"Otpmk", wx.DefaultPosition, wx.Size( 31,20 ), 0 )
+		self.m_staticText_fuse540 = wx.StaticText( self.m_panel_fuseUtil, wx.ID_ANY, u"OTPMK", wx.DefaultPosition, wx.Size( 31,20 ), 0 )
 		self.m_staticText_fuse540.Wrap( -1 )
 
 		self.m_staticText_fuse540.SetFont( wx.Font( 9, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, "宋体" ) )
 
 		bSizer_fuseGroupTxt1.Add( self.m_staticText_fuse540, 0, wx.ALL, 5 )
 
-		self.m_staticText_fuse550 = wx.StaticText( self.m_panel_fuseUtil, wx.ID_ANY, u"Otpmk", wx.DefaultPosition, wx.Size( 31,20 ), 0 )
+		self.m_staticText_fuse550 = wx.StaticText( self.m_panel_fuseUtil, wx.ID_ANY, u"OTPMK", wx.DefaultPosition, wx.Size( 31,20 ), 0 )
 		self.m_staticText_fuse550.Wrap( -1 )
 
 		self.m_staticText_fuse550.SetFont( wx.Font( 9, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, "宋体" ) )
 
 		bSizer_fuseGroupTxt1.Add( self.m_staticText_fuse550, 0, wx.ALL, 5 )
 
-		self.m_staticText_fuse560 = wx.StaticText( self.m_panel_fuseUtil, wx.ID_ANY, u"Otpmk", wx.DefaultPosition, wx.Size( 31,20 ), 0 )
+		self.m_staticText_fuse560 = wx.StaticText( self.m_panel_fuseUtil, wx.ID_ANY, u"OTPMK", wx.DefaultPosition, wx.Size( 31,20 ), 0 )
 		self.m_staticText_fuse560.Wrap( -1 )
 
 		self.m_staticText_fuse560.SetFont( wx.Font( 9, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, "宋体" ) )
 
 		bSizer_fuseGroupTxt1.Add( self.m_staticText_fuse560, 0, wx.ALL, 5 )
 
-		self.m_staticText_fuse570 = wx.StaticText( self.m_panel_fuseUtil, wx.ID_ANY, u"Otpmk", wx.DefaultPosition, wx.Size( 31,20 ), 0 )
+		self.m_staticText_fuse570 = wx.StaticText( self.m_panel_fuseUtil, wx.ID_ANY, u"OTPMK", wx.DefaultPosition, wx.Size( 31,20 ), 0 )
 		self.m_staticText_fuse570.Wrap( -1 )
 
 		self.m_staticText_fuse570.SetFont( wx.Font( 9, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, "宋体" ) )
@@ -889,7 +889,7 @@ class secBootWin ( wx.Frame ):
 		self.m_staticText_fuse580.Wrap( -1 )
 
 		self.m_staticText_fuse580.SetFont( wx.Font( wx.NORMAL_FONT.GetPointSize(), wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, wx.EmptyString ) )
-		self.m_staticText_fuse580.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_INFOBK ) )
+		self.m_staticText_fuse580.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
 
 		bSizer_fuseGroupTxt1.Add( self.m_staticText_fuse580, 0, wx.ALL, 5 )
 
@@ -897,7 +897,7 @@ class secBootWin ( wx.Frame ):
 		self.m_staticText_fuse590.Wrap( -1 )
 
 		self.m_staticText_fuse590.SetFont( wx.Font( wx.NORMAL_FONT.GetPointSize(), wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, wx.EmptyString ) )
-		self.m_staticText_fuse590.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_INFOBK ) )
+		self.m_staticText_fuse590.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
 
 		bSizer_fuseGroupTxt1.Add( self.m_staticText_fuse590, 0, wx.ALL, 5 )
 
@@ -905,7 +905,7 @@ class secBootWin ( wx.Frame ):
 		self.m_staticText_fuse5a0.Wrap( -1 )
 
 		self.m_staticText_fuse5a0.SetFont( wx.Font( wx.NORMAL_FONT.GetPointSize(), wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, wx.EmptyString ) )
-		self.m_staticText_fuse5a0.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_INFOBK ) )
+		self.m_staticText_fuse5a0.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
 
 		bSizer_fuseGroupTxt1.Add( self.m_staticText_fuse5a0, 0, wx.ALL, 5 )
 
@@ -913,7 +913,7 @@ class secBootWin ( wx.Frame ):
 		self.m_staticText_fuse5b0.Wrap( -1 )
 
 		self.m_staticText_fuse5b0.SetFont( wx.Font( wx.NORMAL_FONT.GetPointSize(), wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, wx.EmptyString ) )
-		self.m_staticText_fuse5b0.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_INFOBK ) )
+		self.m_staticText_fuse5b0.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
 
 		bSizer_fuseGroupTxt1.Add( self.m_staticText_fuse5b0, 0, wx.ALL, 5 )
 
@@ -973,7 +973,7 @@ class secBootWin ( wx.Frame ):
 		self.m_staticText_fuse5c0.Wrap( -1 )
 
 		self.m_staticText_fuse5c0.SetFont( wx.Font( wx.NORMAL_FONT.GetPointSize(), wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, wx.EmptyString ) )
-		self.m_staticText_fuse5c0.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_INFOBK ) )
+		self.m_staticText_fuse5c0.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
 
 		bSizer_fuseGroupTxt2.Add( self.m_staticText_fuse5c0, 0, wx.ALL, 5 )
 
@@ -981,7 +981,7 @@ class secBootWin ( wx.Frame ):
 		self.m_staticText_fuse5d0.Wrap( -1 )
 
 		self.m_staticText_fuse5d0.SetFont( wx.Font( wx.NORMAL_FONT.GetPointSize(), wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, wx.EmptyString ) )
-		self.m_staticText_fuse5d0.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_INFOBK ) )
+		self.m_staticText_fuse5d0.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
 
 		bSizer_fuseGroupTxt2.Add( self.m_staticText_fuse5d0, 0, wx.ALL, 5 )
 
@@ -989,7 +989,7 @@ class secBootWin ( wx.Frame ):
 		self.m_staticText_fuse5e0.Wrap( -1 )
 
 		self.m_staticText_fuse5e0.SetFont( wx.Font( wx.NORMAL_FONT.GetPointSize(), wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, wx.EmptyString ) )
-		self.m_staticText_fuse5e0.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_INFOBK ) )
+		self.m_staticText_fuse5e0.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
 
 		bSizer_fuseGroupTxt2.Add( self.m_staticText_fuse5e0, 0, wx.ALL, 5 )
 
@@ -997,7 +997,7 @@ class secBootWin ( wx.Frame ):
 		self.m_staticText_fuse5f0.Wrap( -1 )
 
 		self.m_staticText_fuse5f0.SetFont( wx.Font( wx.NORMAL_FONT.GetPointSize(), wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, wx.EmptyString ) )
-		self.m_staticText_fuse5f0.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_INFOBK ) )
+		self.m_staticText_fuse5f0.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
 
 		bSizer_fuseGroupTxt2.Add( self.m_staticText_fuse5f0, 0, wx.ALL, 5 )
 
@@ -1068,7 +1068,7 @@ class secBootWin ( wx.Frame ):
 		self.m_staticText_fuse690.Wrap( -1 )
 
 		self.m_staticText_fuse690.SetFont( wx.Font( wx.NORMAL_FONT.GetPointSize(), wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, wx.EmptyString ) )
-		self.m_staticText_fuse690.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_INFOBK ) )
+		self.m_staticText_fuse690.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
 
 		bSizer_fuseGroupTxt2.Add( self.m_staticText_fuse690, 0, wx.ALL, 5 )
 
@@ -1128,7 +1128,7 @@ class secBootWin ( wx.Frame ):
 		self.m_staticText_fuse6a0.Wrap( -1 )
 
 		self.m_staticText_fuse6a0.SetFont( wx.Font( wx.NORMAL_FONT.GetPointSize(), wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, wx.EmptyString ) )
-		self.m_staticText_fuse6a0.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_INFOBK ) )
+		self.m_staticText_fuse6a0.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
 
 		bSizer_fuseGroupTxt3.Add( self.m_staticText_fuse6a0, 0, wx.ALL, 5 )
 
@@ -1136,7 +1136,7 @@ class secBootWin ( wx.Frame ):
 		self.m_staticText_fuse6b0.Wrap( -1 )
 
 		self.m_staticText_fuse6b0.SetFont( wx.Font( wx.NORMAL_FONT.GetPointSize(), wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, wx.EmptyString ) )
-		self.m_staticText_fuse6b0.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_INFOBK ) )
+		self.m_staticText_fuse6b0.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
 
 		bSizer_fuseGroupTxt3.Add( self.m_staticText_fuse6b0, 0, wx.ALL, 5 )
 
@@ -1144,7 +1144,7 @@ class secBootWin ( wx.Frame ):
 		self.m_staticText_fuse6c0.Wrap( -1 )
 
 		self.m_staticText_fuse6c0.SetFont( wx.Font( wx.NORMAL_FONT.GetPointSize(), wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, wx.EmptyString ) )
-		self.m_staticText_fuse6c0.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_INFOBK ) )
+		self.m_staticText_fuse6c0.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
 
 		bSizer_fuseGroupTxt3.Add( self.m_staticText_fuse6c0, 0, wx.ALL, 5 )
 
@@ -1152,7 +1152,7 @@ class secBootWin ( wx.Frame ):
 		self.m_staticText_fuse6d0.Wrap( -1 )
 
 		self.m_staticText_fuse6d0.SetFont( wx.Font( 9, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, "宋体" ) )
-		self.m_staticText_fuse6d0.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_ACTIVECAPTION ) )
+		self.m_staticText_fuse6d0.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
 
 		bSizer_fuseGroupTxt3.Add( self.m_staticText_fuse6d0, 0, wx.ALL, 5 )
 
@@ -1160,7 +1160,7 @@ class secBootWin ( wx.Frame ):
 		self.m_staticText_fuse6e0.Wrap( -1 )
 
 		self.m_staticText_fuse6e0.SetFont( wx.Font( 9, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, "宋体" ) )
-		self.m_staticText_fuse6e0.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_ACTIVECAPTION ) )
+		self.m_staticText_fuse6e0.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
 
 		bSizer_fuseGroupTxt3.Add( self.m_staticText_fuse6e0, 0, wx.ALL, 5 )
 
@@ -1241,10 +1241,10 @@ class secBootWin ( wx.Frame ):
 		self.m_textCtrl_fuse6c0 = wx.TextCtrl( self.m_panel_fuseUtil, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.Size( 75,20 ), 0 )
 		bSizer_fuseGroupCtrl3.Add( self.m_textCtrl_fuse6c0, 0, wx.ALL, 5 )
 
-		self.m_textCtrl_fuse6d0 = wx.TextCtrl( self.m_panel_fuseUtil, wx.ID_ANY, u"Misc Conf", wx.DefaultPosition, wx.Size( 75,20 ), 0 )
+		self.m_textCtrl_fuse6d0 = wx.TextCtrl( self.m_panel_fuseUtil, wx.ID_ANY, u"Misc Conf0", wx.DefaultPosition, wx.Size( 75,20 ), 0 )
 		bSizer_fuseGroupCtrl3.Add( self.m_textCtrl_fuse6d0, 0, wx.ALL, 5 )
 
-		self.m_textCtrl_fuse6e0 = wx.TextCtrl( self.m_panel_fuseUtil, wx.ID_ANY, u"Misc Conf", wx.DefaultPosition, wx.Size( 75,20 ), 0 )
+		self.m_textCtrl_fuse6e0 = wx.TextCtrl( self.m_panel_fuseUtil, wx.ID_ANY, u"Misc Conf1", wx.DefaultPosition, wx.Size( 75,20 ), 0 )
 		self.m_textCtrl_fuse6e0.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
 
 		bSizer_fuseGroupCtrl3.Add( self.m_textCtrl_fuse6e0, 0, wx.ALL, 5 )
@@ -1477,7 +1477,7 @@ class secBootWin ( wx.Frame ):
 		self.m_staticText_fuse8c0.Wrap( -1 )
 
 		self.m_staticText_fuse8c0.SetFont( wx.Font( wx.NORMAL_FONT.GetPointSize(), wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, wx.EmptyString ) )
-		self.m_staticText_fuse8c0.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_INFOBK ) )
+		self.m_staticText_fuse8c0.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
 
 		bSizer_fuseGroupTxt5.Add( self.m_staticText_fuse8c0, 0, wx.ALL, 5 )
 
@@ -1485,7 +1485,7 @@ class secBootWin ( wx.Frame ):
 		self.m_staticText_fuse8d0.Wrap( -1 )
 
 		self.m_staticText_fuse8d0.SetFont( wx.Font( wx.NORMAL_FONT.GetPointSize(), wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, wx.EmptyString ) )
-		self.m_staticText_fuse8d0.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_INFOBK ) )
+		self.m_staticText_fuse8d0.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
 
 		bSizer_fuseGroupTxt5.Add( self.m_staticText_fuse8d0, 0, wx.ALL, 5 )
 
@@ -1493,7 +1493,7 @@ class secBootWin ( wx.Frame ):
 		self.m_staticText_fuse8e0.Wrap( -1 )
 
 		self.m_staticText_fuse8e0.SetFont( wx.Font( wx.NORMAL_FONT.GetPointSize(), wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, wx.EmptyString ) )
-		self.m_staticText_fuse8e0.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_INFOBK ) )
+		self.m_staticText_fuse8e0.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
 
 		bSizer_fuseGroupTxt5.Add( self.m_staticText_fuse8e0, 0, wx.ALL, 5 )
 
@@ -1501,7 +1501,7 @@ class secBootWin ( wx.Frame ):
 		self.m_staticText_fuse8f0.Wrap( -1 )
 
 		self.m_staticText_fuse8f0.SetFont( wx.Font( wx.NORMAL_FONT.GetPointSize(), wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, wx.EmptyString ) )
-		self.m_staticText_fuse8f0.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_INFOBK ) )
+		self.m_staticText_fuse8f0.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
 
 		bSizer_fuseGroupTxt5.Add( self.m_staticText_fuse8f0, 0, wx.ALL, 5 )
 

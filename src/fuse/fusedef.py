@@ -115,12 +115,14 @@ kEfuseRemapIndex_Dest = 0x40
 kEfuseRemapLen = 16
 
 ##################################################
-kEfuseEntryModeRegion0IndexStart = 0x05
-kEfuseEntryModeRegion0IndexEnd   = 0x07
-kEfuseEntryModeRegion1IndexStart = 0x18
-kEfuseEntryModeRegion1IndexEnd   = 0x1F
-kEfuseEntryModeRegion2IndexStart = 0x29
-kEfuseEntryModeRegion2IndexEnd   = 0x2E
-kEfuseEntryModeRegion3IndexStart = 0x4C
-kEfuseEntryModeRegion3IndexEnd   = 0x4F
+kEfuseEntryModeRegion0IndexStart = 0x01
+kEfuseEntryModeRegion0IndexEnd   = 0x02
+kEfuseEntryModeRegion1IndexStart = 0x05
+kEfuseEntryModeRegion1IndexEnd   = 0x07
+kEfuseEntryModeRegion2IndexStart = 0x18
+kEfuseEntryModeRegion2IndexEnd   = 0x1F
+kEfuseEntryModeRegion3IndexStart = 0x29
+kEfuseEntryModeRegion3IndexEnd   = 0x2E
+kEfuseEntryModeRegion4IndexStart = 0x4C
+kEfuseEntryModeRegion4IndexEnd   = 0x4F
 

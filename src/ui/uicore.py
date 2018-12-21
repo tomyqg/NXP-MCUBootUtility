@@ -778,8 +778,7 @@ class secBootUi(secBootWin.secBootWin):
         else:
             color = wx.SYS_COLOUR_WINDOW
         self.m_textCtrl_fuse400.SetBackgroundColour( wx.SystemSettings.GetColour( color ) )
-        self.m_textCtrl_fuse410.SetBackgroundColour( wx.SystemSettings.GetColour( color ) )
-        self.m_textCtrl_fuse420.SetBackgroundColour( wx.SystemSettings.GetColour( color ) )
+
         self.m_textCtrl_fuse430.SetBackgroundColour( wx.SystemSettings.GetColour( color ) )
         self.m_textCtrl_fuse440.SetBackgroundColour( wx.SystemSettings.GetColour( color ) )
 

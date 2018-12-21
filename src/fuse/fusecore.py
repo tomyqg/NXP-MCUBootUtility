@@ -27,7 +27,8 @@ class secBootFuse(runcore.secBootRun):
                 if (i >= fusedef.kEfuseEntryModeRegion0IndexStart and i <= fusedef.kEfuseEntryModeRegion0IndexEnd) or \
                    (i >= fusedef.kEfuseEntryModeRegion1IndexStart and i <= fusedef.kEfuseEntryModeRegion1IndexEnd) or \
                    (i >= fusedef.kEfuseEntryModeRegion2IndexStart and i <= fusedef.kEfuseEntryModeRegion2IndexEnd) or \
-                   (i >= fusedef.kEfuseEntryModeRegion3IndexStart and i <= fusedef.kEfuseEntryModeRegion3IndexEnd):
+                   (i >= fusedef.kEfuseEntryModeRegion3IndexStart and i <= fusedef.kEfuseEntryModeRegion3IndexEnd) or \
+                   (i >= fusedef.kEfuseEntryModeRegion4IndexStart and i <= fusedef.kEfuseEntryModeRegion4IndexEnd):
                     self.runModeFuseFlagList[i] = True
                 else:
                     self.runModeFuseFlagList[i] = False
