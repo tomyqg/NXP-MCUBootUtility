@@ -36,6 +36,9 @@ class secBootUi(secBootWin.secBootWin):
         toolCommDict = uivar.getAdvancedSettings(uidef.kAdvancedSettings_Tool)
         self.toolCommDict = toolCommDict.copy()
 
+        self.logFolder = os.path.join(self.exeTopRoot, 'gen', 'log_file')
+        self.logFilename = os.path.join(self.exeTopRoot, 'gen', 'log_file', 'log.txt')
+
         self.isToolRunAsEntryMode = None
         self._initToolRunMode()
         self.setToolRunMode()
@@ -634,6 +637,11 @@ class secBootUi(secBootWin.secBootWin):
 
     def clearLog( self ):
         self.m_textCtrl_log.Clear()
+
+    def saveLog( self ):
+        self.m_textCtrl_log.SaveFile(self.logFilename)
+        msgText = (('Log is saved in file: ' + self.logFilename + ' \n'))
+        wx.MessageBox(msgText, "Log Info", wx.OK | wx.ICON_INFORMATION)
 
     def increaseGauge( self, evt ):
         global s_isGaugeWorking

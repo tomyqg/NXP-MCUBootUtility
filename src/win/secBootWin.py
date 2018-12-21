@@ -1736,6 +1736,7 @@ class secBootWin ( wx.Frame ):
 		self.m_button_viewMem.Bind( wx.EVT_BUTTON, self.callbackViewMem )
 		self.m_button_clearMem.Bind( wx.EVT_BUTTON, self.callbackClearMem )
 		self.m_button_clearLog.Bind( wx.EVT_BUTTON, self.callbackClearLog )
+		self.m_button_saveLog.Bind( wx.EVT_BUTTON, self.callbackSaveLog )
 
 	def __del__( self ):
 		pass
@@ -1854,6 +1855,9 @@ class secBootWin ( wx.Frame ):
 		event.Skip()
 
 	def callbackClearLog( self, event ):
+		event.Skip()
+
+	def callbackSaveLog( self, event ):
 		event.Skip()
 
 

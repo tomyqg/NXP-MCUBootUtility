@@ -603,6 +603,9 @@ class secBootMain(memcore.secBootMem):
     def callbackClearLog( self, event ):
         self.clearLog()
 
+    def callbackSaveLog( self, event ):
+        self.saveLog()
+
     def _deinitToolToExit( self ):
         if self.usbhidDetectTimer != None:
             self.usbhidDetectTimer.cancel()
