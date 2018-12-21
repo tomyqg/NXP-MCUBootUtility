@@ -1,6 +1,6 @@
 # nxpSecBoot
 
-[![GitHub release](https://img.shields.io/github/release/JayHeng/nxp-sec-boot-ui.svg)](https://github.com/JayHeng/nxp-sec-boot-ui/releases/latest) [![GitHub commits](https://img.shields.io/github/commits-since/JayHeng/nxp-sec-boot-ui/v0.11.2.svg)](https://github.com/JayHeng/nxp-sec-boot-ui/compare/v0.11.2...master)
+[![GitHub release](https://img.shields.io/github/release/JayHeng/nxp-sec-boot-ui.svg)](https://github.com/JayHeng/nxp-sec-boot-ui/releases/latest) [![GitHub commits](https://img.shields.io/github/commits-since/JayHeng/nxp-sec-boot-ui/v0.15.0.svg)](https://github.com/JayHeng/nxp-sec-boot-ui/compare/v0.15.0...master)
 
 中文 | [English](./README-en.md)
 
@@ -50,8 +50,10 @@
                       \bd_file                  --根据配置动态生成的BD文件
                       \bee_crypto               --BEE加密过程中生成的文件
                       \bootable_image           --生成的bootable image文件
+                      \dcd_file                 --生成的DCD数据文件
                       \hab_cert                 --HAB签名过程中生成的文件
                       \hab_crypto               --HAB加密过程中生成的文件
+                      \log_file                 --保存软件操作记录日志
                       \user_file                --软件运行过程中缓存的临时文件
                 \gui                         --放置开发nxpSecBoot UI构建工程文件
                 \img                         --放置nxpSecBoot使用过程中需加载的图片
