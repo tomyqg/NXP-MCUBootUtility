@@ -607,9 +607,10 @@ class secBootUi(secBootWin.secBootWin):
             self.m_button_prepBee.SetLabel('Prepare For Encryption')
             self.m_button_prepBee.SetBackgroundColour( uidef.kBootSeqColor_Active )
         elif self.keyStorageRegion == uidef.kKeyStorageRegion_FlexibleUserKeys:
+            enableCertForBeeTxt = self.m_choice_enableCertForBee.GetString(self.m_choice_enableCertForBee.GetSelection())
             self.m_choice_enableCertForBee.Clear()
             self.m_choice_enableCertForBee.SetItems(['Yes', 'No'])
-            self.m_choice_enableCertForBee.SetSelection(1)
+            self.m_choice_enableCertForBee.SetSelection(self.m_choice_enableCertForBee.FindString(enableCertForBeeTxt))
             self.setBeeCertColor()
             self.m_choice_availBeeEngines.Clear()
             self.m_choice_availBeeEngines.SetItems(['2'])
