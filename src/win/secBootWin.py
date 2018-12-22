@@ -69,6 +69,9 @@ class secBootWin ( wx.Frame ):
 		self.m_menuItem_specialThanks = wx.MenuItem( self.m_menu_help, wx.ID_ANY, u"Special Thanks", wx.EmptyString, wx.ITEM_NORMAL )
 		self.m_menu_help.Append( self.m_menuItem_specialThanks )
 
+		self.m_menuItem_revisionHistory = wx.MenuItem( self.m_menu_help, wx.ID_ANY, u"Revision History", wx.EmptyString, wx.ITEM_NORMAL )
+		self.m_menu_help.Append( self.m_menuItem_revisionHistory )
+
 		self.m_menubar.Append( self.m_menu_help, u"Help" )
 
 		self.SetMenuBar( self.m_menubar )
@@ -366,7 +369,7 @@ class secBootWin ( wx.Frame ):
 
 		sbSizer_browseApp.Add( self.m_staticText_appBaseAddr, 0, wx.ALL, 5 )
 
-		self.m_textCtrl_appBaseAddr = wx.TextCtrl( sbSizer_browseApp.GetStaticBox(), wx.ID_ANY, u"0x00003000", wx.DefaultPosition, wx.Size( 180,-1 ), 0 )
+		self.m_textCtrl_appBaseAddr = wx.TextCtrl( sbSizer_browseApp.GetStaticBox(), wx.ID_ANY, u"Eg: 0x00003000", wx.DefaultPosition, wx.Size( 180,-1 ), 0 )
 		self.m_textCtrl_appBaseAddr.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
 
 		sbSizer_browseApp.Add( self.m_textCtrl_appBaseAddr, 0, wx.ALIGN_CENTER|wx.ALL, 5 )
@@ -1705,6 +1708,7 @@ class secBootWin ( wx.Frame ):
 		self.Bind( wx.EVT_MENU, self.callbackShowHomePage, id = self.m_menuItem_homePage.GetId() )
 		self.Bind( wx.EVT_MENU, self.callbackShowAboutAuthor, id = self.m_menuItem_aboutAuthor.GetId() )
 		self.Bind( wx.EVT_MENU, self.callbackShowSpecialThanks, id = self.m_menuItem_specialThanks.GetId() )
+		self.Bind( wx.EVT_MENU, self.callbackShowRevisionHistory, id = self.m_menuItem_revisionHistory.GetId() )
 		self.m_choice_mcuSeries.Bind( wx.EVT_CHOICE, self.callbackSetMcuSeries )
 		self.m_choice_mcuDevice.Bind( wx.EVT_CHOICE, self.callbackSetMcuDevice )
 		self.m_choice_bootDevice.Bind( wx.EVT_CHOICE, self.callbackSetBootDevice )
@@ -1762,6 +1766,9 @@ class secBootWin ( wx.Frame ):
 		event.Skip()
 
 	def callbackShowSpecialThanks( self, event ):
+		event.Skip()
+
+	def callbackShowRevisionHistory( self, event ):
 		event.Skip()
 
 	def callbackSetMcuSeries( self, event ):

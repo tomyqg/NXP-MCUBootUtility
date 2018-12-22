@@ -654,6 +654,49 @@ class secBootMain(memcore.secBootMem):
         msgText = ((helper.encode('utf-8')))
         wx.MessageBox(msgText, "Special Thanks", wx.OK | wx.ICON_INFORMATION)
 
+    def callbackShowRevisionHistory( self, event ):
+        revision_0_15_1 = "【v0.15.1】 \n" + \
+                         "  Feature: \n" + \
+                         "    1. Support DCD (use to load image into SDRAM) \n" + \
+                         "    2. Support new format(.axf/.hex/.bin) user image \n" + \
+                         "  Improvement: \n" + \
+                         "    1. Tool can be put in Chinese path \n" + \
+                         "    2. Can keep all user settings (use json file) \n" + \
+                         "    3. Can back up certificate with time stamp \n" + \
+                         "    4. Can verify image vector address for BD \n" + \
+                         "  Bugfix: \n" + \
+                         "    1. Should always enable cert for BEE encryption (SNVS Key) \n" + \
+                         "    2. Fix UART port connection issue in one-step mode \n" + \
+                         "    3. KBL-4 Fix one-step issue in tool master mode \n" + \
+                         "    4. KBL-8 Fix fuse lock programming issue \n\n"
+        revision_0_11_2 = "【v0.11.2】 \n" + \
+                         "  Feature: \n" + \
+                         "    1. Support i.MXRT1064 SIP \n" + \
+                         "    2. Support LPSPI NOR/EEPROM recovery boot device \n" + \
+                         "    3. Support common boot device memory operation \n" + \
+                         "    4. Support for reading back and marking bootable image from SEMC NAND/LPSPI NOR device \n" + \
+                         "  Improvement: \n" + \
+                         "    1. Support for generating random key (BEE encryption) \n" + \
+                         "    2. User image/bin file can be placed in the path with Chinese/blank space \n" + \
+                         "    3. Can validate the range and applicability of user image \n" + \
+                         "  Bugfix: \n" + \
+                         "    1. Can only switch mcu device before connecting to device \n\n"
+        revision_0_9_3 = "【v0.9.3】 \n" + \
+                         "  Feature: \n" + \
+                         "    1. Support i.MXRT1021, i.MXRT1051/1052, i.MXRT1061/1062 \n" + \
+                         "    2. Support both UART and USB-HID serial downloader modes \n" + \
+                         "    3. Support two kinds of user application image file format (.elf and .srec) \n" + \
+                         "    4. Support FlexSPI NOR and SEMC NAND boot devices \n" + \
+                         "    5. Support HAB encryption (Signed only, Signed and Encrypted) \n" + \
+                         "    6. Support BEE encryption (SNVS Key, User Keys) \n" + \
+                         "    7. Support HAB & BEE encryption (HAB Signed - BEE Encrypted) \n" + \
+                         "    8. Support common eFuse memory operation \n" + \
+                         "    9. Support for reading back and marking bootable image from FlexSPI NOR device \n\n"
+        msgText = ((revision_0_15_1.encode('utf-8')) +
+                   (revision_0_11_2.encode('utf-8')) +
+                   (revision_0_9_3.encode('utf-8')))
+        wx.MessageBox(msgText, "Revision History", wx.OK | wx.ICON_INFORMATION)
+
 if __name__ == '__main__':
     app = wx.App()
 

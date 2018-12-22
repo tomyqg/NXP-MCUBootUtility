@@ -1,6 +1,6 @@
 # nxpSecBoot
 
-[![GitHub release](https://img.shields.io/github/release/JayHeng/nxp-sec-boot-ui.svg)](https://github.com/JayHeng/nxp-sec-boot-ui/releases/latest) [![GitHub commits](https://img.shields.io/github/commits-since/JayHeng/nxp-sec-boot-ui/v0.15.0.svg)](https://github.com/JayHeng/nxp-sec-boot-ui/compare/v0.15.0...master)
+[![GitHub release](https://img.shields.io/github/release/JayHeng/nxp-sec-boot-ui.svg)](https://github.com/JayHeng/nxp-sec-boot-ui/releases/latest) [![GitHub commits](https://img.shields.io/github/commits-since/JayHeng/nxp-sec-boot-ui/v0.15.1.svg)](https://github.com/JayHeng/nxp-sec-boot-ui/compare/v0.15.1...master)
 
 中文 | [English](./README-en.md)
 
