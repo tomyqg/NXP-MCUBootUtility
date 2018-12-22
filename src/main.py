@@ -559,7 +559,10 @@ class secBootMain(memcore.secBootMem):
 
     def callbackViewMem( self, event ):
         if self.connectStage == uidef.kConnectStage_Reset:
-            self.readProgrammedMemoryAndShow()
+            if self.hasAppBeenFlashedOnce:
+                self.readProgrammedMemoryAndShow()
+            else:
+                self.popupMsgBox('Please flash image into boot device first!')
         else:
             self.popupMsgBox('Please configure boot device via Flashloader first!')
 
