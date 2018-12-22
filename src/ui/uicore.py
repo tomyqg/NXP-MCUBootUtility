@@ -179,8 +179,16 @@ class secBootUi(secBootWin.secBootWin):
                 self.m_choice_baudPid.Clear()
                 self.m_choice_portVid.SetItems(ports)
                 self.m_choice_baudPid.SetItems(rundef.kUartSpeed_Sdphost)
-                self.m_choice_portVid.SetSelection(0)
-                self.m_choice_baudPid.SetSelection(0)
+                lastPort = self.m_choice_portVid.GetString(self.m_choice_portVid.GetSelection())
+                lastBaud = self.m_choice_baudPid.GetString(self.m_choice_baudPid.GetSelection())
+                if lastPort in ports:
+                    self.m_choice_portVid.SetSelection(self.m_choice_portVid.FindString(lastPort))
+                else:
+                    self.m_choice_portVid.SetSelection(0)
+                if lastBaud in rundef.kUartSpeed_Sdphost:
+                    self.m_choice_baudPid.SetSelection(self.m_choice_baudPid.FindString(lastBaud))
+                else:
+                    self.m_choice_baudPid.SetSelection(0)
             elif connectStage == uidef.kConnectStage_Flashloader:
                 if not self.isOneStepConnectMode:
                     lastPort = self.m_choice_portVid.GetString(self.m_choice_portVid.GetSelection())
@@ -636,7 +644,7 @@ class secBootUi(secBootWin.secBootWin):
 
     def printLog( self, logStr ):
         try:
-            self.m_textCtrl_log.write(logStr)
+            self.m_textCtrl_log.write(logStr + "\n")
         except:
             pass
 
