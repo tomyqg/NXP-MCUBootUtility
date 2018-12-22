@@ -85,9 +85,10 @@ class secBootUiCfgDcd(bootDeviceWin_DCD.bootDeviceWin_DCD):
     def _getDcdBinFile( self ):
         status = True
         if self.dcdSettingsDict['dcdSource'] == 'Use DCD bin file':
-            self.dcdSettingsDict['userBinFile'] = self.m_filePicker_dcdBinFile.GetPath().encode('utf-8').encode("gbk")
-            if os.path.isfile(self.dcdSettingsDict['userBinFile']):
-                shutil.copy(self.dcdSettingsDict['userBinFile'], self.destBinFilename)
+            dcdBinFile = self.m_filePicker_dcdBinFile.GetPath().encode('utf-8').encode("gbk")
+            if os.path.isfile(dcdBinFile):
+                shutil.copy(dcdBinFile, self.destBinFilename)
+                self.dcdSettingsDict['userBinFile'] = dcdBinFile.decode("gbk")
                 self.dcdCtrlDict['dcdFileType'] = gendef.kUserDcdFileType_Bin
             else:
                 status = False
@@ -98,9 +99,10 @@ class secBootUiCfgDcd(bootDeviceWin_DCD.bootDeviceWin_DCD):
     def _getDcdCfgFile( self ):
         status = True
         if self.dcdSettingsDict['dcdSource'] == 'Use DCD cfg file':
-            self.dcdSettingsDict['userCfgFile'] = self.m_filePicker_dcdCfgFile.GetPath().encode('utf-8').encode("gbk")
-            if os.path.isfile(self.dcdSettingsDict['userCfgFile']):
-                shutil.copy(self.dcdSettingsDict['userCfgFile'], self.destCfgFilename)
+            dcdCfgFile = self.m_filePicker_dcdCfgFile.GetPath().encode('utf-8').encode("gbk")
+            if os.path.isfile(dcdCfgFile):
+                shutil.copy(dcdCfgFile, self.destCfgFilename)
+                self.dcdSettingsDict['userCfgFile'] = dcdCfgFile.decode("gbk")
                 self.dcdCtrlDict['dcdFileType'] = gendef.kUserDcdFileType_Cfg
             else:
                 status = False

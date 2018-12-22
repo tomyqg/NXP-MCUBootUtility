@@ -679,7 +679,7 @@ class secBootUi(secBootWin.secBootWin):
 
     def getUserAppFilePath( self ):
         appPath = self.m_filePicker_appPath.GetPath()
-        self.toolCommDict['appFilename'] = appPath.encode('utf-8').encode("gbk")
+        self.toolCommDict['appFilename'] = appPath.encode("utf-8")
         return appPath.encode('utf-8').encode("gbk")
 
     def getUserAppFileFormat( self ):

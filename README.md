@@ -28,6 +28,7 @@
 
 > * 安装包: https://github.com/JayHeng/nxp-sec-boot-ui/releases  
 > * 源代码: https://github.com/JayHeng/nxp-sec-boot-ui  
+> * 问题反馈：https://www.cnblogs.com/henjay724/p/10159925.html
 
 　　nxpSecBoot在发布时借助PyInstaller将所有的Python依赖全部打包进一个可执行文件（\nxp-sec-boot-ui\bin\nxpSecBoot.exe），因此如果不是对nxpSecBoot的二次开发，你不需要安装任何Python软件及相关库。  
 
