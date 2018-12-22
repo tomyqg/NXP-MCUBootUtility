@@ -21,12 +21,12 @@ class secBootGen(uicore.secBootUi):
         uicore.secBootUi.__init__(self, parent)
         self.serialFilename = os.path.join(self.exeTopRoot, 'gen', 'hab_cert', 'serial')
         self.keypassFilename = os.path.join(self.exeTopRoot, 'gen', 'hab_cert', 'key_pass.txt')
-        self.cstBinFolder = os.path.join(self.exeTopRoot, 'tools', 'cst', uidef.kCstVersion_Invalid, 'mingw32', 'bin')
-        self.cstKeysFolder = os.path.join(self.exeTopRoot, 'tools', 'cst', uidef.kCstVersion_Invalid, 'keys')
-        self.cstCrtsFolder = os.path.join(self.exeTopRoot, 'tools', 'cst', uidef.kCstVersion_Invalid, 'crts')
-        self.hab4PkiTreePath = os.path.join(self.exeTopRoot, 'tools', 'cst', uidef.kCstVersion_Invalid, 'keys')
+        self.cstBinFolder = os.path.join(self.exeTopRoot, 'tools', 'cst', uidef.kCstVersion_v3_0_1, 'mingw32', 'bin')
+        self.cstKeysFolder = os.path.join(self.exeTopRoot, 'tools', 'cst', uidef.kCstVersion_v3_0_1, 'keys')
+        self.cstCrtsFolder = os.path.join(self.exeTopRoot, 'tools', 'cst', uidef.kCstVersion_v3_0_1, 'crts')
+        self.hab4PkiTreePath = os.path.join(self.exeTopRoot, 'tools', 'cst', uidef.kCstVersion_v3_0_1, 'keys')
         self.hab4PkiTreeName = 'hab4_pki_tree.bat'
-        self.srktoolPath = os.path.join(self.exeTopRoot, 'tools', 'cst', uidef.kCstVersion_Invalid, 'mingw32', 'bin', 'srktool.exe')
+        self.srktoolPath = os.path.join(self.exeTopRoot, 'tools', 'cst', uidef.kCstVersion_v3_0_1, 'mingw32', 'bin', 'srktool.exe')
         self.srkFolder = os.path.join(self.exeTopRoot, 'gen', 'hab_cert')
         self.srkTableFilename = None
         self.srkFuseFilename = None
@@ -35,11 +35,11 @@ class secBootGen(uicore.secBootUi):
         self.crtImgUsrPemFileList = [None] * 4
         self.certBackupFolder = os.path.join(self.exeTopRoot, 'gen', 'hab_cert', 'backup')
         self.srkBatFilename = os.path.join(self.exeTopRoot, 'gen', 'hab_cert', 'imx_srk_gen.bat')
-        self.cstBinToElftosbPath = '../../cst/' + uidef.kCstVersion_Invalid + '/mingw32/bin'
-        self.cstCrtsToElftosbPath = '../../cst/' + uidef.kCstVersion_Invalid + '/crts/'
+        self.cstBinToElftosbPath = '../../cst/' + uidef.kCstVersion_v3_0_1 + '/mingw32/bin'
+        self.cstCrtsToElftosbPath = '../../cst/' + uidef.kCstVersion_v3_0_1 + '/crts/'
         self.genCertToElftosbPath = '../../../gen/hab_cert/'
         self.genCryptoToElftosbPath = '../../../gen/hab_crypto/'
-        self.lastCstVersion = uidef.kCstVersion_Invalid
+        self.lastCstVersion = uidef.kCstVersion_v3_0_1
         self.opensslBinFolder = os.path.join(self.exeTopRoot, 'tools', 'openssl', '1.1.0j', 'win32')
         self.habDekFilename = os.path.join(self.exeTopRoot, 'gen', 'hab_crypto', 'hab_dek.bin')
         self.habDekDataOffset = None
@@ -107,8 +107,8 @@ class secBootGen(uicore.secBootUi):
             self.cstBinToElftosbPath = self.cstBinToElftosbPath.replace(self.lastCstVersion, certSettingsDict['cstVersion'])
             self.cstCrtsToElftosbPath = self.cstCrtsToElftosbPath.replace(self.lastCstVersion, certSettingsDict['cstVersion'])
             self.lastCstVersion = certSettingsDict['cstVersion']
-            self._copyCstBinToElftosbFolder()
-            self._copyOpensslBinToCstFolder()
+        self._copyCstBinToElftosbFolder()
+        self._copyOpensslBinToCstFolder()
 
     def _copySerialAndKeypassfileToCstFolder( self ):
         shutil.copy(self.serialFilename, self.cstKeysFolder)

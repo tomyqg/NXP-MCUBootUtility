@@ -658,7 +658,7 @@ if __name__ == '__main__':
     app = wx.App()
 
     g_main_win = secBootMain(None)
-    g_main_win.SetTitle(u"nxpSecBoot v0.15.0")
+    g_main_win.SetTitle(u"nxpSecBoot v0.15.1")
     g_main_win.Show()
 
     app.MainLoop()

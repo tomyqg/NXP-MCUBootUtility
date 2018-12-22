@@ -630,18 +630,21 @@ class secBootUi(secBootWin.secBootWin):
         self.Refresh()
 
     def popupMsgBox( self, msgStr ):
-        messageText = (msgStr)
+        messageText = (msgStr.encode('utf-8'))
         wx.MessageBox(messageText, "Error", wx.OK | wx.ICON_INFORMATION)
 
     def printLog( self, logStr ):
-        self.m_textCtrl_log.write(logStr + "\n")
+        try:
+            self.m_textCtrl_log.write(logStr)
+        except:
+            pass
 
     def clearLog( self ):
         self.m_textCtrl_log.Clear()
 
     def saveLog( self ):
         self.m_textCtrl_log.SaveFile(self.logFilename)
-        msgText = (('Log is saved in file: ' + self.logFilename + ' \n'))
+        msgText = (('Log is saved in file: ' + self.logFilename + ' \n').encode('utf-8'))
         wx.MessageBox(msgText, "Log Info", wx.OK | wx.ICON_INFORMATION)
 
     def increaseGauge( self, evt ):

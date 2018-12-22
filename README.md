@@ -37,8 +37,6 @@
 #### 1.3 安装
 　　nxpSecBoot是一个是纯绿色免安装的工具，下载了源代码包之后，直接双击\nxp-sec-boot-ui\bin\nxpSecBoot.exe即可使用。使用nxpSecBoot没有任何软件依赖，不需要额外安装任何软件。  
 
-> Note: nxpSecBoot安装包文件夹不能放置在含空格或中文的路径下，否则软件无法正常工作。  
-
 #### 1.4 目录
 
 　　nxpSecBoot软件目录组织如下：  
