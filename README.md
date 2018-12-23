@@ -24,7 +24,7 @@
 > * 支持从外部启动设备回读Bootable image，并对其组成部分（NFCB/DBBT/FDCB/EKIB/EPRDB/IVT/Boot Data/DCD/Image/CSF/DEK KeyBlob）进行标注  
 
 #### 1.2 下载
-　　nxpSecBoot完全基于Python语言开发，并且源代码全部开源，其具体开发环境为Python 2.7.14、wxPython 4.0.3、pySerial 3.4、pywinusb 0.4.2、bincopy 15.0.0、PyInstaller 3.3.1（或更高）。  
+　　nxpSecBoot完全基于Python语言开发，并且源代码全部开源，其具体开发环境为Python 2.7.15 (32bit)、wxPython 4.0.3、pySerial 3.4、pywinusb 0.4.2、bincopy 15.0.0、PyInstaller 3.3.1（或更高）。  
 
 > * 安装包: https://github.com/JayHeng/nxp-sec-boot-ui/releases  
 > * 源代码: https://github.com/JayHeng/nxp-sec-boot-ui  
@@ -32,7 +32,8 @@
 
 　　nxpSecBoot在发布时借助PyInstaller将所有的Python依赖全部打包进一个可执行文件（\nxp-sec-boot-ui\bin\nxpSecBoot.exe），因此如果不是对nxpSecBoot的二次开发，你不需要安装任何Python软件及相关库。  
 
-> Note: 源代码包里的nxpSecBoot.exe是在Windows 10 x64环境下打包的，也仅在该环境下测试过，如果因系统原因无法直接使用，你需要在\nxp-sec-boot-ui\env\目录下点击do_setup_by_pip.bat安装nxpSecBoot的Python开发环境，然后点击do_pack_by_pyinstaller.bat重新生成nxpSecBoot.exe可执行文件。  
+> Note1: 源代码包里的nxpSecBoot.exe是在Windows 10 x64环境下打包的，也仅在该环境下测试过，如果因系统原因无法直接使用，你需要先安装 [Python2.7.15 x86版本](https://www.python.org/ftp/python/2.7.15/python-2.7.15.msi) （安装完成后确认\Python27\, \Python27\Scripts\目录在系统环境变量Path里），然后在\nxp-sec-boot-ui\env\目录下点击do_setup_by_pip.bat安装开发nxpSecBoot所依赖的Python库，最后点击do_pack_by_pyinstaller.bat重新生成nxpSecBoot.exe可执行文件。  
+> Note2: 必须使用Python2 x86版本，因为nxpSecBoot使用了pywinusb库，该库在Python2 x64版本下无法用PyInstaller打包，pywinusb作者没有计划修复该问题。  
 
 #### 1.3 安装
 　　nxpSecBoot是一个是纯绿色免安装的工具，下载了源代码包之后，直接双击\nxp-sec-boot-ui\bin\nxpSecBoot.exe即可使用。使用nxpSecBoot没有任何软件依赖，不需要额外安装任何软件。  

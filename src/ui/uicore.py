@@ -63,7 +63,7 @@ class secBootUi(secBootWin.secBootWin):
         self.usbhidToConnect = [None] * 2
         self._initPortSetupValue()
         self.usbhidDetectTimer = None
-        #self.periodicUsbhidDetectTask()
+        self.periodicUsbhidDetectTask()
         self.isOneStepConnectMode = None
         self.initOneStepConnectMode()
 
@@ -126,10 +126,7 @@ class secBootUi(secBootWin.secBootWin):
     def periodicUsbhidDetectTask( self ):
         if self.isUsbhidPortSelected:
             self._retryToDetectUsbhidDevice(False)
-            if self.isUsbhidConnected:
-                self.usbhidDetectTimer = threading.Timer(3, self.periodicUsbhidDetectTask)
-            else:
-                self.usbhidDetectTimer = threading.Timer(1, self.periodicUsbhidDetectTask)
+            self.usbhidDetectTimer = threading.Timer(1, self.periodicUsbhidDetectTask)
             self.usbhidDetectTimer.start()
 
     def _retryToDetectUsbhidDevice( self, needToRetry = True ):
@@ -141,9 +138,9 @@ class secBootUi(secBootWin.secBootWin):
             retryCnt = kRetryDetectTimes
         while retryCnt > 0:
             # Auto detect USB-HID device
-            #hidFilter = pywinusb.hid.HidDeviceFilter(vendor_id = int(self.usbhidToConnect[0], 16), product_id = int(self.usbhidToConnect[1], 16))
-            #hidDevice = hidFilter.get_devices()
-            if True: #len(hidDevice) > 0:
+            hidFilter = pywinusb.hid.HidDeviceFilter(vendor_id = int(self.usbhidToConnect[0], 16), product_id = int(self.usbhidToConnect[1], 16))
+            hidDevice = hidFilter.get_devices()
+            if len(hidDevice) > 0:
                 self.isUsbhidConnected = True
                 usbVid[0] = self.usbhidToConnect[0]
                 usbPid[0] = self.usbhidToConnect[1]
