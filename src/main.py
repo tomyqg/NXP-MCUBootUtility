@@ -346,6 +346,9 @@ class secBootMain(memcore.secBootMem):
         self.getUserAppFilePath()
         self.setSecureBootButtonColor()
 
+    def callbackSetAppFormat( self, event ):
+        self.getUserAppFileFormat()
+
     def _doGenImage( self ):
         status = False
         if self.secureBootType == uidef.kSecureBootType_BeeCrypto and self.bootDevice != uidef.kBootDevice_FlexspiNor:

@@ -169,7 +169,7 @@ def initVar(cfgFilename):
                           'certKeyPass':'test',
                           'appFilename':None,
                           'appFormat':0,
-                          'appBinBaseAddr':'0x00003000',
+                          'appBinBaseAddr':'Eg: 0x00003000',
                           'keyStoreRegion':1,
                           'certOptForBee':0
                          }

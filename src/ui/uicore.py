@@ -33,7 +33,7 @@ class secBootUi(secBootWin.secBootWin):
         exeMainFile = os.path.join(self.exeTopRoot, 'src', 'main.py')
         if not os.path.isfile(exeMainFile):
             self.exeTopRoot = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
-        uivar.initVar(os.path.join(self.exeTopRoot, 'bin', 'nxpSecBoot.json'))
+        uivar.initVar(os.path.join(self.exeTopRoot, 'bin', 'nsb_settings.json'))
         toolCommDict = uivar.getAdvancedSettings(uidef.kAdvancedSettings_Tool)
         self.toolCommDict = toolCommDict.copy()
 
@@ -286,6 +286,8 @@ class secBootUi(secBootWin.secBootWin):
         self.m_textCtrl_keyPass.write(self.toolCommDict['certKeyPass'])
         if self.toolCommDict['appFilename'] != None:
             self.m_filePicker_appPath.SetPath(self.toolCommDict['appFilename'])
+        self.m_choice_appFormat.SetSelection(self.toolCommDict['appFormat'])
+        self._setUserBinaryBaseField()
         self.m_textCtrl_appBaseAddr.Clear()
         self.m_textCtrl_appBaseAddr.write(self.toolCommDict['appBinBaseAddr'])
         self.m_choice_keyStorageRegion.SetSelection(self.toolCommDict['keyStoreRegion'])
@@ -691,8 +693,16 @@ class secBootUi(secBootWin.secBootWin):
         self.toolCommDict['appFilename'] = appPath.encode("utf-8")
         return appPath.encode('utf-8').encode("gbk")
 
+    def _setUserBinaryBaseField( self ):
+        txt = self.m_choice_appFormat.GetString(self.m_choice_appFormat.GetSelection())
+        if txt == uidef.kAppImageFormat_AutoDetect or txt == uidef.kAppImageFormat_RawBinary:
+            self.m_textCtrl_appBaseAddr.Enable(True)
+        else:
+            self.m_textCtrl_appBaseAddr.Enable(False)
+
     def getUserAppFileFormat( self ):
         self.toolCommDict['appFormat'] = self.m_choice_appFormat.GetSelection()
+        self._setUserBinaryBaseField()
         return self.m_choice_appFormat.GetString(self.m_choice_appFormat.GetSelection())
 
     def getUserBinaryBaseAddress( self ):

@@ -360,7 +360,7 @@ class secBootWin ( wx.Frame ):
 		sbSizer_browseApp.Add( self.m_filePicker_appPath, 0, wx.ALIGN_CENTER|wx.ALL, 5 )
 
 		m_choice_appFormatChoices = [ u"Auto-detect image format", u".out(axf) from Keil MDK", u".out(elf) from IAR EWARM", u".out(axf) from MCUXpresso", u".out(elf) from GCC ARM", u"Motorola S-Records (.srec/.s19)", u"Intel Extended Hex (.hex)", u"Raw Binary (.bin)" ]
-		self.m_choice_appFormat = wx.Choice( sbSizer_browseApp.GetStaticBox(), wx.ID_ANY, wx.DefaultPosition, wx.Size( 180,-1 ), m_choice_appFormatChoices, 0 )
+		self.m_choice_appFormat = wx.Choice( sbSizer_browseApp.GetStaticBox(), wx.ID_ANY, wx.DefaultPosition, wx.Size( 200,-1 ), m_choice_appFormatChoices, 0 )
 		self.m_choice_appFormat.SetSelection( 0 )
 		sbSizer_browseApp.Add( self.m_choice_appFormat, 0, wx.ALIGN_CENTER|wx.ALL, 5 )
 
@@ -369,7 +369,7 @@ class secBootWin ( wx.Frame ):
 
 		sbSizer_browseApp.Add( self.m_staticText_appBaseAddr, 0, wx.ALL, 5 )
 
-		self.m_textCtrl_appBaseAddr = wx.TextCtrl( sbSizer_browseApp.GetStaticBox(), wx.ID_ANY, u"Eg: 0x00003000", wx.DefaultPosition, wx.Size( 180,-1 ), 0 )
+		self.m_textCtrl_appBaseAddr = wx.TextCtrl( sbSizer_browseApp.GetStaticBox(), wx.ID_ANY, u"Eg: 0x00003000", wx.DefaultPosition, wx.Size( 200,-1 ), 0 )
 		self.m_textCtrl_appBaseAddr.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_WINDOW ) )
 
 		sbSizer_browseApp.Add( self.m_textCtrl_appBaseAddr, 0, wx.ALIGN_CENTER|wx.ALL, 5 )
@@ -1723,6 +1723,7 @@ class secBootWin ( wx.Frame ):
 		self.m_button_advCertSettings.Bind( wx.EVT_BUTTON, self.callbackAdvCertSettings )
 		self.m_button_genCert.Bind( wx.EVT_BUTTON, self.callbackGenCert )
 		self.m_filePicker_appPath.Bind( wx.EVT_FILEPICKER_CHANGED, self.callbackChangedAppFile )
+		self.m_choice_appFormat.Bind( wx.EVT_CHOICE, self.callbackSetAppFormat )
 		self.m_choice_enableCertForBee.Bind( wx.EVT_CHOICE, self.callbackSetCertForBee )
 		self.m_button_genImage.Bind( wx.EVT_BUTTON, self.callbackGenImage )
 		self.m_choice_keyStorageRegion.Bind( wx.EVT_CHOICE, self.callbackSetKeyStorageRegion )
@@ -1811,6 +1812,9 @@ class secBootWin ( wx.Frame ):
 		event.Skip()
 
 	def callbackChangedAppFile( self, event ):
+		event.Skip()
+
+	def callbackSetAppFormat( self, event ):
 		event.Skip()
 
 	def callbackSetCertForBee( self, event ):
