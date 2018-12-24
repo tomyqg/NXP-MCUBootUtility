@@ -30,10 +30,10 @@ class secBootUiCfgDcd(bootDeviceWin_DCD.bootDeviceWin_DCD):
 
     def _recoverLastSettings ( self ):
         self.m_choice_dcdSource.SetSelection(self.m_choice_dcdSource.FindString(self.dcdSettingsDict['dcdSource']))
-        self._getDcdSource()
         self.m_filePicker_dcdBinFile.SetPath(self.dcdSettingsDict['userBinFile'])
         self.m_filePicker_dcdCfgFile.SetPath(self.dcdSettingsDict['userCfgFile'])
         self.m_choice_dcdPurpose.SetSelection(self.m_choice_dcdPurpose.FindString(self.dcdSettingsDict['dcdPurpose']))
+        self._getDcdSource()
         self._getDcdPurpose()
         if self.dcdSettingsDict['sdramBase'] != None:
             self.m_textCtrl_sdramBase.Clear()
@@ -118,7 +118,6 @@ class secBootUiCfgDcd(bootDeviceWin_DCD.bootDeviceWin_DCD):
                 self.dcdSettingsDict['sdramBase'] = None
             elif txt == 'SDRAM':
                 self.m_textCtrl_sdramBase.Enable( True )
-                pass
             else:
                 pass
             self.dcdSettingsDict['dcdPurpose'] = txt
