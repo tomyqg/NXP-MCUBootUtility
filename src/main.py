@@ -34,6 +34,7 @@ class secBootMain(memcore.secBootMem):
     def __init__(self, parent):
         memcore.secBootMem.__init__(self, parent)
         self.connectStage = uidef.kConnectStage_Rom
+        self.isBootableAppAllowedToView = False
         self.gaugeTimer = wx.Timer(self)
         self.Bind(wx.EVT_TIMER, self.increaseGauge, self.gaugeTimer)
 
@@ -154,6 +155,7 @@ class secBootMain(memcore.secBootMem):
         self.updateConnectStatus('red')
         usbIdList = self.getUsbid()
         self.setPortSetupValue(self.connectStage, usbIdList, False, False)
+        self.isBootableAppAllowedToView = False
 
     def _connectStateMachine( self ):
         connectSteps = uidef.kConnectStep_Normal
@@ -214,6 +216,7 @@ class secBootMain(memcore.secBootMem):
                     return
             elif self.connectStage == uidef.kConnectStage_Reset:
                 self.resetMcuDevice()
+                self.isBootableAppAllowedToView = False
                 self.connectStage = uidef.kConnectStage_Rom
                 self.updateConnectStatus('black')
                 usbIdList = self.getUsbid()
@@ -505,6 +508,7 @@ class secBootMain(memcore.secBootMem):
                 if not self.flashBootableImage():
                     self.popupMsgBox('Failed to flash bootable image into external memory, Please reset board and try again!')
                 else:
+                    self.isBootableAppAllowedToView = True
                     if self.burnBootDeviceFuses():
                         if (self.secureBootType == uidef.kSecureBootType_HabAuth) or \
                            (self.secureBootType == uidef.kSecureBootType_BeeCrypto and self.isCertEnabledForBee):
@@ -578,7 +582,7 @@ class secBootMain(memcore.secBootMem):
 
     def callbackViewMem( self, event ):
         if self.connectStage == uidef.kConnectStage_Reset:
-            if self.hasAppBeenFlashedOnce:
+            if self.isBootableAppAllowedToView:
                 self.readProgrammedMemoryAndShow()
             else:
                 self.popupMsgBox('Please flash image into boot device first!')

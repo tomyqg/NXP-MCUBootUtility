@@ -74,8 +74,6 @@ class secBootRun(gencore.secBootGen):
         self.semcNandBlockSize = None
         self.isFlexspiNorErasedForImage = False
 
-        self.hasAppBeenFlashedOnce = False
-
         self.mcuDeviceHabStatus = None
         self.mcuDeviceBtFuseSel = None
         self.mcuDeviceBeeKey0Sel = None
@@ -800,7 +798,6 @@ class secBootRun(gencore.secBootGen):
             except:
                 pass
             self.isConvertedAppUsed = False
-        self.hasAppBeenFlashedOnce = True
         return True
 
     def _getMcuDeviceSemcNandCfg( self ):
