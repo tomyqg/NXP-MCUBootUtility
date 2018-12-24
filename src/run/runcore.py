@@ -608,9 +608,9 @@ class secBootRun(gencore.secBootGen):
                         if not burnResult:
                             self.popupMsgBox('Fuse SRK Regions were not burned successfully!')
                             return False
+                return True
             else:
                 self.popupMsgBox('Fuse SRK Regions have been burned, it is program-once!')
-            return True
         else:
             self.popupMsgBox('Super Root Keys hasn\'t been generated!')
         return False
