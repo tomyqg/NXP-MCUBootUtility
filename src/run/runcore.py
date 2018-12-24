@@ -580,7 +580,10 @@ class secBootRun(gencore.secBootGen):
         keyWords = gendef.kSecKeyLengthInBits_SRK / 32
         for i in range(keyWords):
             srk = self.readMcuDeviceFuseByBlhost(fusedef.kEfuseIndex_SRK0 + i, '(' + str(hex(0x580 + i * 0x10)) + ') ' + 'SRK' + str(i), False)
-            if srk != None and srk != 0:
+            if srk == None:
+                isReady = False
+                break
+            elif srk != 0:
                 isBlank = False
                 val32 = self.getVal32FromBinFile(srkFuseFilename, (i * 4))
                 if srk != val32:
@@ -605,9 +608,9 @@ class secBootRun(gencore.secBootGen):
                         if not burnResult:
                             self.popupMsgBox('Fuse SRK Regions were not burned successfully!')
                             return False
-                return True
             else:
                 self.popupMsgBox('Fuse SRK Regions have been burned, it is program-once!')
+            return True
         else:
             self.popupMsgBox('Super Root Keys hasn\'t been generated!')
         return False
@@ -618,7 +621,10 @@ class secBootRun(gencore.secBootGen):
         keyWords = gendef.kSecKeyLengthInBits_DEK / 32
         for i in range(keyWords):
             dek = self.readMcuDeviceFuseByBlhost(fusedef.kEfuseIndex_SW_GP2_0 + i, '(' + str(hex(0x690 + i * 0x10)) + ') ' + 'SW_GP2_' + str(i), False)
-            if dek != None and dek != 0:
+            if dek == None:
+                isReady = False
+                break
+            elif dek != 0:
                 isBlank = False
                 val32 = self.getVal32FromBinFile(swgp2DekFilename, (i * 4))
                 if dek != val32:
@@ -632,7 +638,10 @@ class secBootRun(gencore.secBootGen):
         keyWords = gendef.kSecKeyLengthInBits_DEK / 32
         for i in range(keyWords):
             dek = self.readMcuDeviceFuseByBlhost(fusedef.kEfuseIndex_GP4_0 + i, '(' + str(hex(0x8C0 + i * 0x10)) + ') ' + 'GP4_' + str(i), False)
-            if dek != None and dek != 0:
+            if dek == None:
+                isReady = False
+                break
+            elif dek != 0:
                 isBlank = False
                 val32 = self.getVal32FromBinFile(gp4DekFilename, (i * 4))
                 if dek != val32:
@@ -697,8 +706,7 @@ class secBootRun(gencore.secBootGen):
                     if not self._lockFuseSwGp2():
                         return False
             else:
-                self.popupMsgBox('Fuse SW_GP2 Regions have been burned, it is program-once!')
-                return False
+                self.popupMsgBox('Fuse SW_GP2 Regions have been burned/locked, it is program-once!')
         else:
             pass
         if needToBurnGp4:
@@ -714,8 +722,7 @@ class secBootRun(gencore.secBootGen):
                     if not self._lockFuseGp4():
                         return False
             else:
-                self.popupMsgBox('Fuse GP4 Regions have been burned, it is program-once!')
-                return False
+                self.popupMsgBox('Fuse GP4 Regions have been burned/locked, it is program-once!')
         else:
             pass
         return True
