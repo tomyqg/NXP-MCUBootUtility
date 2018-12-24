@@ -33,12 +33,12 @@ class secBootUiCfgDcd(bootDeviceWin_DCD.bootDeviceWin_DCD):
         self.m_filePicker_dcdBinFile.SetPath(self.dcdSettingsDict['userBinFile'])
         self.m_filePicker_dcdCfgFile.SetPath(self.dcdSettingsDict['userCfgFile'])
         self.m_choice_dcdPurpose.SetSelection(self.m_choice_dcdPurpose.FindString(self.dcdSettingsDict['dcdPurpose']))
+        self.m_choice_dcdModel.SetSelection(self.m_choice_dcdModel.FindString(self.dcdSettingsDict['deviceModel']))
         self._getDcdSource()
         self._getDcdPurpose()
         if self.dcdSettingsDict['sdramBase'] != None:
             self.m_textCtrl_sdramBase.Clear()
             self.m_textCtrl_sdramBase.write(self.dcdSettingsDict['sdramBase'])
-        self.m_choice_dcdModel.SetSelection(self.m_choice_dcdModel.FindString(self.dcdSettingsDict['deviceModel']))
         self._getDeviceModel()
         if self.dcdSettingsDict['dcdDesc'] != None:
             self.m_textCtrl_dcdDesc.Clear()
@@ -61,6 +61,7 @@ class secBootUiCfgDcd(bootDeviceWin_DCD.bootDeviceWin_DCD):
             self.m_choice_dcdPurpose.Enable( True )
             self.m_panel_dcdDesc.Enable( False )
             self._getDcdPurpose()
+            self._getDeviceModel()
         elif txt == 'Use DCD cfg file':
             self.dcdCtrlDict['isDcdEnabled'] = True
             self.m_filePicker_dcdBinFile.Enable( False )
@@ -68,6 +69,7 @@ class secBootUiCfgDcd(bootDeviceWin_DCD.bootDeviceWin_DCD):
             self.m_choice_dcdPurpose.Enable( True )
             self.m_panel_dcdDesc.Enable( False )
             self._getDcdPurpose()
+            self._getDeviceModel()
         elif txt == 'Use DCD descriptor':
             self.dcdCtrlDict['isDcdEnabled'] = True
             self.m_filePicker_dcdBinFile.Enable( False )
@@ -75,6 +77,7 @@ class secBootUiCfgDcd(bootDeviceWin_DCD.bootDeviceWin_DCD):
             self.m_choice_dcdPurpose.Enable( True )
             self.m_panel_dcdDesc.Enable( True )
             self._getDcdPurpose()
+            self._getDeviceModel()
         else:
             pass
 

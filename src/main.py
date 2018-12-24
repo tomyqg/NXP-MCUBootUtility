@@ -672,7 +672,7 @@ class secBootMain(memcore.secBootMem):
         wx.MessageBox(msgText, "About Author", wx.OK | wx.ICON_INFORMATION)
 
     def callbackShowSpecialThanks( self, event ):
-        helper = "Special thanks to 周小朋Clare、杨帆、刘华东Howard \n"
+        helper = "Special thanks to 周小朋Clare、杨帆、刘华东Howard、沈浩杰 \n"
         msgText = ((helper.encode('utf-8')))
         wx.MessageBox(msgText, "Special Thanks", wx.OK | wx.ICON_INFORMATION)
 
