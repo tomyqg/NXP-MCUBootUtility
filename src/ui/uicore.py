@@ -171,36 +171,27 @@ class secBootUi(secBootWin.secBootWin):
             for i in range(len(comports)):
                 comport = list(comports[i])
                 ports[i] = comport[0]
+            lastPort = self.m_choice_portVid.GetString(self.m_choice_portVid.GetSelection())
+            lastBaud = self.m_choice_baudPid.GetString(self.m_choice_baudPid.GetSelection())
+            self.m_choice_portVid.Clear()
+            self.m_choice_baudPid.Clear()
+            self.m_choice_portVid.SetItems(ports)
+            baudItems = ['115200']
             if connectStage == uidef.kConnectStage_Rom:
-                self.m_choice_portVid.Clear()
-                self.m_choice_baudPid.Clear()
-                self.m_choice_portVid.SetItems(ports)
-                self.m_choice_baudPid.SetItems(rundef.kUartSpeed_Sdphost)
-                lastPort = self.m_choice_portVid.GetString(self.m_choice_portVid.GetSelection())
-                lastBaud = self.m_choice_baudPid.GetString(self.m_choice_baudPid.GetSelection())
-                if lastPort in ports:
-                    self.m_choice_portVid.SetSelection(self.m_choice_portVid.FindString(lastPort))
-                else:
-                    self.m_choice_portVid.SetSelection(0)
-                if lastBaud in rundef.kUartSpeed_Sdphost:
-                    self.m_choice_baudPid.SetSelection(self.m_choice_baudPid.FindString(lastBaud))
-                else:
-                    self.m_choice_baudPid.SetSelection(0)
+                baudItems = rundef.kUartSpeed_Sdphost
             elif connectStage == uidef.kConnectStage_Flashloader:
-                if not self.isOneStepConnectMode:
-                    lastPort = self.m_choice_portVid.GetString(self.m_choice_portVid.GetSelection())
-                    self.m_choice_portVid.Clear()
-                    self.m_choice_portVid.SetItems(ports)
-                    self.m_choice_portVid.SetSelection(0)
-                    for i in range(len(ports)):
-                        if lastPort == ports[i]:
-                            self.m_choice_portVid.SetSelection(i)
-                            break
-                self.m_choice_baudPid.Clear()
-                self.m_choice_baudPid.SetItems(rundef.kUartSpeed_Blhost)
-                self.m_choice_baudPid.SetSelection(0)
+                baudItems = rundef.kUartSpeed_Blhost
             else:
                 pass
+            self.m_choice_baudPid.SetItems(baudItems)
+            if lastPort in ports:
+                self.m_choice_portVid.SetSelection(self.m_choice_portVid.FindString(lastPort))
+            else:
+                self.m_choice_portVid.SetSelection(0)
+            if lastBaud in baudItems:
+                self.m_choice_baudPid.SetSelection(self.m_choice_baudPid.FindString(lastBaud))
+            else:
+                self.m_choice_baudPid.SetSelection(0)
         elif self.isUsbhidPortSelected:
             self.m_staticText_portVid.SetLabel('Vendor ID:')
             self.m_staticText_baudPid.SetLabel('Product ID:')
