@@ -614,7 +614,7 @@ class secBootUi(secBootWin.secBootWin):
         elif self.keyStorageRegion == uidef.kKeyStorageRegion_FlexibleUserKeys:
             enableCertForBeeTxt = self.m_choice_enableCertForBee.GetString(self.m_choice_enableCertForBee.GetSelection())
             self.m_choice_enableCertForBee.Clear()
-            self.m_choice_enableCertForBee.SetItems(['Yes', 'No'])
+            self.m_choice_enableCertForBee.SetItems(['No', 'Yes'])
             self.m_choice_enableCertForBee.SetSelection(self.m_choice_enableCertForBee.FindString(enableCertForBeeTxt))
             self.setBeeCertColor()
             self.m_choice_availBeeEngines.Clear()
