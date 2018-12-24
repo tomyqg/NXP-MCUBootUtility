@@ -643,7 +643,7 @@ class secBootRun(gencore.secBootGen):
     def _lockFuseSwGp2( self ):
         lock = self.readMcuDeviceFuseByBlhost(fusedef.kEfuseIndex_LOCK, '', False)
         if lock != None:
-            lock = lock & (fusedef.kEfuseMask_WLockSwGp2 | fusedef.kEfuseMask_RLockSwGp2)
+            lock = (lock | (fusedef.kEfuseMask_WLockSwGp2 | fusedef.kEfuseMask_RLockSwGp2)) & (~fusedef.kEfuseMask_LockHigh)
             burnResult = self.burnMcuDeviceFuseByBlhost(fusedef.kEfuseIndex_LOCK, lock)
             if not burnResult:
                 self.popupMsgBox('Fuse LOCK SW_GP2 region was not burned successfully!')
@@ -653,7 +653,7 @@ class secBootRun(gencore.secBootGen):
     def _lockFuseGp4( self ):
         lock = self.readMcuDeviceFuseByBlhost(fusedef.kEfuseIndex_LOCK, '', False)
         if lock != None:
-            lock = lock & (fusedef.kEfuseMask_WLockGp4 | fusedef.kEfuseMask_RLockGp4)
+            lock = (lock | (fusedef.kEfuseMask_WLockGp4 | fusedef.kEfuseMask_RLockGp4)) & (~fusedef.kEfuseMask_LockHigh)
             burnResult = self.burnMcuDeviceFuseByBlhost(fusedef.kEfuseIndex_LOCK, lock)
             if not burnResult:
                 self.popupMsgBox('Fuse LOCK GP4 region was not burned successfully!')
