@@ -718,7 +718,13 @@ class secBootUiSettingsFlexibleUserKeys(advSettingsWin_FlexibleUserKeys.advSetti
         #print 'use_zero_key=' + self.userKeyCmdDict['use_zero_key']
         #print 'is_boot_image=' + self.userKeyCmdDict['is_boot_image']
         uivar.setAdvancedSettings(uidef.kAdvancedSettings_UserKeys, self.userKeyCtrlDict, self.userKeyCmdDict)
+        uivar.setRuntimeSettings(False)
         self.Show(False)
 
     def callbackCancel( self, event ):
+        uivar.setRuntimeSettings(False)
+        self.Show(False)
+
+    def callbackClose( self, event ):
+        uivar.setRuntimeSettings(False)
         self.Show(False)

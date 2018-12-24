@@ -366,6 +366,7 @@ class advSettingsWin_FlexibleUserKeys ( wx.Frame ):
 		self.Centre( wx.BOTH )
 
 		# Connect Events
+		self.Bind( wx.EVT_CLOSE, self.callbackClose )
 		self.m_choice_engineSel.Bind( wx.EVT_CHOICE, self.callbackChangeEngineSelection )
 		self.m_choice_engine0keySource.Bind( wx.EVT_CHOICE, self.callbackChangeEngine0KeySource )
 		self.m_choice_engine0FacCnt.Bind( wx.EVT_CHOICE, self.callbackChangeEngine0FacCnt )
@@ -380,6 +381,9 @@ class advSettingsWin_FlexibleUserKeys ( wx.Frame ):
 
 
 	# Virtual event handlers, overide them in your derived class
+	def callbackClose( self, event ):
+		event.Skip()
+
 	def callbackChangeEngineSelection( self, event ):
 		event.Skip()
 

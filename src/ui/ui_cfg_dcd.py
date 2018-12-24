@@ -193,8 +193,14 @@ class secBootUiCfgDcd(bootDeviceWin_DCD.bootDeviceWin_DCD):
         if not self._getDcdDesc():
             return
         uivar.setBootDeviceConfiguration(uidef.kBootDevice_Dcd, self.dcdCtrlDict, self.dcdSettingsDict)
+        uivar.setRuntimeSettings(False)
         self.Show(False)
 
     def callbackCancel( self, event ):
+        uivar.setRuntimeSettings(False)
+        self.Show(False)
+
+    def callbackClose( self, event ):
+        uivar.setRuntimeSettings(False)
         self.Show(False)
 

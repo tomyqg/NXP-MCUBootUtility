@@ -305,8 +305,14 @@ class secBootUiCfgSemcNand(bootDeviceWin_SemcNand.bootDeviceWin_SemcNand):
         self._getImageCopies()
         self._getImageInfo()
         uivar.setBootDeviceConfiguration(uidef.kBootDevice_SemcNand, self.semcNandOpt, self.semcNandFcbOpt, self.semcNandImageInfoList)
+        uivar.setRuntimeSettings(False)
         self.Show(False)
 
     def callbackCancel( self, event ):
+        uivar.setRuntimeSettings(False)
+        self.Show(False)
+
+    def callbackOk(self, event):
+        uivar.setRuntimeSettings(False)
         self.Show(False)
 

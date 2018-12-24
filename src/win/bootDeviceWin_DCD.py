@@ -121,6 +121,7 @@ class bootDeviceWin_DCD ( wx.Frame ):
 		self.Centre( wx.BOTH )
 
 		# Connect Events
+		self.Bind( wx.EVT_CLOSE, self.callbackClose )
 		self.m_choice_dcdSource.Bind( wx.EVT_CHOICE, self.callbackSetDcdSource )
 		self.m_choice_dcdPurpose.Bind( wx.EVT_CHOICE, self.callbackSetDcdPurpose )
 		self.m_choice_dcdModel.Bind( wx.EVT_CHOICE, self.callbackSetDeviceModel )
@@ -132,6 +133,9 @@ class bootDeviceWin_DCD ( wx.Frame ):
 
 
 	# Virtual event handlers, overide them in your derived class
+	def callbackClose( self, event ):
+		event.Skip()
+
 	def callbackSetDcdSource( self, event ):
 		event.Skip()
 

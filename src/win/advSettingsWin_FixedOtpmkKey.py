@@ -124,6 +124,7 @@ class advSettingsWin_FixedOtpmkKey ( wx.Frame ):
 		self.Centre( wx.BOTH )
 
 		# Connect Events
+		self.Bind( wx.EVT_CLOSE, self.callbackClose )
 		self.m_choice_regionCnt.Bind( wx.EVT_CHOICE, self.callbackChangeRegionCount )
 		self.m_button_ok.Bind( wx.EVT_BUTTON, self.callbackOk )
 		self.m_button_cancel.Bind( wx.EVT_BUTTON, self.callbackCancel )
@@ -133,6 +134,9 @@ class advSettingsWin_FixedOtpmkKey ( wx.Frame ):
 
 
 	# Virtual event handlers, overide them in your derived class
+	def callbackClose( self, event ):
+		event.Skip()
+
 	def callbackChangeRegionCount( self, event ):
 		event.Skip()
 

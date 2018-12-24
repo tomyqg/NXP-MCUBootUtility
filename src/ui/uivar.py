@@ -5,6 +5,8 @@ import os
 import json
 import uidef
 
+g_hasSubWinBeenOpened = False
+
 g_cfgFilename = None
 g_toolCommDict = {'isToolRunAsEntryMode':None,
                   'secBootType':None,
@@ -86,6 +88,8 @@ g_userKeyCmdDict = {'base_addr':None,
                     'is_boot_image':None}
 
 def initVar(cfgFilename):
+    global g_hasSubWinBeenOpened
+
     global g_cfgFilename
 
     global g_toolCommDict
@@ -126,6 +130,7 @@ def initVar(cfgFilename):
     global g_userKeyCtrlDict
     global g_userKeyCmdDict
 
+    g_hasSubWinBeenOpened = False
     g_cfgFilename = cfgFilename
     if os.path.isfile(cfgFilename):
         cfgDict = None
@@ -400,3 +405,11 @@ def setAdvancedSettings( group, *args ):
         g_userKeyCmdDict = args[1]
     else:
         pass
+
+def getRuntimeSettings( ):
+    global g_hasSubWinBeenOpened
+    return g_hasSubWinBeenOpened
+
+def setRuntimeSettings( *args ):
+    global g_hasSubWinBeenOpened
+    g_hasSubWinBeenOpened = args[0]

@@ -59,14 +59,24 @@ class secBootMain(memcore.secBootMem):
         self.setTargetSetupValue()
         self.setSecureBootSeqColor()
 
+    def _checkIfSubWinHasBeenOpened( self ):
+        if not uivar.getRuntimeSettings():
+            uivar.setRuntimeSettings(True)
+            return False
+        else:
+            return True
+
     def callbackBootDeviceConfiguration( self, event ):
         if self.bootDevice == uidef.kBootDevice_FlexspiNor:
             if self.tgt.isSipFlexspiNorDevice:
                 self.popupMsgBox('MCU has on-chip QSPI NOR Flash (4MB, 133MHz), so you don\'t need to configure this boot device!')
-            else:
-                flexspiNorFrame = ui_cfg_flexspinor.secBootUiCfgFlexspiNor(None)
-                flexspiNorFrame.SetTitle(u"FlexSPI NOR Device Configuration")
-                flexspiNorFrame.Show(True)
+                return
+        if self._checkIfSubWinHasBeenOpened():
+            return
+        if self.bootDevice == uidef.kBootDevice_FlexspiNor:
+            flexspiNorFrame = ui_cfg_flexspinor.secBootUiCfgFlexspiNor(None)
+            flexspiNorFrame.SetTitle(u"FlexSPI NOR Device Configuration")
+            flexspiNorFrame.Show(True)
         elif self.bootDevice == uidef.kBootDevice_FlexspiNand:
             flexspiNandFrame = ui_cfg_flexspinand.secBootUiFlexspiNand(None)
             flexspiNandFrame.SetTitle(u"FlexSPI NAND Device Configuration")
@@ -95,6 +105,8 @@ class secBootMain(memcore.secBootMem):
             pass
 
     def callbackDeviceConfigurationData( self, event ):
+        if self._checkIfSubWinHasBeenOpened():
+            return
         dcdFrame = ui_cfg_dcd.secBootUiCfgDcd(None)
         dcdFrame.SetTitle(u"Device Configuration Data")
         dcdFrame.setNecessaryInfo(self.dcdBinFilename, self.dcdCfgFilename, self.dcdModelFolder)
@@ -275,6 +287,8 @@ class secBootMain(memcore.secBootMem):
             if self.secureBootType == uidef.kSecureBootType_BeeCrypto and (not self.isCertEnabledForBee):
                 self.popupMsgBox('Certificate is not enabled for BEE, You can enable it then try again!')
             else:
+                if self._checkIfSubWinHasBeenOpened():
+                    return
                 certSettingsFrame = ui_settings_cert.secBootUiSettingsCert(None)
                 certSettingsFrame.SetTitle(u"Advanced Certificate Settings")
                 certSettingsFrame.Show(True)
@@ -382,6 +396,8 @@ class secBootMain(memcore.secBootMem):
 
     def callbackAdvKeySettings( self, event ):
         if self.secureBootType == uidef.kSecureBootType_BeeCrypto and self.bootDevice == uidef.kBootDevice_FlexspiNor:
+            if self._checkIfSubWinHasBeenOpened():
+                return
             if self.keyStorageRegion == uidef.kKeyStorageRegion_FixedOtpmkKey:
                 otpmkKeySettingsFrame = ui_settings_fixed_otpmk_key.secBootUiSettingsFixedOtpmkKey(None)
                 otpmkKeySettingsFrame.SetTitle(u"Advanced Key Settings - Fixed OTPMK")

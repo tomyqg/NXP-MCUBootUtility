@@ -212,6 +212,7 @@ class bootDeviceWin_FlexspiNor ( wx.Frame ):
 		self.Centre( wx.BOTH )
 
 		# Connect Events
+		self.Bind( wx.EVT_CLOSE, self.callbackClose )
 		self.m_choice_deviceMode.Bind( wx.EVT_CHOICE, self.callbackUseTypicalDeviceModel )
 		self.m_choice_hasOption1.Bind( wx.EVT_CHOICE, self.callbackHasOption1 )
 		self.m_button_ok.Bind( wx.EVT_BUTTON, self.callbackOk )
@@ -222,6 +223,9 @@ class bootDeviceWin_FlexspiNor ( wx.Frame ):
 
 
 	# Virtual event handlers, overide them in your derived class
+	def callbackClose( self, event ):
+		event.Skip()
+
 	def callbackUseTypicalDeviceModel( self, event ):
 		event.Skip()
 

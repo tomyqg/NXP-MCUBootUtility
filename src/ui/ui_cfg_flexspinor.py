@@ -235,8 +235,14 @@ class secBootUiCfgFlexspiNor(bootDeviceWin_FlexspiNor.bootDeviceWin_FlexspiNor):
         self._getMaxFrequency()
         self._getHasOpt1()
         uivar.setBootDeviceConfiguration(uidef.kBootDevice_FlexspiNor, self.flexspiNorOpt0, self.flexspiNorOpt1, self.flexspiDeviceModel)
+        uivar.setRuntimeSettings(False)
         self.Show(False)
 
     def callbackCancel( self, event ):
+        uivar.setRuntimeSettings(False)
+        self.Show(False)
+
+    def callbackClose( self, event ):
+        uivar.setRuntimeSettings(False)
         self.Show(False)
 

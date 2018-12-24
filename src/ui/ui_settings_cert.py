@@ -152,8 +152,13 @@ class secBootUiSettingsCert(advSettingsWin_Cert.advSettingsWin_Cert):
         self._getSRKs()
         self._getCaFlagSet()
         uivar.setAdvancedSettings(uidef.kAdvancedSettings_Cert, self.certSettingsDict)
+        uivar.setRuntimeSettings(False)
         self.Show(False)
 
     def callbackCancel( self, event ):
+        uivar.setRuntimeSettings(False)
         self.Show(False)
 
+    def callbackClose( self, event ):
+        uivar.setRuntimeSettings(False)
+        self.Show(False)

@@ -128,7 +128,13 @@ class secBootUiCfgLpspiNor(bootDeviceWin_LpspiNor.bootDeviceWin_LpspiNor):
         self._getSpiPcs()
         self._getSpiSpeed()
         uivar.setBootDeviceConfiguration(uidef.kBootDevice_LpspiNor, self.lpspiNorOpt0, self.lpspiNorOpt1)
+        uivar.setRuntimeSettings(False)
         self.Show(False)
 
     def callbackCancel(self, event):
+        uivar.setRuntimeSettings(False)
+        self.Show(False)
+
+    def callbackOk(self, event):
+        uivar.setRuntimeSettings(False)
         self.Show(False)

@@ -122,6 +122,7 @@ class advSettingsWin_Cert ( wx.Frame ):
 		self.Centre( wx.BOTH )
 
 		# Connect Events
+		self.Bind( wx.EVT_CLOSE, self.callbackClose )
 		self.m_choice_cstVersion.Bind( wx.EVT_CHOICE, self.callbackSwitchCstVersion )
 		self.m_choice_useEcc.Bind( wx.EVT_CHOICE, self.callbackUseEcc )
 		self.m_button_ok.Bind( wx.EVT_BUTTON, self.callbackOk )
@@ -132,6 +133,9 @@ class advSettingsWin_Cert ( wx.Frame ):
 
 
 	# Virtual event handlers, overide them in your derived class
+	def callbackClose( self, event ):
+		event.Skip()
+
 	def callbackSwitchCstVersion( self, event ):
 		event.Skip()
 

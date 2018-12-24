@@ -181,7 +181,13 @@ class secBootUiSettingsFixedOtpmkKey(advSettingsWin_FixedOtpmkKey.advSettingsWin
         if not self._getEncryptedRegionInfo():
             return
         uivar.setAdvancedSettings(uidef.kAdvancedSettings_OtpmkKey, self.otpmkKeyOpt, self.otpmkEncryptedRegionStartList, self.otpmkEncryptedRegionLengthList)
+        uivar.setRuntimeSettings(False)
         self.Show(False)
 
     def callbackCancel( self, event ):
+        uivar.setRuntimeSettings(False)
+        self.Show(False)
+
+    def callbackClose( self, event ):
+        uivar.setRuntimeSettings(False)
         self.Show(False)
