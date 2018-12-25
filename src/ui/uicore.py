@@ -153,10 +153,10 @@ class secBootUi(secBootWin.secBootWin):
                 usbPid[0] = usbVid[0]
         if self.m_choice_portVid.GetString(self.m_choice_portVid.GetSelection()) != usbVid[0]:
             self.m_choice_portVid.Clear()
-            self.m_choice_baudPid.Clear()
             self.m_choice_portVid.SetItems(usbVid)
-            self.m_choice_baudPid.SetItems(usbPid)
             self.m_choice_portVid.SetSelection(0)
+            self.m_choice_baudPid.Clear()
+            self.m_choice_baudPid.SetItems(usbPid)
             self.m_choice_baudPid.SetSelection(0)
 
     def adjustPortSetupValue( self, connectStage=uidef.kConnectStage_Rom, usbIdList=[] ):
@@ -174,8 +174,11 @@ class secBootUi(secBootWin.secBootWin):
             lastPort = self.m_choice_portVid.GetString(self.m_choice_portVid.GetSelection())
             lastBaud = self.m_choice_baudPid.GetString(self.m_choice_baudPid.GetSelection())
             self.m_choice_portVid.Clear()
-            self.m_choice_baudPid.Clear()
             self.m_choice_portVid.SetItems(ports)
+            if lastPort in ports:
+                self.m_choice_portVid.SetSelection(self.m_choice_portVid.FindString(lastPort))
+            else:
+                self.m_choice_portVid.SetSelection(0)
             baudItems = ['115200']
             if connectStage == uidef.kConnectStage_Rom:
                 baudItems = rundef.kUartSpeed_Sdphost
@@ -183,11 +186,8 @@ class secBootUi(secBootWin.secBootWin):
                 baudItems = rundef.kUartSpeed_Blhost
             else:
                 pass
+            self.m_choice_baudPid.Clear()
             self.m_choice_baudPid.SetItems(baudItems)
-            if lastPort in ports:
-                self.m_choice_portVid.SetSelection(self.m_choice_portVid.FindString(lastPort))
-            else:
-                self.m_choice_portVid.SetSelection(0)
             if lastBaud in baudItems:
                 self.m_choice_baudPid.SetSelection(self.m_choice_baudPid.FindString(lastBaud))
             else:

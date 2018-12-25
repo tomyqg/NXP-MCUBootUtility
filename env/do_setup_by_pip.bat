@@ -4,4 +4,3 @@ pip.exe install pywinusb==0.4.2
 pip.exe install bincopy==15.0.0 
 
 pip.exe install PyInstaller
-pip.exe install cx_Freeze
