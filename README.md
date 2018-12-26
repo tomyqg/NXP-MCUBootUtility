@@ -44,31 +44,31 @@
 　　nxpSecBoot软件目录组织如下：  
 ```text
 \nxp-sec-boot-ui
-                \apps                        --放置NXP官方评估板示例image文件
-                \bin                         --放置nxpSecBoot可执行文件及用户配置文件
-                \doc                         --放置NXP官方安全启动相关的参考文档
-                \env                         --放置用于安装nxpSecBoot开发环境以及打包脚本
-                \gen                         --放置nxpSecBoot使用过程中生成的临时文件
-                      \bd_file                  --根据配置动态生成的BD文件
-                      \bee_crypto               --BEE加密过程中生成的文件
-                      \bootable_image           --生成的bootable image文件
-                      \dcd_file                 --生成的DCD数据文件
-                      \hab_cert                 --HAB签名过程中生成的文件
-                      \hab_crypto               --HAB加密过程中生成的文件
-                      \log_file                 --保存软件操作记录日志
-                      \user_file                --软件运行过程中缓存的临时文件
-                \gui                         --放置开发nxpSecBoot UI构建工程文件
-                \img                         --放置nxpSecBoot使用过程中需加载的图片
-                \src                         --放置开发nxpSecBoot的所有Python源代码文件
-                \tools                       --放置nxpSecBoot使用过程中需调用的外部程序
-                      \blhost                   --与Flashloader通信的上位机命令行工具
-                      \cst                      --HAB加密的配套命令行工具
-                      \elftosb                  --生成bootable image的命令行工具
-                      \ide_utils                --各IDE提供的image格式转换工具
-                      \image_enc                --BEE加密的配套命令行工具
-                      \imgutil                  --生成DCD数据的命令行工具
-                      \openssl                  --生成证书和秘钥的标准工具
-                      \sdphost                  --与ROM通信的上位机命令行工具
+                \apps                 --放置NXP官方评估板示例image文件
+                \bin                  --放置nxpSecBoot可执行文件及用户配置文件
+                \doc                  --放置NXP官方安全启动相关的参考文档
+                \env                  --放置用于安装nxpSecBoot开发环境以及打包脚本
+                \gen                  --放置nxpSecBoot使用过程中生成的临时文件
+                      \bd_file            --根据配置动态生成的BD文件
+                      \bee_crypto         --BEE加密过程中生成的文件
+                      \bootable_image     --生成的bootable image文件
+                      \dcd_file           --生成的DCD数据文件
+                      \hab_cert           --HAB签名过程中生成的文件
+                      \hab_crypto         --HAB加密过程中生成的文件
+                      \log_file           --保存软件操作记录日志
+                      \user_file          --软件运行过程中缓存的临时文件
+                \gui                  --放置开发nxpSecBoot UI构建工程文件
+                \img                  --放置nxpSecBoot使用过程中需加载的图片
+                \src                  --放置开发nxpSecBoot的所有Python源代码文件
+                \tools                --放置nxpSecBoot使用过程中需调用的外部程序
+                      \blhost             --与Flashloader通信的上位机命令行工具
+                      \cst                --HAB加密的配套命令行工具
+                      \elftosb            --生成bootable image的命令行工具
+                      \ide_utils          --各IDE提供的image格式转换工具
+                      \image_enc          --BEE加密的配套命令行工具
+                      \imgutil            --生成DCD数据的命令行工具
+                      \openssl            --生成证书和秘钥的标准工具
+                      \sdphost            --与ROM通信的上位机命令行工具
 ```
 
 #### 1.5 界面

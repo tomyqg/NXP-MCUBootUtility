@@ -9,7 +9,7 @@
 　　nxpSecBoot is a GUI tool specially designed for NXP MCU secure boot. Its features correspond to the BootROM function in NXP MCU. Currently, it mainly supports i.MXRT series MCU chips, Compared to NXP official security enablement toolset (OpenSSL, CST, sdphost, blhost, elftosb, BD, MfgTool2), nxpSecBoot is a real one-stop tool, a tool that includes all the features of NXP's official security enablement toolset, and what's more, it supports full graphical user interface operation. With nxpSecBoot, you can easily get started with NXP MCU secure boot. 
 　　The main features of nxpSecBoot include：  
 
-> * Support i.MXRT1021, i.MXRT1051/1052, i.MXRT1061/1062、i.MXRT1064 SIP  
+> * Support i.MXRT1021, i.MXRT1051/1052, i.MXRT1061/1062, i.MXRT1064 SIP  
 > * Support both UART and USB-HID serial downloader modes  
 > * Support various user application image file formats (elf/axf/srec/hex/bin)  
 > * Can validate the range and applicability of user application image
@@ -31,7 +31,7 @@
 > * Source code: https://github.com/JayHeng/nxp-sec-boot-ui  
 > * Feedback: https://www.cnblogs.com/henjay724/p/10159925.html  
 
-　　nxpSecBoot is packaged by PyInstaller, All Python dependencies has been packaged into an executable file (\nxp-sec-boot-ui\bin\nxpSecBoot.exe), so if you don't want to develop nxpSecBoot for new feature, there is no need to install any Python software or related libraries.  
+　　nxpSecBoot is packaged by PyInstaller, all Python dependencies have been packaged into an executable file (\nxp-sec-boot-ui\bin\nxpSecBoot.exe), so if you do not want to develop nxpSecBoot for new feature, there is no need to install any Python software or related libraries.  
 
 > Note1: The nxpSecBoot.exe in the source code package is packaged in the Windows 10 x64 environment and has only been tested in this environment. If it cannot be used directly for system environment reasons, you need to install [Python2.7.15 x86 version ](https://www.python.org/ftp/python/2.7.15/python-2.7.15.msi)(Confirm that the directory "\Python27\" and "\Python27\Scripts\" are in the system environment variable path after the installation is completed), then click on "do_setup_by_pip.bat" in the "\nxp-sec-boot-ui\env\" directory to install the Python library on which nxpSecBoot depends. Finally, click "do_pack_by_pyinstaller.bat" to regenerate the nxpSecBoot.exe.  
 
@@ -45,31 +45,31 @@
 　　The nxpSecBoot software directory is organized as follows:  
 ```text
 \nxp-sec-boot-ui
-                \apps                       --Place example source image files
-                \bin                        --Place nxpSecBoot.exe and user configuration file
-                \doc                        --Place reference documents related to NXP MCU Boot
-                \env                        --Place scripts to install the nxpSecBoot development environment and to do package 
-                \gen                        --Place temporary files generated during the use of nxpSecBoot
-                      \bd_file                  -- dynamically generated BD files based on configuration
-                      \bee_crypto               -- files generated during the BEE encryption process
-                      \bootable_image           -- generated bootable image file
-                      \dcd_file                 -- generated DCD data file
-                      \hab_cert                 -- files generated during HAB signature process
-                      \hab_crypto               -- files generated during HAB encryption
-                      \log_file                 -- save the software operation log
-                      \user_file                -- Temporary files cached during software operation
-                \gui                        --Place nxpSecBoot development UI build project file
-                \img                        --Place the image to be loaded during the use of nxpSecBoot
-                \src                        --Place all Python source code files for developing nxpSecBoot
-                \tools                      --Place all external programs to be called during the use of nxpSecBoot
-                      \blhost                   -- Host command line tool to communicate with Flashloader
-                      \cst                      -- HAB encryption command line tool
-                      \elftosb                  -- Command line tool to generate bootable image
-                      \ide_utils                -- Command line tool to convert image format
-                      \image_enc                -- BEE encryption command line tool
-                      \imgutil                  -- Command line tool to generate DCD data
-                      \openssl                  -- Standard tool to generate certificates and keys
-                      \sdphost                  -- Host command line tool to communicate with ROM
+                \apps                 --Place example source image files
+                \bin                  --Place nxpSecBoot.exe and user configuration file
+                \doc                  --Place reference documents related to NXP MCU Boot
+                \env                  --Place scripts to install the nxpSecBoot development environment and to do package
+                \gen                  --Place temporary files generated during the use of nxpSecBoot
+                      \bd_file            -- Generated BD files based on configuration
+                      \bee_crypto         -- Generated BEE encryption related files
+                      \bootable_image     -- Generated bootable image file
+                      \dcd_file           -- Generated DCD data file
+                      \hab_cert           -- Generated HAB signature related files
+                      \hab_crypto         -- Generated HAB encryption related files
+                      \log_file           -- Saved software operation log
+                      \user_file          -- Temporary files
+                \gui                  --Place nxpSecBoot development UI build project file
+                \img                  --Place the image to be loaded during the use of nxpSecBoot
+                \src                  --Place all Python source code files for developing nxpSecBoot
+                \tools                --Place all external programs to be called during the use of nxpSecBoot
+                      \blhost             -- Host command line tool to communicate with Flashloader
+                      \cst                -- HAB encryption command line tool
+                      \elftosb            -- Command line tool to generate bootable image
+                      \ide_utils          -- Command line tool to convert image format
+                      \image_enc          -- BEE encryption command line tool
+                      \imgutil            -- Command line tool to generate DCD data
+                      \openssl            -- Standard tool to generate certificates and keys
+                      \sdphost            -- Host command line tool to communicate with ROM
 ```
 #### 1.5 Interface
 　　The following figure shows the main interface of the nxpSecBoot tool. The interface consists of six parts. The functions of each part are as follows:  
@@ -114,11 +114,11 @@ define symbol m_data2_end              = 0x202BFFFF;
 
 ![nxpSecBoot_sdkProjectOptions](http://henjay724.com/image/cnblogs/nxpSecBoot_sdkProjectOptions.PNG)
 
-　　If you just want to quickly verify the nxpSecBoot tool, All the led_blinky application image files of NXP's official i.MXRT evaluation boards are stored by default in the nxpSecBoot\apps folder.  
+　　If you just want to quickly verify the nxpSecBoot tool, all the led_blinky application image files of NXP's official i.MXRT evaluation boards are stored by default in the nxpSecBoot\apps folder.  
 
 ### 3 Basic Usage
 #### 3.1 Setting the target device
-　　When using nxpSecBoot, you need to configure the target device. The target device includes MCU Device and Boot Device. Take the NXP official development board EVK-MIMXRT1060 as an example. The main chip of the development board is i.MXRT1062DVL6A, so [MCU Device] should be set to i.MXRT106x. Taking the most commonly used FlexSPI NOR boot as an example, [Boot Device] is set to FLEXSPI NOR, and the corresponding external memory chip on the development board is IS25WP064AJBLE, which is a commonly used four-wire QSPI NOR Flash, which needs to be further configured. Click the [Boot Device Configuration] button to pop up the following new configuration page:  
+　　When using nxpSecBoot, you need to configure the target device. The target device includes MCU Device and Boot Device. Taking the NXP official development board EVK-MIMXRT1060 as an example, the main chip of the development board is i.MXRT1062DVL6A, so [MCU Device] should be set to i.MXRT106x. Taking the most commonly used FlexSPI NOR boot as an example, [Boot Device] is set to FLEXSPI NOR, and the corresponding external memory chip on the development board is IS25WP064AJBLE, which is a commonly used four-wire QSPI NOR Flash, which needs to be further configured. Click the [Boot Device Configuration] button to pop up the following new configuration page:  
 
 ![nxpSecBoot_flexspiNorCfgWin_e](http://henjay724.com/image/cnblogs/nxpSecBoot_v1_0_0_flexspiNorCfgWin_e.png)
 
@@ -127,11 +127,11 @@ define symbol m_data2_end              = 0x202BFFFF;
 　　The IS25WP064AJBLE chip on the EVK-MIMXRT1060 development board belongs to the ISSI-IS25LP064A category, so we only need to select ISSI - IS25LP064A in [Use Typical Device Model] and click [Ok] to complete the setting of the target device.  
 
 #### 3.2 Connecting target devices
-　　After setting up the target device, the next step is to connect the target device. Take the USB-HID interface as an example, supply power to the EVK-MIMXRT1060 board, and connect the PC to the J9 port with USB Cable. If everything is going well, You can find new HID device (vid=0x1fc9, pid=0x0135) named HID-compliant vendor-defined device is enumerated. If the HID device is not found, please check the board SW7 DIP switch to set Boot Mode to 2'b01(Serial Downloader mode).  
+　　After setting up the target device, the next step is to connect the target device. Taking the USB-HID interface as an example, supply power to the EVK-MIMXRT1060 board, and connect the PC to the J9 port with USB Cable. If everything is going well, you can find new HID device (vid=0x1fc9, pid=0x0135) named HID-compliant vendor-defined device is enumerated. If the HID device is not found, please check the board SW7 DIP switch to set Boot Mode to 2'b01(Serial Downloader mode).  
 
 ![nxpSecBoot_usbhidDetected_e](http://henjay724.com/image/cnblogs/nxpSecBoot_usbhidDetected_e.png)
 
-　　After confirming the existence of the HID device, select USB-HID in [Port Setup], and then directly click the [Connect to ROM] button. nxpSecBoot will automatically complete the whole process of connecting the target device (using sdphost to connect to the ROM to obtain some MCU internal register information). Use sdphost to load Flashloader and jump to it, use blhost to connect to Flashloader, get some eFuse information, use blhost to configure boot device and get boot device meomry information), this process takes about 5s, if the target device is connected properly, you can see the indicator LED turns blue, and the [Connect to ROM] button label changes to [Reset Device]. If the target device fails to connect, the indicator LED will turn red and the [Connect to ROM] button label will change to [Reconnect].  
+　　After confirming the existence of the HID device, select USB-HID in [Port Setup], and then directly click the [Connect to ROM] button. The nxpSecBoot will automatically complete the whole process of connecting the target device (using sdphost to connect to the ROM to obtain some MCU internal register information. Using sdphost to load Flashloader and jump to it, using blhost to connect to Flashloader, get some eFuse information, use blhost to configure boot device and get boot device meomry information), this process takes about 5s, if the target device is connected properly, you can see the indicator LED turns blue, and the [Connect to ROM] button label changes to [Reset Device]. If the target device fails to connect, the indicator LED will turn red and the [Connect to ROM] button label will change to [Reconnect].  
 
 ![nxpSecBoot_connectedToDevice_e](http://henjay724.com/image/cnblogs/nxpSecBoot_v1_0_0_connectedToDevice_e.png)
 
@@ -143,7 +143,7 @@ define symbol m_data2_end              = 0x202BFFFF;
 ![nxpSecBoot_secboot0_intro_e](http://henjay724.com/image/cnblogs/nxpSecBoot_v1_0_0_secboot0_intro_e.png)
 
 > * [Image Generation Sequence]: The image generation window is used to encrypt the source image then generate a bootable image that can be placed in the Boot Device.  
-> * [Image Loading Sequence]: image download window, used to download the generated bootable image into the Boot Device, and burn the corresponding Fuse value in the MCU (various Key, HAB settings, etc.)  
+> * [Image Loading Sequence]: The image download window is used to download the generated bootable image into the Boot Device, and burn the corresponding Fuse value in the MCU (various Key, HAB settings, etc.)  
 > * [eFuse Operation Utility]: The eFuse readback and burning window allows the user to burn custom values into the Fuse Region.  
 > * [Boot Device Memory]: The image readback and annotation display window is used to read back the downloaded Bootable image data from the Boot Device and mark the data components.  
 > * [Secure Boot Type]: Select the secure boot mode, select the desired secure mode (do not enable security, HAB signature only, HAB signature & encryption, BEE encryption).  
@@ -151,7 +151,7 @@ define symbol m_data2_end              = 0x202BFFFF;
 
 ##### 3.3.1 Mode 1: No security measures are enabled
 　　The first mode is the simplest mode, that is, no security measures are initiated, and it is generally used in the product development and debugging phase.  
-　　Select "DEV Unsigned Image Boot" in [Secure Boot Type], and then click the [Browse] button to select a raw image file (using the bare image file generated by the IDE, do not need to include any additional headers required for i.MXRT boot in image file) Head), click the [All-In-One Action] button to complete the bootable image generation and download operations.  
+　　Select "DEV Unsigned Image Boot" in [Secure Boot Type], and then click the [Browse] button to select a raw image file (using the bare image file generated by the IDE, do not need to include any additional headers required for i.MXRT boot in image file**<u>) H</u>**ead), click the [All-In-One Action] button to complete the bootable image generation and download operations.  
 
 > Note: If 'Auto-detect image format' option is selected, the source file format is automatically recognized based on the file extension. However, for the axf file generated by MCUXpresso or GCC, it needs to be set to ".out(axf) from MCUXpresso/GCC ARM".  
 
@@ -166,9 +166,9 @@ define symbol m_data2_end              = 0x202BFFFF;
 
 ![nxpSecBoot_secboot2_signed](http://henjay724.com/image/cnblogs/nxpSecBoot_v1_0_0_secboot2_signed_e.png)
 
-　　Step5 in the above figure is mainly used to confirm two points: First, whether the HAB status is Closed (Fuse 0x460[31:0] bit1 is 1'b1); Second, whether SRKH is correctly programmed (Fuse 0x580 - 0x5f0, a total of 256bit, That is, the sha-256 algorithm), SRKH is the hash value of the Public RSA Key in the CSF data in the final bootable image, and is used to verify whether the Public RSA Key is legal.  
+　　Step5 in the above figure is mainly used to confirm two points: First, whether the HAB status is Closed (Fuse 0x460[31:0] bit1 is 1'b1); Second, whether SRKH is correctly programmed (Fuse 0x580 - 0x5f0, a total of 256bit, that is, the sha-256 algorithm), SRKH is the hash value of the Public RSA Key in the CSF data in the final bootable image, and is used to verify whether the Public RSA Key is legal.  
 　　All operations are correct. Set the Boot Mode to 2'b10(Internal Boot mode) via SW7 DIP switch on the board. The rest will remain all 0. When the power is turned back on, you can see that the HAB signed image is executed normally.  
-　　Because the HAB status of the MCU chip is already Closed and the SRKH has been burned and cannot be changed, the unauthenticated image cannot be run normally. In the software directory \nxp-sec-boot\tools\cst\3.0.1\crts The Private RSA Key file is stored in the folder. Please save it properly. If it is lost, the new image will not be properly signed and the HAB authentication will fail to be executed.  
+　　Because the HAB status of the MCU chip is already Closed and the SRKH has been burned and cannot be changed, the unauthenticated image cannot be run normally. In the software directory \nxp-sec-boot\tools\cst\3.0.1\crts, the Private RSA Key file is stored in the folder. Please save it properly. If it is lost, the new image will not be properly signed and the HAB authentication will fail to be executed.  
 
 ##### 3.3.3 Mode 3: Enable HAB signature authentication and HAB encryption
 　　The third mode is the intermediate security mode, which is to sign and authenticate the image and HAB level encryption, which is generally used in applications where product security is very high. The signature authentication is mainly to verify the validity of the image, and the encryption can protect the image from being illegally stolen in the external Boot Device. Because the external cryptographic data is stored in the external Boot Device, even if it is illegally acquired, it cannot be easily Cracked, and the encryption is bound to the MCU chip, because the HAB encryption process uses the only Master Secret Key in the MCU's internal SNVS module.  
@@ -179,8 +179,8 @@ define symbol m_data2_end              = 0x202BFFFF;
 　　After the Step6 operation in the above figure, you can see that the image downloaded into Boot Deivce is indeed cipher text. In fact, HAB encryption only supports encrypted image area, and other areas (such as FDCB, IVT, Boot Data, etc.) are not encrypted.  
 　　All operations are correct. Set the Boot Mode to 2'b10(Internal Boot mode) via SW7 DIP switch on the board. The rest will remain all 0s. After power-on, you can see that the HAB signed encrypted image is executed normally.  
 　　You may be curious, since the image is HAB encrypted, where is the password? How to set it up? In fact, the image encryption operation is completely encapsulated by the HAB encryption tool. The AES-128 algorithm is used by HAB encryption, the corresponding 128-bit AES-128 Key is not user-defined, but the HAB encryption tool automatically generates it randomly, and each AES-128 Key generated by every encryption operation is different, even if you have not replaced the original image. The AES-128 Key is saved in the \nxp-sec-boot\gen\hab_crypto\hab_dek.bin file.  
-　　From the above diagram, the Bootable image shown in the image download window shows that compared to the HAB single-signature method, the final part of the Bootable image is a DEK KeyBlob component. This DEK KeyBlob is The key data in hab_dek.bin is dynamically encrypted by the Master Secret Key in the internal SNVS module of the MCU chip. Because the Master Secret Key is the unique in each chip, the DEK KeyBlob is also unique. This is key to protect the image from being illegally stolen.  
-　　Why does HAB encryption not support XIP Image? In fact, a simple analysis of the boot principle makes it clear that Image stores ciphertext in the Boot Device. This part of the ciphertext must be decrypted into plaintext by HAB before it can be executed by the CPU. Therefore, it must be specified different storage spaces to store the image plaintext, Non-XIP image naturally specifies that the plaintext should be stored in the chip's internal SRAM or external SDRAM, and the XIP Image is directly executed in the Boot Device. The plaintext address and the ciphertext address are the same. Therefore, HAB encryption does not support XIP Image.  
+　　From the above diagram, the Bootable image shown in the image download window shows that compared to the HAB single-signature method, the final part of the Bootable image is a DEK KeyBlob component. This DEK KeyBlob is the key data in hab_dek.bin is dynamically encrypted by the Master Secret Key in the internal SNVS module of the MCU chip. Because the Master Secret Key is the unique in each chip, the DEK KeyBlob is also unique. This is key to protect the image from being illegally stolen.  
+　　Why does HAB encryption not support XIP Image? In fact, a simple analysis of the boot principle makes it clear that Image stores ciphertext in the Boot Device. This part of the ciphertext must be decrypted into plaintext by HAB before it can be executed by the CPU. Therefore, it must be specified different storage spaces to store the image plaintext, Non-XIP Image naturally specifies that the plaintext should be stored in the chip's internal SRAM or external SDRAM, and the XIP Image is directly executed in the Boot Device. The plaintext address and the ciphertext address are the same. Therefore, HAB encryption does not support XIP Image.  
 
 ##### 3.3.4 Mode 4: Enable single-engine BEE encryption (unique SNVS Key)
 　　The fourth mode is the advanced security mode, that is, single-engine BEE-level encryption of image with a unique SNVS Key, which is generally used in applications where product security is extremely high. The main difference between BEE encryption and HAB encryption is that the main body of the decryption operation is different. There are three main differences:  
@@ -191,9 +191,9 @@ define symbol m_data2_end              = 0x202BFFFF;
 
 ![nxpSecBoot_secboot4_bee_encrypted_fixed_key](http://henjay724.com/image/cnblogs/nxpSecBoot_v1_0_0_secboot4_bee_encrypted_fixed_key_e.png)
 
-　　Select "BEE Encrypted Image Boot" in [Secure Boot Type], and then configure all the parameters for signature authentication (if there is a certificate in the local, you can use it without configuration, the software will try to reuse), and then click the [Browse] button to select an original image file (must be XIP image in FlexSPI NOR), select "Fixed Otpmk(SNVS) Key" in [Key Storage Region] Then click the [Advanced Key Settings] button to configure all BEE encryption parameters, and finally click the [All-In-One Action] button to complete the bootable image generation and download operations.  
+　　Select "BEE Encrypted Image Boot" in [Secure Boot Type], and then configure all the parameters for signature authentication (if there is a certificate in the local, you can use it without configuration, the software will try to reuse), and then click the [Browse] button to select an original image file (must be XIP image in FlexSPI NOR), select "Fixed Otpmk(SNVS) Key" in [Key Storage Region], then click the [Advanced Key Settings] button to configure all BEE encryption parameters, and finally click the [All-In-One Action] button to complete the bootable image generation and download operations.  
 　　The Step6 operation in the above figure is mainly used to confirm one point: whether BEE_KEY0_SEL is set to From OTPMK[255:128] (bit 13 of Fuse 0x460[31:0], 12 is 2'b10). After Step6 operation, you can see that the Bootable image downloaded into Boot Deivce is all ciphertext from IVT. This example only enables one encryption area. Which areas are encrypted are specified in [Advanced Key Settings], and the maximum support is specified. 3 blocks of encryption.  
-　　It is necessary to introduce the following BEE parameter setting page using Fixed Otpmk (SNVS) Key encryption, Set the Region Count and specify the Region range. The default is 0 which means encrypted region is the entire image.  
+　　It is necessary to introduce the following BEE parameter setting page using Fixed Otpmk (SNVS) Key encryption. Set the Region Count and specify the Region range, the default is 0 which means encrypted region is the entire image.  
 
 ![nxpSecBoot_fixedSnvsKeyWin](http://henjay724.com/image/cnblogs/nxpSecBoot_v1_0_0_fixedSnvsKeyWin.PNG)
 
@@ -209,9 +209,9 @@ define symbol m_data2_end              = 0x202BFFFF;
 
 ![nxpSecBoot_secboot5_bee_encrypted_flexible_key](http://henjay724.com/image/cnblogs/nxpSecBoot_v1_0_0_secboot5_bee_encrypted_flexible_key_e.png)
 
-　　Select "BEE Encrypted Image Boot" in [Secure Boot Type], click the [Browse] button to select an original image file (must be XIP image in FlexSPI NOR), select "Flexible User Keys" in [Key Storage Region] Then click the [Advanced Key Settings] button to configure all BEE encryption parameters, and finally click the [All-In-One Action] button to complete the bootable image generation and download operations.  
-　　The Step6 operation in the above figure  is mainly used to confirm two points: 1. Whether BEE_KEY0_SEL is set correctly (bits13, 12 of Fuse 0x460[31:0]) and BEE_KEY1_SEL are set correctly (bit 15 and 14 of Fuse 0x460[31:0]); Whether the user key is correctly programmed (SW_GP2: Fuse 0x690 - 0x6c0, GP4: Fuse 0x8c0 - 0x8f0).  
-　　It is necessary to introduce the BEE parameter setting page encrypted by Flexible User Keys as follows. First, select the BEE engine to be activated. You can activate the BEE engine 0 separately, or activate the BEE engine 1 separately. Of course, you can activate the BEE engines(0/1) at the same time. This example activates both BEE engines 0 and 1. After the BEE engine is specified, the storage space of the Key used for encryption is further configured for the engine and the Key (128 bits) is required to manually input. Finally, you need to set the area for encryption protection. In this example, two areas are encrypted, which are 0x60001000 - 0x60001fff (protected by BEE engine 0) and 0x60003000 - 0x60003fff (protected by BEE engine 1).  
+　　Select "BEE Encrypted Image Boot" in [Secure Boot Type], click the [Browse] button to select an original image file (must be XIP image in FlexSPI NOR), select "Flexible User Keys" in [Key Storage Region], then click the [Advanced Key Settings] button to configure all BEE encryption parameters, and finally click the [All-In-One Action] button to complete the bootable image generation and download operations.  
+　　The Step6 operation in the above figure is mainly used to confirm two points: 1. Whether BEE_KEY0_SEL is set correctly (bits13, 12 of Fuse 0x460[31:0]) and whether BEE_KEY1_SEL is set correctly (bit 15 and 14 of Fuse 0x460[31:0]); Whether the user key is correctly programmed (SW_GP2: Fuse 0x690 - 0x6c0, GP4: Fuse 0x8c0 - 0x8f0).  
+　　It is necessary to introduce the BEE parameter setting page encrypted by Flexible User Keys as follows. Firstly, select the BEE engine to be activated. You can activate the BEE engine 0 separately, or activate the BEE engine 1 separately. Of course, you can activate the BEE engines(0/1) at the same time. This example activates both BEE engines 0 and 1. After the BEE engine is specified, the storage space of the Key used for encryption is further configured for the engine and the Key (128 bits) is required to manually input. Finally, you need to set the area for encryption protection. In this example, two areas are encrypted, which are 0x60001000 - 0x60001fff (protected by BEE engine 0) and 0x60003000 - 0x60003fff (protected by BEE engine 1).  
 
 ![nxpSecBoot_flexibleUserKeysWin](http://henjay724.com/image/cnblogs/nxpSecBoot_v1_0_0_flexibleUserKeysWin_e.png)
 
@@ -221,27 +221,27 @@ define symbol m_data2_end              = 0x202BFFFF;
 　　Compared with single-engine BEE encryption, dual-engine BEE encryption doubles the difficulty from the perspective of cracking. After all, two different keys can be enabled to jointly protect the image from being illegally obtained.  
 
 ### 4 Advanced Usage
-　　The nxpSecBoot is set to work in the Entry Mode by default. You can set it to Master Mode through the function menu bar Tools->Option. Some advanced functions are opened in the Master mode, which is suitable for users who are very familiar with the NXP MCU chip and the Boot ROM.  
+　　The nxpSecBoot is set to work in the Entry Mode by default. You can set it to Master Mode through the function menu bar Tools->Option. Some advanced functions are opened in the Master Mode, which is suitable for users who are very familiar with the NXP MCU chip and the Boot ROM.  
 
 ![nxpSecBoot_setToolRunMode](http://henjay724.com/image/cnblogs/nxpSecBoot_v1_0_0_setToolRunMode.PNG)
 
 #### 4.1 Step-by-step connection
-　　In the Master mode, you can uncheck the One Step option, so you can connect to the target device step by step. The main meaning of the single-step connection is that you can connect to the Flashloader to implement the eFuse operation without configuring the Boot Device.  
+　　In the Master Mode, you can uncheck the One Step option, so you can connect to the target device step by step. The main meaning of the single-step connection is that you can connect to the Flashloader to implement the eFuse operation without configuring the Boot Device.  
 
 ![nxpSecBoot_nonOneStepConnection](http://henjay724.com/image/cnblogs/nxpSecBoot_v1_0_0_nonOneStepConnection.png)
 
 #### 4.2 Dedicated eFuse Programmer
-　　When nxpSecBoot is in Master mode, you can see that all eFuse areas are open. You can burn the specified eFuse area at will. The eFuse operation is a bit-by-bit. It can only be written as 1 and when it has been burned to 1 and it cannot be changed. Therefore, the operation of eFuse requires special care.  
+　　When nxpSecBoot is in Master Mode, you can see that all eFuse areas are open. You can burn the specified eFuse area at will. The eFuse operation is a bit-by-bit. It can only be written as 1 and when it has been burned to 1 and it cannot be changed. Therefore, the operation of eFuse requires special care.  
 
 ![nxpSecBoot_fuseUnderMasterMode](http://henjay724.com/image/cnblogs/nxpSecBoot_v1_0_0_fuseUnderMasterMode.PNG)
 
-　　In the previous chapter, the secure boot process, we will burn SRKH (0x580 - 0x5f0), SW_GP2 (0x690 - 0x6c0), GP4 (0x8c0 - 0x8f0), these areas can not be changed once burned, even we want these areas can't only be changed, it can't be read back.  
+　　In the previous chapter, the secure boot process, we will burn SRKH (0x580 - 0x5f0), SW_GP2 (0x690 - 0x6c0), GP4 (0x8c0 - 0x8f0), these areas can not be changed once burned, even we want these areas can't only be changed, it can not be read back.  
 
 ![nxpSecBoot_fuseLockerBits](http://henjay724.com/image/cnblogs/nxpSecBoot_fuseLockerBits.PNG)
 
 　　From the above figure, eFuse 0x400 is the Locker of each Fuse function area. We can lock the SW_GP2, and GP4 areas by burning eFuse 0x400. So how do you burn it? In fact, it is very simple, fill in the value you want to burn directly in each eFuse box, click the [Burn] button.  
 
 #### 4.3 Universal Flash Programmer
-　　In the Master mode, you can click the [Read], [Erase], [Write] button to implement any read and write operations of the configured Flash, so that the nxpSecBoot tool can be used as a general-purpose Flash programmer.
+　　In the Master Mode, you can click the [Read], [Erase], [Write] button to implement any read and write operations of the configured Flash, so that the nxpSecBoot tool can be used as a general-purpose Flash programmer.
 
 ![nxpSecBoot_flashProgrammer](http://henjay724.com/image/cnblogs/nxpSecBoot_v1_0_0_flashProgrammer_e.png)
