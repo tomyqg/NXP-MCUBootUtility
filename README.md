@@ -16,7 +16,7 @@
 > * 支持下载Bootable image进主动启动设备 - FlexSPI NOR、SEMC NAND接口Flash  
 > * 支持下载Bootable image进备份启动设备 - LPSPI接口NOR/EEPROM Flash  
 > * 支持DCD配置功能，可用于加载image进SDRAM执行  
-> * 支持基于HAB实现的安全加密启动（单签名，签名和加密）  
+> * 支持基于HAB实现的安全加密启动（单签名，签名和加密），证书自动备份  
 > * 支持基于BEE实现的安全加密启动（唯一SNVS key，用户自定义key）  
 > * 支持MCU芯片内部eFuse的回读和烧写操作（即专用eFuse烧写器）  
 > * 支持外部启动设备的任意读写擦操作（即通用Flash编程器）  
@@ -27,7 +27,7 @@
 
 > * 安装包: https://github.com/JayHeng/nxp-sec-boot-ui/releases  
 > * 源代码: https://github.com/JayHeng/nxp-sec-boot-ui  
-> * 问题反馈：https://www.cnblogs.com/henjay724/p/10159925.html
+> * 问题反馈：https://www.cnblogs.com/henjay724/p/10159925.html  
 
 　　nxpSecBoot在发布时借助PyInstaller将所有的Python依赖全部打包进一个可执行文件（\nxp-sec-boot-ui\bin\nxpSecBoot.exe），因此如果不是对nxpSecBoot的二次开发，你不需要安装任何Python软件及相关库。  
 
@@ -210,7 +210,7 @@ define symbol m_data2_end              = 0x202BFFFF;
 ![nxpSecBoot_secboot5_bee_encrypted_flexible_key](http://henjay724.com/image/cnblogs/nxpSecBoot_v1_0_0_secboot5_bee_encrypted_flexible_key_e.png)
 
 　　【Secure Boot Type】选择“BEE Encrypted Image Boot”，【Enable Certificate For BEE Encryption】选择是否要使能HAB签名，然后点击【Browse】按钮选择一个原始image文件（必须是XIP在FlexSPI NOR中的image），【Key Storage Region】选择“Flexible User Keys”后点击【Advanced Key Settings】按钮配置所有BEE加密的参数，最后点击【All-In-One Action】按钮即可完成bootable image生成与下载所有操作。  
-　　上图中Step5操作主要确认两点：一、BEE_KEY0_SEL是否设置正确（Fuse 0x460[31:0]的bit13,12）和BEE_KEY1_SEL是否设置正确（Fuse 0x460[31:0]的bit15,14）；二、用户Key是否被正确烧录（SW_GP2: Fuse 0x690 - 0x6c0，GP4: Fuse 0x8c0 - 0x8f0）或锁住。  
+　　上图中Step6操作主要确认两点：一、BEE_KEY0_SEL是否设置正确（Fuse 0x460[31:0]的bit13,12）和BEE_KEY1_SEL是否设置正确（Fuse 0x460[31:0]的bit15,14）；二、用户Key是否被正确烧录（SW_GP2: Fuse 0x690 - 0x6c0，GP4: Fuse 0x8c0 - 0x8f0）或锁住。  
 　　有必要对如下使用Flexible User Keys加密的BEE参数设置页面再做一下介绍，首先是选择要激活的BEE引擎，可以单独激活BEE引擎0，也可以单独激活BEE引擎1，当然更可以同时激活BEE引擎0和1，本示例同时激活BEE引擎0和1。指定了BEE引擎后需要进一步为该引擎配置加密所使用的Key的存储空间以及需要用户手动输入Key（128bits）。最后还需要设置加密保护的区域，本示例共使能加密2个区域，分别为0x60001000 - 0x60001fff（由BEE引擎0保护），0x60003000 - 0x60003fff（由BEE引擎1保护）。  
 
 ![nxpSecBoot_flexibleUserKeysWin](http://henjay724.com/image/cnblogs/nxpSecBoot_v1_0_0_flexibleUserKeysWin_e.png)
@@ -239,7 +239,7 @@ define symbol m_data2_end              = 0x202BFFFF;
 
 ![nxpSecBoot_fuseLockerBits](http://henjay724.com/image/cnblogs/nxpSecBoot_fuseLockerBits.PNG)
 
-　　从上图可知eFuse 0x400即是各Fuse功能区域的Locker，我们可以通过烧录eFuse 0x400来锁住SRKH, SW_GP2, GP4区域。那么如何烧录呢？其实非常简单，直接在各eFuse框内填写想要烧录的值，点击【Burn】按钮即可。  
+　　从上图可知eFuse 0x400即是各Fuse功能区域的Locker，我们可以通过烧录eFuse 0x400来锁住SW_GP2, GP4区域。那么如何烧录呢？其实非常简单，直接在各eFuse框内填写想要烧录的值，点击【Burn】按钮即可。  
 
 #### 4.3 通用Flash编程器
 　　进入Master模式下，可以点击【Read】、【Erase】、【Write】按钮实现已配置Flash的任意读擦写操作，这样可以将nxpSecBoot工具当做通用Flash编程器。  

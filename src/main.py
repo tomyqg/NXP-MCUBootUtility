@@ -688,9 +688,9 @@ class secBootMain(memcore.secBootMem):
                          "     2. Support both UART and USB-HID serial downloader modes \n" + \
                          "     3. Support various user application image file formats (elf/axf/srec/hex/bin) \n" + \
                          "     4. Can validate the range and applicability of user application image \n" + \
-                         "     5. Support FlexSPI NOR and SEMC NAND boot devices \n" + \
-                         "     6. Support LPSPI NOR/EEPROM recovery boot device \n" + \
-                         "     7. Support DCD (use to load image into SDRAM) \n" + \
+                         "     5. Support for loading bootable image into FlexSPI NOR and SEMC NAND boot devices \n" + \
+                         "     6. Support for loading bootable image into LPSPI NOR/EEPROM recovery boot device \n" + \
+                         "     7. Support DCD which can help load image to SDRAM \n" + \
                          "     8. Support HAB encryption (Signed only, Signed and Encrypted) \n" + \
                          "     9. Can back up certificate with time stamp \n" + \
                          "    10. Support BEE encryption (SNVS Key, User Keys) \n" + \
