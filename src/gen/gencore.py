@@ -97,18 +97,21 @@ class secBootGen(uicore.secBootUi):
         shutil.copy(self.opensslBinFolder + '\\libssl-1_1.dll', self.cstBinFolder)
 
     def updateAllCstPathToCorrectVersion( self ):
-        certSettingsDict = uivar.getAdvancedSettings(uidef.kAdvancedSettings_Cert)
-        if self.lastCstVersion != certSettingsDict['cstVersion']:
-            self.cstBinFolder = self.cstBinFolder.replace(self.lastCstVersion, certSettingsDict['cstVersion'])
-            self.cstKeysFolder = self.cstKeysFolder.replace(self.lastCstVersion, certSettingsDict['cstVersion'])
-            self.cstCrtsFolder = self.cstCrtsFolder.replace(self.lastCstVersion, certSettingsDict['cstVersion'])
-            self.hab4PkiTreePath = self.hab4PkiTreePath.replace(self.lastCstVersion, certSettingsDict['cstVersion'])
-            self.srktoolPath = self.srktoolPath.replace(self.lastCstVersion, certSettingsDict['cstVersion'])
-            self.cstBinToElftosbPath = self.cstBinToElftosbPath.replace(self.lastCstVersion, certSettingsDict['cstVersion'])
-            self.cstCrtsToElftosbPath = self.cstCrtsToElftosbPath.replace(self.lastCstVersion, certSettingsDict['cstVersion'])
-            self.lastCstVersion = certSettingsDict['cstVersion']
-        self._copyCstBinToElftosbFolder()
-        self._copyOpensslBinToCstFolder()
+        try:
+            certSettingsDict = uivar.getAdvancedSettings(uidef.kAdvancedSettings_Cert)
+            if self.lastCstVersion != certSettingsDict['cstVersion']:
+                self.cstBinFolder = self.cstBinFolder.replace(self.lastCstVersion, certSettingsDict['cstVersion'])
+                self.cstKeysFolder = self.cstKeysFolder.replace(self.lastCstVersion, certSettingsDict['cstVersion'])
+                self.cstCrtsFolder = self.cstCrtsFolder.replace(self.lastCstVersion, certSettingsDict['cstVersion'])
+                self.hab4PkiTreePath = self.hab4PkiTreePath.replace(self.lastCstVersion, certSettingsDict['cstVersion'])
+                self.srktoolPath = self.srktoolPath.replace(self.lastCstVersion, certSettingsDict['cstVersion'])
+                self.cstBinToElftosbPath = self.cstBinToElftosbPath.replace(self.lastCstVersion, certSettingsDict['cstVersion'])
+                self.cstCrtsToElftosbPath = self.cstCrtsToElftosbPath.replace(self.lastCstVersion, certSettingsDict['cstVersion'])
+                self.lastCstVersion = certSettingsDict['cstVersion']
+            self._copyCstBinToElftosbFolder()
+            self._copyOpensslBinToCstFolder()
+        except:
+            pass
 
     def _copySerialAndKeypassfileToCstFolder( self ):
         shutil.copy(self.serialFilename, self.cstKeysFolder)
