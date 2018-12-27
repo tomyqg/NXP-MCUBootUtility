@@ -27,15 +27,15 @@ English | [中文](./README-zh.md)
 #### 1.2 Download
 　　nxpSecBoot is developed in Python, and it is open source. The development environment is Python 2.7.15 (32bit), wxPython 4.0.3, pySerial 3.4, pywinusb 0.4.2, bincopy 15.0.0, PyInstaller 3.3.1 (or higher).  
 
-> * Installation package: https://github.com/JayHeng/nxp-sec-boot-ui/releases
 > * Source code: https://github.com/JayHeng/nxp-sec-boot-ui  
-> * Feedback: https://www.cnblogs.com/henjay724/p/10159925.html  
 
 　　nxpSecBoot is packaged by PyInstaller, all Python dependencies have been packaged into an executable file (\nxp-sec-boot-ui\bin\nxpSecBoot.exe), so if you do not want to develop nxpSecBoot for new feature, there is no need to install any Python software or related libraries.  
 
 > Note1: The nxpSecBoot.exe in the source code package is packaged in the Windows 10 x64 environment and has only been tested in this environment. If it cannot be used directly for system environment reasons, you need to install [Python2.7.15 x86 version ](https://www.python.org/ftp/python/2.7.15/python-2.7.15.msi)(Confirm that the directory "\Python27\" and "\Python27\Scripts\" are in the system environment variable path after the installation is completed), then click on "do_setup_by_pip.bat" in the "\nxp-sec-boot-ui\env\" directory to install the Python library on which nxpSecBoot depends. Finally, click "do_pack_by_pyinstaller.bat" to regenerate the nxpSecBoot.exe.  
 
-> Note2: You must use Python2 x86 version, because nxpSecBoot uses the pywinusb library, which cannot be packaged by PyInstaller in Python2 x64 version. The pywinusb author has no plan to fix the problem.  
+> Note2: Before using nxpSecBoot, you need to download [HAB Code Signing Tool](https://www.nxp.com/webapp/sps/download/license.jsp?colCode=IMX_CST_TOOL&appType=file2&location=null&DOWNLOAD_ID=null&lang_cd=en) from NXP website，upzip it and put it in the \nxp-sec-boot-ui\tools\cst\3.0.1\ directory。  
+
+> Note3: You must use Python2 x86 version, because nxpSecBoot uses the pywinusb library, which cannot be packaged by PyInstaller in Python2 x64 version. The pywinusb author has no plan to fix the problem.  
 
 #### 1.3 Installation
 　　nxpSecBoot is a pure green free installation tool. After downloading the source code package, double-click "\nxp-sec-boot-ui\bin\nxpSecBoot.exe" to use it. No additional software is required.  
