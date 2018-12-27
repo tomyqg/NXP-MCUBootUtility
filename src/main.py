@@ -664,7 +664,7 @@ class secBootMain(memcore.secBootMem):
         self._switchToolRunMode()
 
     def callbackShowHomePage( self, event ):
-        msgText = (('https://github.com/JayHeng/nxp-mcu-utility-boot.git \n'))
+        msgText = (('https://github.com/JayHeng/NXP-MCUBootUtility.git \n'))
         wx.MessageBox(msgText, "Home Page", wx.OK | wx.ICON_INFORMATION)
 
     def callbackShowAboutAuthor( self, event ):
@@ -704,7 +704,7 @@ if __name__ == '__main__':
     app = wx.App()
 
     g_main_win = secBootMain(None)
-    g_main_win.SetTitle(u"NXP MCU Utility Boot v1.0.0")
+    g_main_win.SetTitle(u"NXP MCU Boot Utility v1.0.0")
     g_main_win.Show()
 
     app.MainLoop()
