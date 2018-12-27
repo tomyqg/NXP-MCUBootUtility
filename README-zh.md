@@ -29,11 +29,13 @@
 
 　　NXP-MCUBootUtility在发布时借助PyInstaller将所有的Python依赖全部打包进一个可执行文件（\NXP-MCUBootUtility\bin\NXP-MCUBootUtility.exe），因此如果不是对NXP-MCUBootUtility的二次开发，你不需要安装任何Python软件及相关库。  
 
-> Note1: 源代码包里的NXP-MCUBootUtility.exe是在Windows 10 x64环境下打包的，也仅在该环境下测试过，如果因系统原因无法直接使用，你需要先安装 [Python2.7.15 x86版本](https://www.python.org/ftp/python/2.7.15/python-2.7.15.msi) （安装完成后确认\Python27\\, \Python27\Scripts\\目录被添加到系统环境变量Path里），然后在\NXP-MCUBootUtility\env\目录下点击do_setup_by_pip.bat安装开发NXP-MCUBootUtility所依赖的Python库，最后点击do_pack_by_pyinstaller.bat重新生成NXP-MCUBootUtility.exe可执行文件。  
+> Note1: 使用NXP-MCUBootUtility之前必须先从NXP官网下载 [HAB Code Signing Tool工具](https://www.nxp.com/webapp/sps/download/license.jsp?colCode=IMX_CST_TOOL&appType=file2&location=null&DOWNLOAD_ID=null&lang_cd=en)，并将其解压放在\NXP-MCUBootUtility\tools\cst\目录下，并且需要修改代码使能AES功能重新生成\NXP-MCUBootUtility\tools\cst\mingw32\bin\cst.exe，否则HAB签名以及加密相关功能无法使用。  
 
-> Note2: 使用NXP-MCUBootUtility之前必须先从NXP官网下载 [HAB Code Signing Tool工具](https://www.nxp.com/webapp/sps/download/license.jsp?colCode=IMX_CST_TOOL&appType=file2&location=null&DOWNLOAD_ID=null&lang_cd=en)，并将其解压放在\NXP-MCUBootUtility\tools\cst\3.0.1目录下。  
+> Note2: 使用NXP-MCUBootUtility之前必须编译\NXP-MCUBootUtility\tools\image_enc\code下面的源文件生成image_enc.exe，并将其放置在\NXP-MCUBootUtility\tools\image_enc\win，否则BEE加密相关功能无法使用。  
 
-> Note3: 必须使用Python2 x86版本，因为NXP-MCUBootUtility使用了pywinusb库，该库在Python2 x64版本下无法用PyInstaller打包，pywinusb作者没有计划修复该问题。  
+> Note3: 源代码包里的NXP-MCUBootUtility.exe是在Windows 10 x64环境下打包的，也仅在该环境下测试过，如果因系统原因无法直接使用，你需要先安装 [Python2.7.15 x86版本](https://www.python.org/ftp/python/2.7.15/python-2.7.15.msi) （安装完成后确认\Python27\\, \Python27\Scripts\\目录被添加到系统环境变量Path里），然后在\NXP-MCUBootUtility\env\目录下点击do_setup_by_pip.bat安装开发NXP-MCUBootUtility所依赖的Python库，最后点击do_pack_by_pyinstaller.bat重新生成NXP-MCUBootUtility.exe可执行文件。  
+
+> Note4: 必须使用Python2 x86版本去打包NXP-MCUBootUtility，因为NXP-MCUBootUtility使用了pywinusb库，该库在Python2 x64版本下无法用PyInstaller打包，pywinusb作者没有计划修复该问题。  
 
 #### 1.3 安装
 　　NXP-MCUBootUtility是一个是纯绿色免安装的工具，下载了源代码包之后，直接双击\NXP-MCUBootUtility\bin\NXP-MCUBootUtility.exe即可使用。使用NXP-MCUBootUtility没有任何软件依赖，不需要额外安装任何软件。  
