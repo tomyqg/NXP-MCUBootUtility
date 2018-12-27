@@ -135,6 +135,6 @@ class secBootUiCfgLpspiNor(bootDeviceWin_LpspiNor.bootDeviceWin_LpspiNor):
         uivar.setRuntimeSettings(False)
         self.Show(False)
 
-    def callbackOk(self, event):
+    def callbackClose( self, event ):
         uivar.setRuntimeSettings(False)
         self.Show(False)

@@ -312,7 +312,6 @@ class secBootUiCfgSemcNand(bootDeviceWin_SemcNand.bootDeviceWin_SemcNand):
         uivar.setRuntimeSettings(False)
         self.Show(False)
 
-    def callbackOk(self, event):
+    def callbackClose( self, event ):
         uivar.setRuntimeSettings(False)
         self.Show(False)
-
