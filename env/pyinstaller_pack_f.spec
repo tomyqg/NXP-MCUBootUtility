@@ -68,10 +68,10 @@ exe = EXE(pyz,
           a.binaries,
           a.zipfiles,
           a.datas,
-          name='nxpSecBoot',
+          name='NXPMcuUtilityBoot',
           debug=False,
           strip=False,
           upx=True,
           runtime_tmpdir=None,
           console=True,
-          icon='..\\img\\nxpSecBoot.ico')
+          icon='..\\img\\NXPMcuUtilityBoot.ico')
