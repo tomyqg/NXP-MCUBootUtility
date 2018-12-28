@@ -26,12 +26,13 @@
 　　NXP-MCUBootUtility完全基于Python语言开发，并且源代码全部开源，其具体开发环境为Python 2.7.15 (32bit)、wxPython 4.0.3、pySerial 3.4、pywinusb 0.4.2、bincopy 15.0.0、PyInstaller 3.3.1（或更高）。  
 
 > * 源代码: https://github.com/JayHeng/NXP-MCUBootUtility  
+> * 问题反馈: https://www.cnblogs.com/henjay724/p/10159925.html  
 
 　　NXP-MCUBootUtility在发布时借助PyInstaller将所有的Python依赖全部打包进一个可执行文件（\NXP-MCUBootUtility\bin\NXP-MCUBootUtility.exe），因此如果不是对NXP-MCUBootUtility的二次开发，你不需要安装任何Python软件及相关库。  
 
-> Note1: 使用NXP-MCUBootUtility之前必须先从NXP官网下载 [HAB Code Signing Tool工具](https://www.nxp.com/webapp/sps/download/license.jsp?colCode=IMX_CST_TOOL&appType=file2&location=null&DOWNLOAD_ID=null&lang_cd=en)，并将其解压放在\NXP-MCUBootUtility\tools\cst\目录下，并且需要修改代码使能AES功能重新生成\NXP-MCUBootUtility\tools\cst\mingw32\bin\cst.exe，否则HAB签名以及加密相关功能无法使用。  
+> Note1: 使用NXP-MCUBootUtility之前必须先从NXP官网下载 [HAB Code Signing Tool工具](https://www.nxp.com/webapp/sps/download/license.jsp?colCode=IMX_CST_TOOL&appType=file2&location=null&DOWNLOAD_ID=null&lang_cd=en)，并将其解压放在\NXP-MCUBootUtility\tools\cst\目录下，并且需要修改代码使能AES功能重新生成\NXP-MCUBootUtility\tools\cst\mingw32\bin\cst.exe，否则HAB签名以及加密相关功能无法使用。具体步骤可以参考这篇博客 [《开启NXP-MCUBootUtility工具的HAB加密功能 - cst.exe》](https://www.cnblogs.com/henjay724/p/10189593.html)。   
 
-> Note2: 使用NXP-MCUBootUtility之前必须编译\NXP-MCUBootUtility\tools\image_enc\code下面的源文件生成image_enc.exe，并将其放置在\NXP-MCUBootUtility\tools\image_enc\win，否则BEE加密相关功能无法使用。  
+> Note2: 使用NXP-MCUBootUtility之前必须编译\NXP-MCUBootUtility\tools\image_enc\code下面的源文件生成image_enc.exe，并将其放置在\NXP-MCUBootUtility\tools\image_enc\win，否则BEE加密相关功能无法使用。具体步骤可以参考这篇博客 [《开启NXP-MCUBootUtility工具的BEE加密功能 - image_enc.exe》](https://www.cnblogs.com/henjay724/p/10189602.html)  
 
 > Note3: 源代码包里的NXP-MCUBootUtility.exe是在Windows 10 x64环境下打包的，也仅在该环境下测试过，如果因系统原因无法直接使用，你需要先安装 [Python2.7.15 x86版本](https://www.python.org/ftp/python/2.7.15/python-2.7.15.msi) （安装完成后确认\Python27\\, \Python27\Scripts\\目录被添加到系统环境变量Path里），然后在\NXP-MCUBootUtility\env\目录下点击do_setup_by_pip.bat安装开发NXP-MCUBootUtility所依赖的Python库，最后点击do_pack_by_pyinstaller.bat重新生成NXP-MCUBootUtility.exe可执行文件。  
 
@@ -170,7 +171,7 @@ define symbol m_data2_end              = 0x202BFFFF;
 
 　　上图中Step5主要确认两点：一、HAB状态是否是Closed的（Fuse 0x460[31:0]的bit1为1'b1）；二、SRKH是否被正确烧录（Fuse 0x580 - 0x5f0，一共256bit，即sha-256算法），SRKH是最终bootable image里CSF数据里的Public RSA Key的Hash值，用于校验Public RSA Key是否合法。  
 　　一切操作无误，板子上SW7拨码开关将Boot Mode设为2'b10即Internal Boot模式，其余保持全0，重新上电便可以看到HAB signed image正常执行了。  
-　　因为此时MCU芯片HAB状态已经是Closed，并且SRKH已经被烧录无法更改，所以未经签名认证的image无法正常运行，在软件目录\NXP-MCUBootUtility\tools\cst\3.0.1\crts文件夹下存放着Private RSA Key文件，请妥善保存好，一旦遗失，那么新的image将无法被正确签名从而导致HAB认证失败无法被启动执行。  
+　　因为此时MCU芯片HAB状态已经是Closed，并且SRKH已经被烧录无法更改，所以未经签名认证的image无法正常运行，在软件目录\NXP-MCUBootUtility\tools\cst\crts文件夹下存放着Private RSA Key文件，请妥善保存好，一旦遗失，那么新的image将无法被正确签名从而导致HAB认证失败无法被启动执行。  
 
 ##### 3.3.3 模式三：启用HAB签名认证与HAB加密
 　　第三种模式是中级的安全模式，即对image进行签名认证以及HAB级加密，一般用于对产品安全性要求很高的场合。签名认证主要是对image合法性进行校验，而加密则可以保护image在外部Boot Device中不被非法盗用，因为在外部Boot Device中存放的是image的密文数据，即使被非法获取也无法轻易破解，并且加密是和MCU芯片绑定的，因为HAB加密过程中使用了MCU内部SNVS模块里的唯一Master Secret Key。  
