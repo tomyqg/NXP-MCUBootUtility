@@ -35,8 +35,8 @@ class secBootGen(uicore.secBootUi):
         self.crtImgUsrPemFileList = [None] * 4
         self.certBackupFolder = os.path.join(self.exeTopRoot, 'gen', 'hab_cert', 'backup')
         self.srkBatFilename = os.path.join(self.exeTopRoot, 'gen', 'hab_cert', 'imx_srk_gen.bat')
-        self.cstBinToElftosbPath = '../../cst/' + '/mingw32/bin'
-        self.cstCrtsToElftosbPath = '../../cst/' + '/crts/'
+        self.cstBinToElftosbPath = '../../cst/mingw32/bin'
+        self.cstCrtsToElftosbPath = '../../cst/crts/'
         self.genCertToElftosbPath = '../../../gen/hab_cert/'
         self.genCryptoToElftosbPath = '../../../gen/hab_crypto/'
         self.lastCstVersion = uidef.kCstVersion_v3_0_1

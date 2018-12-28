@@ -6,7 +6,7 @@ English | [中文](./README-zh.md)
 
 ### 1 Overview
 #### 1.1 Introduction
-　　NXP-MCUBootUtility is a GUI tool specially designed for NXP MCU secure boot. Its features correspond to the BootROM function in NXP MCU. Currently, it mainly supports i.MXRT series MCU chips, Compared to NXP official security enablement toolset (OpenSSL, CST, sdphost, blhost, elftosb, BD, MfgTool2), NXP-MCUBootUtility is a real one-stop tool, a tool that includes all the features of NXP's official security enablement toolset, and what's more, it supports full graphical user interface operation. With NXP-MCUBootUtility, you can easily get started with NXP MCU secure boot. 
+　　NXP-MCUBootUtility is a GUI tool specially designed for NXP MCU secure boot. Its features correspond to the BootROM function in NXP MCU. Currently, it mainly supports i.MXRT series MCU chips, Compared to NXP official security enablement toolset (OpenSSL, CST, sdphost, blhost, elftosb, BD, MfgTool2), NXP-MCUBootUtility is a real one-stop tool, a tool that includes all the features of NXP's official security enablement toolset, and what's more, it supports full graphical user interface operation. With NXP-MCUBootUtility, you can easily get started with NXP MCU secure boot.  
 　　The main features of NXP-MCUBootUtility include：  
 
 > * Support i.MXRT1021, i.MXRT1051/1052, i.MXRT1061/1062, i.MXRT1064 SIP  
