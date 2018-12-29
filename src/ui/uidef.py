@@ -20,6 +20,7 @@ kMcuSeries_Kinetis = 'Kinetis'
 
 kMcuSeries_v0_11_x = [kMcuSeries_iMXRT]
 
+kMcuDevice_iMXRT1015 = 'i.MXRT1015'
 kMcuDevice_iMXRT102x = 'i.MXRT102x'
 kMcuDevice_iMXRT105x = 'i.MXRT105x'
 kMcuDevice_iMXRT106x = 'i.MXRT106x'
@@ -86,6 +87,7 @@ kUserKeySource_OTPMK  = 'Fuse OTPMK[255:128]'
 kUserKeySource_SW_GP2 = 'Fuse SW-GP2'
 kUserKeySource_GP4    = 'Fuse GP4[127:0]'
 
+kSupportedKeySource_iMXRT1015 = [kUserKeySource_SW_GP2]
 kSupportedKeySource_iMXRT102x = [kUserKeySource_SW_GP2]
 kSupportedKeySource_iMXRT105x = [kUserKeySource_SW_GP2]
 kSupportedKeySource_iMXRT106x = [kUserKeySource_SW_GP2, kUserKeySource_GP4]

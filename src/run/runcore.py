@@ -18,7 +18,9 @@ from utils import misc
 
 def createTarget(device, exeBinRoot):
     # Build path to target directory and config file.
-    if device == uidef.kMcuDevice_iMXRT102x:
+    if device == uidef.kMcuDevice_iMXRT1015:
+        cpu = "MIMXRT1015"
+    elif device == uidef.kMcuDevice_iMXRT102x:
         cpu = "MIMXRT1021"
     elif device == uidef.kMcuDevice_iMXRT105x:
         cpu = "MIMXRT1052"
